@@ -52,7 +52,7 @@
         "velocity-react": "1.4.1"
     },
     "scripts": {
-        "start": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start",
+        "start": "concurrently \"yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start\" \"nodemon ../OrchidPrototype/server/server.js\"",
         "build": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts build",
         "build-css-helpers": "./node_modules/.bin/tailwind build ./src/styles/fuse-helpers.tailwind.css -c ./tailwind.js -o ./src/styles/fuse-helpers.css && postcss --use autoprefixer -o ./src/styles/fuse-helpers.css ./src/styles/fuse-helpers.css",
         "test": "cross-env NODE_PATH=src react-scripts test --env=node",
@@ -70,7 +70,9 @@
         "marked": "0.5.1",
         "postcss-cli": "6.0.0",
         "tailwindcss": "0.6.6",
-        "webpack-bundle-analyzer": "3.0.2"
+        "webpack-bundle-analyzer": "3.0.2",
+        "concurrently": "~4.0.1",
+        "nodemon": "~1.18.4"
     },
     "browserslist": [
         ">0.2%",
