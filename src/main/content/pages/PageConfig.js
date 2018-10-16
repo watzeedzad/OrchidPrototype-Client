@@ -11,5 +11,11 @@ export const PageConfig = {
                 loader: () => import('./WeatherControl')
             })
         },
+        {
+            path     : '/login',
+            component: FuseLoadable({
+                loader: () => import('./Login')
+            })
+        }
     ]
 };
