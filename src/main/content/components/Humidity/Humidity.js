@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getHumidity } from '../../../../store/actions/application/weatherActions'
+import { getHumidity,saveHumidityConfig } from '../../../../store/actions/application/weatherActions'
 import { connect } from 'react-redux'
 import HumidityGauge from '../Humidity/HumidityGauge'
 import SettingHumidity from '../Humidity/SettingHumidity'
@@ -65,7 +65,7 @@ class Humidity extends Component {
                             <SettingHumidity
                                 minConfig={data.minConfigHumidity}
                                 maxConfig={data.maxConfigHumidity}
-                                onToggle={this.toggle}
+                                onSubmit={this.onSubmit}
                             />
                         </Col>
                     </Row>
@@ -74,8 +74,11 @@ class Humidity extends Component {
         )
     }
 
-    toggle = () => {
-        this.fetchData(0)
+    onSubmit = (values) => {
+        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        this.props.dispatch(saveHumidityConfig(values)).then(() => {
+            this.fetchData(0)
+        })
     }
 }
 

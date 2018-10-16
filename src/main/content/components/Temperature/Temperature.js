@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getTemp } from '../../../../store/actions/application/weatherActions'
+import { getTemp,saveTempConfig } from '../../../../store/actions/application/weatherActions'
 import { connect } from 'react-redux'
 import TemperatureGauge from '../Temperature/TemperatureGauge'
 import SettingTemperature from '../Temperature/SettingTemperature'
@@ -24,7 +24,6 @@ class Temperature extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if(this.props.temp.data !== null && nextProps.temp.data !== null){
-            console.log(this.props.temp,nextProps.temp)
             return this.props.temp.data.currentTemperature !== nextProps.temp.data.currentTemperature
         }else{
             return true
@@ -69,7 +68,7 @@ class Temperature extends Component {
                             <SettingTemperature
                                 minConfig={data.minConfigTemperature}
                                 maxConfig={data.maxConfigTemperature}
-                                onToggle={this.toggle}
+                                onSubmit={this.onSubmit}
                             />
                         </Col>
                     </Row>
@@ -78,8 +77,11 @@ class Temperature extends Component {
         )
     }
 
-    toggle = () => {
-        this.fetchData(0)
+    onSubmit = (values) => {
+        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        this.props.dispatch(saveTempConfig(values)).then(() => {
+            this.fetchData(0)
+        })
     }
 }
 

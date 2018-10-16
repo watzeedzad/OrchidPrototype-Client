@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
-import { saveTempConfig } from '../../../../store/actions/application/weatherActions'
+import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Card, CardContent, Typography, Icon, InputAdornment,CssBaseline} from '@material-ui/core';
-import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
     layout: {
@@ -12,8 +11,8 @@ const styles = theme => ({
       marginTop: theme.spacing.unit * 8,
       marginLeft: theme.spacing.unit * 3,
       marginRight: theme.spacing.unit * 3,
-      [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-        width: 300,
+      [theme.breakpoints.up(250 + theme.spacing.unit * 3 * 2)]: {
+        width: 250,
         marginLeft: 'auto',
         marginRight: 'auto',
       },
@@ -55,16 +54,16 @@ class SettingTemperature extends Component {
     };
 
     render() {
-        const { classes } = this.props
+        const { classes,onSubmit } = this.props
         const {canSubmit} = this.state;
 
         return (
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
-                <Typography variant="title">ตั้งค่าอุณหภูมิที่เหมาะสม</Typography>
+                <Typography variant="headline">ตั้งค่าอุณหภูมิที่เหมาะสม</Typography>
                 <Formsy
-                    onValidSubmit={this.onSubmit}
+                    onValidSubmit={onSubmit}
                     onValid={this.enableButton}
                     onInvalid={this.disableButton}
                     ref={(form) => this.form = form}
@@ -130,15 +129,6 @@ class SettingTemperature extends Component {
             </main>
           </React.Fragment>
         )
-    }
-
-
-    onSubmit = (values) => {
-        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
-        console.log(values)
-        this.props.dispatch(saveTempConfig(values)).then(() => {
-            this.props.onToggle()
-        })
     }
 }
 
