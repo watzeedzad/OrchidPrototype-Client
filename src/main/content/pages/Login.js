@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
+import Formsy from 'formsy-react';
+import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Link, withRouter} from 'react-router-dom';
-import {Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, TextField, Typography} from '@material-ui/core';
+import {withRouter} from 'react-router-dom';
+import {Button, Card, CardContent, Typography, Icon, InputAdornment} from '@material-ui/core';
 import classNames from 'classnames';
-import { Field,reduxForm } from 'redux-form';
 import _ from '@lodash';
 import {FuseAnimate} from '@fuse';
+import connect from 'react-redux/es/connect/connect';
 import { login } from '../../../store/actions/application/loginActions'; 
-import MaterialRenderTextField from '../../../main/Utils/MaterialRenderTextField'
 
 const styles = theme => ({
     root: {
@@ -22,40 +23,45 @@ const styles = theme => ({
 
 class Login extends Component {
     state = {
-        username   : '',
-        password: '',
-        remember: true
+        canSubmit: false
     };
 
-    componentDidMount() {
-        //เรียกใช้ฟังก์ชันในการก�ำหนด value ให้กับ textbox และ control ต่างๆ
-        this.handleInitialize()
-    }
+    form = React.createRef();
 
-    handleInitialize() {
-        let initData = {
-            "username": this.state.username,
-            "password": this.state.password,
-        };
-        this.props.initialize(initData);
+    disableButton = () => {
+        this.setState({canSubmit: false});
     };
 
-    handleChange = (event) => {
-        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+    enableButton = () => {
+        this.setState({canSubmit: true});
     };
 
-    canBeSubmitted()
+    componentDidUpdate(prevProps, prevState)
     {
-        const {username, password} = this.state;
-        return (
-            username.length > 0 && password.length > 0
-        );
+        if ( this.props.login.error && (this.props.login.error.username || this.props.login.error.password) )
+        {
+            this.form.updateInputsWithError({
+                ...this.props.login.error
+            });
+
+            this.props.login.error = null;
+            this.disableButton();
+        }
+
+        // if ( this.props.user.role !== 'guest' )
+        // {
+        //     const pathname = this.props.location.state && this.props.location.state.redirectUrl ? this.props.location.state.redirectUrl : '/';
+        //     this.props.history.push({
+        //         pathname
+        //     });
+        // }
+        return null;
     }
 
     render()
     {
-        const {classes,handleSubmit} = this.props;
-        const {remember} = this.state;
+        const {classes} = this.props;
+        const {canSubmit} = this.state;
 
         return (
             <div className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
@@ -71,59 +77,62 @@ class Login extends Component {
                                 <img className="w-128 m-32" src="assets/images/logos/fuse.svg" alt="logo"/>
 
                                 <Typography variant="h6" className="mt-16 mb-32">LOGIN TO YOUR ACCOUNT</Typography>
-
-                                <form className="flex flex-col justify-center w-full">
-
-                                    <Field
-                                        component={MaterialRenderTextField}
+                                <Formsy
+                                    onValidSubmit={this.onSubmit}
+                                    onValid={this.enableButton}
+                                    onInvalid={this.disableButton}
+                                    ref={(form) => this.form = form}
+                                    className="flex flex-col justify-center w-full"
+                                >
+                                    <TextFieldFormsy
                                         className="mb-16"
-                                        label="Username"
-                                        autoFocus
                                         type="text"
                                         name="username"
-                                        onChange={this.handleChange}
+                                        label="Username"
+                                        validations={{
+                                            minLength: 4
+                                        }}
+                                        validationErrors={{
+                                            minLength: 'Min character length is 4'
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
+                                        }}
                                         variant="outlined"
                                         required
-                                        fullWidth
                                     />
 
-                                    <Field
-                                        component={MaterialRenderTextField}
+                                    <TextFieldFormsy
                                         className="mb-16"
-                                        label="Password"
                                         type="password"
                                         name="password"
-                                        onChange={this.handleChange}
+                                        label="Password"
+                                        validations={{
+                                            minLength: 4
+                                        }}
+                                        validationErrors={{
+                                            minLength: 'Min character length is 4'
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
+                                        }}
                                         variant="outlined"
                                         required
-                                        fullWidth
                                     />
 
-                                    <div className="flex items-center justify-between">
-
-                                        <FormControl>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        name="remember"
-                                                        checked={remember}
-                                                        onChange={this.handleChange}/>
-                                                }
-                                                label="Remember Me"
-                                            />
-                                        </FormControl>
-
-                                        <Link className="font-medium" to="/pages/auth/forgot-password">
-                                            Forgot Password?
-                                        </Link>
-                                    </div>
-
-                                    <Button variant="contained" color="primary" className="w-224 mx-auto mt-16" aria-label="LOG IN"
-                                            disabled={!this.canBeSubmitted()} onClick={handleSubmit(this.onSubmit)}>
-                                        LOGIN
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        className="w-full mx-auto mt-16 normal-case"
+                                        aria-label="LOG IN"
+                                        disabled={!canSubmit}
+                                        value="legacy"
+                                    >
+                                        Login
                                     </Button>
 
-                                </form>
+                                </Formsy>
 
                             </CardContent>
                         </Card>
@@ -136,12 +145,15 @@ class Login extends Component {
     onSubmit = (values) => {
         //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
         console.log(values)
-        this.props.dispatch(login({username:'test01',password:'test01'}))
+        this.props.dispatch(login(values))
     }
 }
 
-const form = reduxForm({
-    form: 'login',
-})
+function mapStateToProps({application})
+{
+    return {
+        login: application.loginReducers
+    }
+}
 
-export default withStyles(styles, {withTheme: true})(form(withRouter(Login)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps)(Login)));

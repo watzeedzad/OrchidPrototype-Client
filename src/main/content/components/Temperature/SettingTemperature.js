@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import Formsy from 'formsy-react';
+import {TextFieldFormsy} from '@fuse';
 import { saveTempConfig } from '../../../../store/actions/application/weatherActions'
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
+import {Button, Card, CardContent, Typography, Icon, InputAdornment,CssBaseline} from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
-import MaterialRenderTextField from '../../../Utils/MaterialRenderTextField';
 
 const styles = theme => ({
     layout: {
@@ -40,47 +37,96 @@ const styles = theme => ({
 });
 
 class SettingTemperature extends Component {
+    state = {
+        greenHouseId: 789456123,
+        minTemperature: this.props.minConfig,
+        maxTemperature: this.props.maxConfig,
+        canSubmit: false
+    };
 
-    componentDidMount() {
-        //เรียกใช้ฟังก์ชันในการก�ำหนด value ให้กับ textbox และ control ต่างๆ
-        this.handleInitialize()
-    }
+    form = React.createRef();
 
-    handleInitialize() {
-        let initData = {
-            "greenHouseId": 789456123,
-            "minTemperature": this.props.minConfig,
-            "maxTemperature": this.props.maxConfig,
-        };
-        this.props.initialize(initData);
-    }
+    disableButton = () => {
+        this.setState({canSubmit: false});
+    };
+
+    enableButton = () => {
+        this.setState({canSubmit: true});
+    };
 
     render() {
-        const { classes,handleSubmit } = this.props
+        const { classes } = this.props
+        const {canSubmit} = this.state;
 
         return (
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
                 <Typography variant="title">ตั้งค่าอุณหภูมิที่เหมาะสม</Typography>
-                <form className={classes.form}>
-                  <FormControl margin="normal" required fullWidth>
-                    <Field name="minTemperature"  component={MaterialRenderTextField} type='number' label="อุณหภูมิต่ำสุด" />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                  <Field name="maxTemperature" component={MaterialRenderTextField} type="number" label="อุณหภูมิสูงสุด" />
-                  </FormControl>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="raised"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={handleSubmit(this.onSubmit)}
-                  >
-                    บันทึก
-                  </Button>
-                </form>
+                <Formsy
+                    onValidSubmit={this.onSubmit}
+                    onValid={this.enableButton}
+                    onInvalid={this.disableButton}
+                    ref={(form) => this.form = form}
+                    className="flex flex-col justify-center w-full"
+                >
+                    <TextFieldFormsy
+                        className="mb-16"
+                        type="number"
+                        name="minTemperature"
+                        label="อุณหภูมิต่ำสุด"
+                        value={this.state.minTemperature}
+                        // validations={{
+                        //     minLength: 1                          
+                        // }}
+                        // validationErrors={{
+                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
+                        // }}
+                        // InputProps={{
+                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
+                        // }}
+                        variant="outlined"
+                        required
+                    />
+
+                    <TextFieldFormsy
+                        className="mb-16"
+                        type="number"
+                        name="maxTemperature"
+                        label="อุณหภูมิสูงสุด"
+                        value={this.state.maxTemperature}
+                        // validations={{
+                        //     minLength: 1                          
+                        // }}
+                        // validationErrors={{
+                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
+                        // }}
+                        // InputProps={{
+                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
+                        // }}
+                        variant="outlined"
+                        required
+                    />
+                    
+                    <TextFieldFormsy
+                        type="hidden"
+                        name="greenHouseId"
+                        value={this.state.greenHouseId}
+                    />
+
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className="w-full mx-auto mt-16 normal-case"
+                        aria-label="บันทึก"
+                        disabled={!canSubmit}
+                        value="legacy"
+                    >
+                        บันทึก
+                    </Button>
+
+                </Formsy>                
             </main>
           </React.Fragment>
         )
@@ -89,6 +135,7 @@ class SettingTemperature extends Component {
 
     onSubmit = (values) => {
         //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        console.log(values)
         this.props.dispatch(saveTempConfig(values)).then(() => {
             this.props.onToggle()
         })
@@ -117,9 +164,5 @@ function validate(values) {
     return errors;
 }
 
-const form = reduxForm({
-    form: 'settingTemp',
-    validate
-})
 
-export default withStyles(styles)(form(SettingTemperature));
+export default withStyles(styles)(SettingTemperature);
