@@ -1,4 +1,5 @@
 import {FuseLoadable} from '@fuse';
+import UserManagement from './UserManagement'
 
 export const PageConfig = {
     settings: {
@@ -11,5 +12,12 @@ export const PageConfig = {
                 loader: () => import('./WeatherControl')
             })
         },
+        {
+            path     : '/userManagement',
+            component: FuseLoadable({
+                loader: () => import('./UserManagement')
+            })
+            
+        }
     ]
 };

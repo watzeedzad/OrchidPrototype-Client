@@ -13,6 +13,13 @@ export const fuseNavigationConfig = [
                 'url'  : '/example'
             },
             {
+                'id'   : 'userManagement',
+                'title': 'รายชื่อผู้ใช้งาน',
+                'type' : 'item',
+                'icon' : 'whatshot',
+                'url'  : '/userManagement'
+            },
+            {
                 'id'   : 'weatherControl',
                 'title': 'ควบคุมสภาพอากาศ',
                 'type' : 'item',
