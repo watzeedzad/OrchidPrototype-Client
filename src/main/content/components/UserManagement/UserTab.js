@@ -3,8 +3,8 @@ import {withStyles} from '@material-ui/core/styles';
 import {FusePageSimple, FuseAnimate} from '@fuse';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-// import ContactsList from 'main/content/apps/contacts/ContactsList';
-// import ContactsHeader from 'main/content/apps/contacts/ContactsHeader';
+import UserTable from 'main/content/components/UserManagement/UserTable';
+import UserHeader from 'main/content/components/UserManagement/UserHeader';
 import _ from '@lodash';
 import {Button, Icon} from '@material-ui/core';
 import UserDialog from 'main/content/components/UserManagement/UserDialog';
@@ -48,24 +48,30 @@ class UserTab extends Component {
         }
 
         return (
-            <div>
-                {/* <FusePageSimple
+            <React.Fragment>
+                <FusePageSimple
                     classes={{
                         contentCardWrapper: "p-16 sm:p-24 pb-80",
                         leftSidebar       : "w-256",
                         header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
                     }}
-                    // header={
-                    //     //<ContactsHeader pageLayout={() => this.pageLayout}/>
-                    // }
-                    // content={
-                    //     //<ContactsList/>
-                    // }
+                    header={
+                        <UserHeader 
+                        pageLayout={() => this.pageLayout}
+                        handleSearch={this.handleSearch}/>
+                    }
+                    content={
+                        <UserTable
+                            data={users.data}
+                            buttonEdit={this.handleEdit}
+                            buttonDelete={this.handleDelete}        
+                        />
+                    }
                     onRef={instance => {
                         this.pageLayout = instance;
                     }}
                     innerScroll
-                /> */}
+                />
                 <FuseAnimate animation="transition.expandIn" delay={300}>
                     <Button
                         variant="fab"
@@ -78,20 +84,20 @@ class UserTab extends Component {
                     </Button>
                 </FuseAnimate>
                 <UserDialog
-                    isOpen={this.state.modal} 
-                    dialogTitle={this.state.modalTitle}
+                    isOpen={this.state.dialog} 
+                    dialogTitle={this.state.dialogTitle}
                     data={this.state.data}
                     userSave={userSave}
                     onSubmit={this.handleSubmit}
                     onToggle={this.toggle}/>
 
-            </div>
+            </React.Fragment>
         )
     };
 
     toggle = () => {
         this.setState({
-            modal: !this.state.modal
+            dialog: !this.state.dialog
         })
     }
 
@@ -111,15 +117,15 @@ class UserTab extends Component {
     //ฟังก์ชันแก้ไขข้อมูล และสั่งให้เปิด Modal โดยส่งข้อมูลไปแป๊ะให้กับฟอร์มด้วย
     handleEdit = (data) => {
         this.props.dispatch(resetStatus())
-
+        
         this.setState({ dialogTitle: 'แก้ไข' ,data: data})
         this.toggle()
-
     }
 
     //ฟังก์ชันบันทึกข้อมูล
     handleSubmit = (values) => {
-        if(this.state.modalTitle === 'เพิ่ม'){
+
+        if(this.state.dialogTitle === 'เพิ่ม'){
             this.props.dispatch(addUser(values)).then(() => {
                 if (!this.props.userSave.isRejected) {
                     this.toggle()
@@ -134,7 +140,7 @@ class UserTab extends Component {
                     this.props.dispatch(loadUsers({farmId: 123456789}))
                 }
             })
-        }else if(this.state.modalTitle === 'แก้ไข'){
+        }else if(this.state.dialogTitle === 'แก้ไข'){
             this.props.dispatch(editUser(values)).then(() => {
                 if (!this.props.userSave.isRejected) {
                     this.toggle()

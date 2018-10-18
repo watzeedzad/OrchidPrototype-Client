@@ -15,11 +15,7 @@ function UserManagement (props) {
     const { classes } = props;
         return (
             <div className={classes.root}>
-                <FuseAnimate animation="transition.slideUpIn" delay={200}>
-                    <div>
-                        <UserTab />
-                    </div>
-                </FuseAnimate>
+                <UserTab />
             </div>
         )
     

@@ -1,21 +1,23 @@
 import React, {Component} from 'react';
 import {MuiThemeProvider, withStyles} from '@material-ui/core/styles/index';
 import {Hidden, Icon, IconButton, Input, Paper, Typography} from '@material-ui/core';
-import * as Actions from './store/actions';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {FuseAnimate, FuseSelectedTheme} from '@fuse';
+import { debounce } from 'lodash';
+import SearchBar from '../../../Utils/searchBar'
 
 const styles = theme => ({
     root: {}
 });
 
-class ContactsHeader extends Component {
+class UserHeader extends Component {
 
     render()
     {
         const {classes, setSearchText, searchText, pageLayout} = this.props;
+
+        const userSearch = debounce(term => { this.props.handleSearch(term) }, 200);
+
         return (
             <div className={classNames(classes.root, "flex flex-1 items-center justify-between p-8 sm:p-24")}>
 
@@ -47,17 +49,27 @@ class ContactsHeader extends Component {
 
                                 <Icon className="mr-8" color="action">search</Icon>
 
-                                <Input
+                                <SearchBar
+                                    onSearchTermChange={userSearch}
+                                    className="flex flex-1"
+                                    disableUnderline
+                                    fullWidth
+                                    placeholder="ค้นหา..." 
+                                    inputProps={{
+                                        'aria-label': 'Search'
+                                    }}/>
+
+                                {/* <Input
                                     placeholder="Search for anything"
                                     className="flex flex-1"
                                     disableUnderline
                                     fullWidth
-                                    value={searchText}
+                                    // value={searchText}
                                     inputProps={{
                                         'aria-label': 'Search'
                                     }}
-                                    onChange={setSearchText}
-                                />
+                                    // onChange={setSearchText}
+                                /> */}
                             </Paper>
                         </FuseAnimate>
                     </MuiThemeProvider>
@@ -68,18 +80,5 @@ class ContactsHeader extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch)
-{
-    return bindActionCreators({
-        setSearchText: Actions.setSearchText
-    }, dispatch);
-}
 
-function mapStateToProps({contactsApp})
-{
-    return {
-        searchText: contactsApp.contacts.searchText
-    }
-}
-
-export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(ContactsHeader));
+export default withStyles(styles, {withTheme: true})(UserHeader);

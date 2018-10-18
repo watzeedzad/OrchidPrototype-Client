@@ -35,10 +35,9 @@ class UserDialog extends Component {
 
     form = React.createRef();
 
-    componentDidMount() {
-        const {data} = this.props
-
-        if (this.props.data._id) {
+    componentWillReceiveProps(nextProps){
+        const {data} = nextProps
+        if (data._id) {
             this.setState({ 
                 farmId : data.farmId,
                 role : data.role,
@@ -97,7 +96,7 @@ class UserDialog extends Component {
                 }}
                 className={classes.root}
                 onClose={this.toggle}
-                open={!this.props.isOpen}
+                open={this.props.isOpen}
                 fullWidth
                 maxWidth="xs"
             >
@@ -105,7 +104,7 @@ class UserDialog extends Component {
                 <AppBar position="static" elevation={1}>
                     <Toolbar className="flex w-full">
                         <Typography variant="subtitle1" color="inherit">
-                            {dialogTitle}
+                            {dialogTitle}ผู้ใช้
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -145,9 +144,9 @@ class UserDialog extends Component {
                                 className={classes.formControl}
                                 label="นามสกุล"
                                 type="text"
-                                id="lastName"
-                                name="lastName"
-                                value={this.state.lastName}
+                                id="lastname"
+                                name="lastname"
+                                value={this.state.lastname}
                                 onChange={this.handleChange}
                                 variant="outlined"
                                 fullWidth
@@ -195,10 +194,12 @@ class UserDialog extends Component {
                                     onChange={this.handleRadioChange}/>                                                
                             </RadioGroupFormsy>
                         </div>
-                        {this.props.data._id  ? 
-                        <div>
+                        {this.props.data._id  ?
+                        null 
+                        : <div>
                             <div className="flex">
                                 <div className="min-w-48 pt-20">
+                                    <Icon color="action">vpn_key</Icon>
                                 </div>
                                 <TextFieldFormsy
                                     className={classes.formControl}
@@ -230,8 +231,26 @@ class UserDialog extends Component {
                                 />
                             </div>
                         </div>
-                        : null}
-                        
+                        }
+
+                        <TextFieldFormsy
+                                className={classes.formControl}
+                                autoFocus
+                                type="hidden"
+                                id="farmId"
+                                name="farmId"
+                                value={this.state.farmId}
+                                onChange={this.handleChange}
+                            />
+                        <TextFieldFormsy
+                                className={classes.formControl}
+                                autoFocus
+                                type="hidden"
+                                id="_id"
+                                name="_id"
+                                value={this.props.data._id}
+                                onChange={this.handleChange}
+                            />
                     </DialogContent>
 
                     <DialogActions className="justify-between pl-16">
