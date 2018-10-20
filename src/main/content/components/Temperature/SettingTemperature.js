@@ -61,7 +61,7 @@ class SettingTemperature extends Component {
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
-                <Typography variant="headline">ตั้งค่าอุณหภูมิที่เหมาะสม</Typography>
+                <Typography variant="headline">ตั้งค่าอุณหภูมิที่เหมาะสม</Typography><br/>
                 <Formsy
                     onValidSubmit={onSubmit}
                     onValid={this.enableButton}
@@ -155,4 +155,4 @@ function validate(values) {
 }
 
 
-export default withStyles(styles)(SettingTemperature);
+export default  withStyles(styles, {withTheme: true})(SettingTemperature);

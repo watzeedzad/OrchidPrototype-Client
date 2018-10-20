@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import TemperatureGauge from '../Temperature/TemperatureGauge'
 import SettingTemperature from '../Temperature/SettingTemperature'
 import { Container, Row, Col } from 'reactstrap';
+import {Typography} from '@material-ui/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Temperature extends Component {
@@ -44,13 +45,13 @@ class Temperature extends Component {
         const { data } = temp
 
         if (temp.isRejected) {
-            return <div className="alert alert-danger">Error: {temp.data}</div>
+            return <Typography variant="body1" className="alert alert-danger">Error: {temp.data}</Typography>
         }
         if (temp.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <div className="alert alert-danger">{data.errorMessage}</div>
+            return <Typography variant="body1" className="alert alert-danger">{data.errorMessage}</Typography>
         }
     
         return (

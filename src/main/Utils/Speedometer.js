@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Typography} from '@material-ui/core';
 import Highcharts from "highcharts";
 import {
     HighchartsChart,
@@ -41,7 +42,7 @@ class Speedometer extends Component {
     render() {
         return (
             <div className="gauge-empty">
-                <div className="text-center">{this.props.title}</div>
+                 <Typography variant="headline" className="text-center">{this.props.title}</Typography>
                 <HighchartsChart
                     chart={{ type: "gauge" }}
                     plotOptions={plotOptions}

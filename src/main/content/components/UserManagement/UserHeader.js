@@ -14,7 +14,7 @@ class UserHeader extends Component {
 
     render()
     {
-        const {classes, setSearchText, searchText, pageLayout} = this.props;
+        const {classes} = this.props;
 
         const userSearch = debounce(term => { this.props.handleSearch(term) }, 200);
 
@@ -22,21 +22,21 @@ class UserHeader extends Component {
             <div className={classNames(classes.root, "flex flex-1 items-center justify-between p-8 sm:p-24")}>
 
                 <div className="flex flex-shrink items-center sm:w-224">
-                    <Hidden lgUp>
+                    {/* <Hidden lgUp>
                         <IconButton
                             onClick={(ev) => pageLayout().toggleLeftSidebar()}
                             aria-label="open left sidebar"
                         >
                             <Icon>menu</Icon>
                         </IconButton>
-                    </Hidden>
+                    </Hidden> */}
 
                     <div className="flex items-center">
                         <FuseAnimate animation="transition.expandIn" delay={300}>
                             <Icon className="text-32 mr-12">account_box</Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                            <Typography variant="h6" className="hidden sm:flex">Contacts</Typography>
+                            <Typography variant="h6" className="hidden sm:flex">รายชื่อผู้ใช้งาน</Typography>
                         </FuseAnimate>
                     </div>
                 </div>
@@ -58,18 +58,6 @@ class UserHeader extends Component {
                                     inputProps={{
                                         'aria-label': 'Search'
                                     }}/>
-
-                                {/* <Input
-                                    placeholder="Search for anything"
-                                    className="flex flex-1"
-                                    disableUnderline
-                                    fullWidth
-                                    // value={searchText}
-                                    inputProps={{
-                                        'aria-label': 'Search'
-                                    }}
-                                    // onChange={setSearchText}
-                                /> */}
                             </Paper>
                         </FuseAnimate>
                     </MuiThemeProvider>

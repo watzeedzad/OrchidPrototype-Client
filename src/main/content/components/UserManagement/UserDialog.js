@@ -5,7 +5,6 @@ import {
 import {TextFieldFormsy, CheckboxFormsy, RadioGroupFormsy, SelectFormsy} from '@fuse';
 import Formsy from 'formsy-react';
 import {withStyles} from '@material-ui/core/styles/index';
-import {bindActionCreators} from 'redux';
 import _ from '@lodash';
 
 const styles = theme => ({

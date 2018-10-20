@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Speedometer from '../../../Utils/Speedometer'
+import {Typography} from '@material-ui/core';
 
 class TemperatureGauge extends Component {
     
     render() {
         if (!this.props.currentValue){
-            return <div className="alert alert-danger">ไม่มีข้อมูลจากเซนเซอร์</div>
+            return <Typography variant="body1" className="alert alert-danger">ไม่มีข้อมูลจากเซนเซอร์</Typography>
         }
 
         return (

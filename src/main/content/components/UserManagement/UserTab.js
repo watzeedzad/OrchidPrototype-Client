@@ -67,6 +67,7 @@ class UserTab extends Component {
                             buttonDelete={this.handleDelete}        
                         />
                     }
+                    sidebarInner
                     onRef={instance => {
                         this.pageLayout = instance;
                     }}

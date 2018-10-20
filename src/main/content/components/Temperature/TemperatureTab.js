@@ -58,4 +58,4 @@ class TemperatureTab extends Component {
     }
 }
 
-export default withStyles(styles)(TemperatureTab);
+export default  withStyles(styles, {withTheme: true})(TemperatureTab);

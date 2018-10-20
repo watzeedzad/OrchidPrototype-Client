@@ -62,7 +62,7 @@ class SettingHumidity extends Component {
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
-                <Typography variant="headline">ตั้งค่าความชื้นที่เหมาะสม</Typography>
+                <Typography variant="headline">ตั้งค่าความชื้นที่เหมาะสม</Typography><br/>
                 <Formsy
                     onValidSubmit={onSubmit}
                     onValid={this.enableButton}
@@ -156,4 +156,4 @@ class SettingHumidity extends Component {
 // }
 
 
-export default withStyles(styles)(SettingHumidity);
+export default  withStyles(styles, {withTheme: true})(SettingHumidity);

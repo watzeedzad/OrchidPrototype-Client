@@ -58,4 +58,4 @@ class HumidityTab extends Component {
     }
 }
 
-export default withStyles(styles)(HumidityTab);
+export default  withStyles(styles, {withTheme: true})(HumidityTab);

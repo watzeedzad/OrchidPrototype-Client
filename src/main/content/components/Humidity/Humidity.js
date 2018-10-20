@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import HumidityGauge from '../Humidity/HumidityGauge'
 import SettingHumidity from '../Humidity/SettingHumidity'
 import { Container, Row, Col } from 'reactstrap';
+import {Typography} from '@material-ui/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Humidity extends Component {
@@ -45,11 +46,15 @@ class Humidity extends Component {
         const { data } = humidity
 
         if (humidity.isRejected) {
-            return <div className="alert alert-danger">Error: {humidity.data}</div>
+            return <Typography variant="body1" className="alert alert-danger">Error: {humidity.data}</Typography>
         }
         if (humidity.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
+        if (data.errorMessage){
+            return <Typography variant="body1" className="alert alert-danger">{data.errorMessage}</Typography>
+        }
+    
         return (
             <Container>
                 <div>

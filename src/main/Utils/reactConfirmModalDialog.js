@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { render } from 'react-dom';
+import {
+     Button, Dialog, DialogActions, DialogContent, Typography, Toolbar, AppBar
+} from '@material-ui/core';
 
-import { Modal, ModalHeader, Button, ModalBody, ModalFooter } from 'reactstrap';
 
 //รูปแบบการเขียนต่อไปนี้จะเข้าใจยากครับต้องใช้เวลานานเพื่อทำและทดสอบ
-//มันเป็นรูปแบบของการสร้าง Element ขึ้นมาใหม่
+//มันเป็นรูปแบบของการสร้าง Element 
+
 export default class ReactConfirmModalDialog extends Component {
     //เก็บ State เพื่อกำหนดว่าจะให้แสดง Modal หรือไม่
     state = {
@@ -61,7 +64,7 @@ export default class ReactConfirmModalDialog extends Component {
     };
 
     render() {
-        const { title, message, confirmLabel, cancelLabel, type } = this.props;
+        const {classes, title, message, confirmLabel, cancelLabel, type } = this.props;
 
         let buttonColor, modalColor;
         switch (type) {
@@ -76,20 +79,35 @@ export default class ReactConfirmModalDialog extends Component {
         }
         
         return (
-            <div>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={modalColor}>
-                    <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
-                    <ModalBody>
-                        {message}
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button color="secondary" onClick={this.toggle}>{cancelLabel}</Button>
-                        {confirmLabel && <Button color={buttonColor} onClick={this.onClickConfirm}>
-                        {confirmLabel}</Button>}
-                    </ModalFooter>
-                </Modal>
-            </div>
+            <Dialog
+                // classes={{
+                //     root : classes.root,
+                //     paper: "m-24"
+                // }}
+                //className={modalColor}
+                onClose={this.toggle}
+                open={this.state.modal}
+                //fullWidth
+                maxWidth="xs"
+            >
+                <AppBar position="static" elevation={1}>
+                    <Toolbar className="flex w-full">
+                        {/* <Typography variant="body2" color="inherit"> */}
+                            {title}
+                        {/* </Typography> */}
+                    </Toolbar>
+                </AppBar>
+                <DialogContent>
+                    {/* <Typography variant="body2" color="inherit"> */}
+                        <br/>{message}
+                    {/* </Typography>    */}
+                </DialogContent>
+                <DialogActions className="justify-between pl-16"> 
+                <Button variant="raised" color={buttonColor} onClick={this.toggle}>{cancelLabel}</Button>
+                    {confirmLabel && <Button variant="raised" color="primary" onClick={this.onClickConfirm}>
+                    {confirmLabel}</Button>}
+                </DialogActions>
+            </Dialog>                  
         )
     }
 }

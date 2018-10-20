@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import {FuseUtils, FuseAnimate} from '@fuse';
-import {Avatar, Checkbox, Icon, IconButton, ListItemIcon, 
-    ListItemText, Menu, MenuItem, MenuList, Typography} from '@material-ui/core';
+import {Avatar, Checkbox, Icon, IconButton,Typography} from '@material-ui/core';
 import ReactTable from "react-table";
 import classNames from 'classnames';
 
