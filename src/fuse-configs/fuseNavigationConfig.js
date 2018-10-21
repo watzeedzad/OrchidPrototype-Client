@@ -16,7 +16,7 @@ export const fuseNavigationConfig = [
                 'id'   : 'userManagement',
                 'title': 'รายชื่อผู้ใช้งาน',
                 'type' : 'item',
-                'icon' : 'contacts',
+                'icon' : 'account_box',
                 'url'  : '/userManagement'
             },
             {
@@ -25,7 +25,14 @@ export const fuseNavigationConfig = [
                 'type' : 'item',
                 'icon' : 'wb_sunny',
                 'url'  : '/weatherControl'
-            }
+            },
+            // {
+            //     'id'   : 'controllerManagement',
+            //     'title': 'จัดการคอนโทรลเลอร์',
+            //     'type' : 'item',
+            //     'icon' : 'wb_sunny',
+            //     'url'  : '/controllerManagement'
+            // }
         ]
     }
 ];

@@ -3,13 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import { getGreenHouse,deleteController,editController } from '../../redux/actions/controllerActions'
+import {FusePageCarded} from '@fuse';
+import {Tab, Tabs, Typography} from '@material-ui/core';
+import { getGreenHouse,deleteController,editController } from 'store/actions/application/controllerActions'
 import GreenHouseControllerList from './GreenHouseControllerList';
 import { UncontrolledAlert, Modal, ModalHeader } from 'reactstrap';
-import { confirmModalDialog } from '../../Utils/reactConfirmModalDialog'
+import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import ControllerForm from './ControllerForm'
 import ProjectTabs from './ProjectTabs';
 
@@ -26,11 +25,16 @@ TabContainer.propTypes = {
 };
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    width: "100%",
-    backgroundColor: theme.palette.background.paper
-  }
+  layoutRoot   : {},
+    layoutToolbar: {
+        padding: 0
+    },
+    tabsRoot     : {
+        height: 64
+    },
+    tabRoot      : {
+        height: 64
+    }
 });
 
 class GreenHouseTabs extends Component {
@@ -65,44 +69,64 @@ class GreenHouseTabs extends Component {
     }
 
     return (
-      <div className={classes.root}>
-        {this.state.mss}
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={this.handleChange}
-            scrollable
-            scrollButtons="on"
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            {greenHouses.data && greenHouses.data.map((e,index) => {
-              let label = "โรงเรือนที่ "+(parseInt(index)+1)
-              return (
-                <Tab label={label} index/>
-              )
-            })}
-          </Tabs>
-        </AppBar>
-        {greenHouses.data && greenHouses.data.map((e,index) => {
-          return (
-            value === index && 
-            <TabContainer>
-              <h5>รายชื่อคอนโทรลเลอร์ในโรงเรือน</h5>
-              <GreenHouseControllerList 
-                greenHouseId={e.greenHouseId}
-                buttonCreate={this.handleNew} 
-                buttonDelete={this.handleDelete}
-                buttonEdit={this.handleEdit}/>
-              <br/><br/><hr/>
-              <ProjectTabs 
-                greenHouseId={e.greenHouseId}
-                buttonCreate={this.handleNew} 
-                buttonDelete={this.handleDelete}
-                buttonEdit={this.handleEdit}/>
-            </TabContainer>
-          )
-        })}
+      <React.Fragment>
+        <FusePageCarded
+          classes={{
+              root   : classes.layoutRoot,
+              toolbar: classes.layoutToolbar
+          }}
+          header={
+              <div className="py-24"><h4>Header</h4></div>
+          }
+          contentToolbar={
+            <Tabs
+              value={value}
+              onChange={this.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              scrollable
+              scrollButtons="auto"
+              classes={{
+                  root: classes.tabsRoot
+              }}
+            >
+              {greenHouses.data && greenHouses.data.map((e,index) => {
+                let label = "โรงเรือนที่ "+(parseInt(index)+1)
+                return (
+                  <Tab 
+                    classes={{
+                      root: classes.tabRoot
+                    }}
+                    label={label} index
+                  />
+                )
+              })}
+            </Tabs>
+          }
+          content={
+            <div className="p-24">
+              {greenHouses.data && greenHouses.data.map((e,index) => {
+                return (
+                  value === index && 
+                  <TabContainer>
+                    <h3 className="mb-16">รายชื่อคอนโทรลเลอร์ในโรงเรือน</h3>
+                    <GreenHouseControllerList 
+                      greenHouseId={e.greenHouseId}
+                      buttonCreate={this.handleNew} 
+                      buttonDelete={this.handleDelete}
+                      buttonEdit={this.handleEdit}/>
+                    <br/><br/><hr/>
+                    <ProjectTabs 
+                      greenHouseId={e.greenHouseId}
+                      buttonCreate={this.handleNew} 
+                      buttonDelete={this.handleDelete}
+                      buttonEdit={this.handleEdit}/>
+                  </TabContainer>
+                )
+              })}
+            </div>
+          }
+        />
         <Modal isOpen={this.state.modal} toggle={this.toggle} 
           className="modal-primary" autoFocus={false}>
             <ModalHeader toggle={this.toggle}>{this.state.modalTitle}คอนโทรลเลอร์</ModalHeader>
@@ -111,7 +135,7 @@ class GreenHouseTabs extends Component {
               onSubmit={this.handleSubmit}
               onToggle={this.toggle} />
         </Modal>
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -180,4 +204,4 @@ GreenHouseTabs.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(GreenHouseTabs));
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(GreenHouseTabs));

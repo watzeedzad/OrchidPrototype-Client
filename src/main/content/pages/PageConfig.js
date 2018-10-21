@@ -17,6 +17,13 @@ export const PageConfig = {
                 loader: () => import('./UserManagement')
             })
             
-        }
+        },
+        // {
+        //     path     : '/controllerManagement',
+        //     component: FuseLoadable({
+        //         loader: () => import('./ControllerManagement')
+        //     })
+            
+        // }
     ]
 };

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {FusePageSimple, FuseAnimate} from '@fuse';
+import {FusePageCarded, FuseAnimate} from '@fuse';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import UserTable from 'main/content/components/UserManagement/UserTable';
@@ -49,7 +49,7 @@ class UserTab extends Component {
 
         return (
             <React.Fragment>
-                <FusePageSimple
+                <FusePageCarded
                     classes={{
                         contentCardWrapper: "p-16 sm:p-24 pb-80",
                         leftSidebar       : "w-256",
