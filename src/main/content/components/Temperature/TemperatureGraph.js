@@ -1,9 +1,9 @@
- import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { getTempHistory } from '../../../../store/actions/application/weatherActions'
 import { connect } from 'react-redux'
 import LineGraph from '../../../Utils/LineGraph'
 import {Typography} from '@material-ui/core';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class TemperatureGraph extends Component {
 
@@ -41,13 +41,13 @@ class TemperatureGraph extends Component {
         const { data } = tempHistory
 
         if (tempHistory.isRejected) {
-            return <Typography variant="body1" className="alert alert-danger">Error: {tempHistory.data}</Typography>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+tempHistory.data}/>
         }
         if (tempHistory.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <Typography variant="body1" className="alert alert-danger">{data.errorMessage}</Typography>
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
         const history = []
         for (let index = 0; index < data.temperatureHistory.length; index++) {

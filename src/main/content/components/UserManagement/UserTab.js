@@ -14,6 +14,7 @@ import {
 } from 'store/actions/application/userActions';
 import { UncontrolledAlert } from 'reactstrap';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 const styles = theme => ({
     addButton: {
@@ -30,7 +31,6 @@ class UserTab extends Component {
         dialog: false,
         dialogTitle: '',
         data: [],
-        mss: ''
     }
 
     componentDidMount()
@@ -43,8 +43,7 @@ class UserTab extends Component {
         const {classes, users, userSave} = this.props;
 
         if (users.isRejected) {
-            //ถ้ามี error
-            return <div className="alert alert-danger">Error:{users.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+users.data}/>
         }
 
         return (
@@ -130,14 +129,6 @@ class UserTab extends Component {
             this.props.dispatch(addUser(values)).then(() => {
                 if (!this.props.userSave.isRejected) {
                     this.toggle()
-                    this.setState({
-                        mss: 
-                            <div>
-                                <UncontrolledAlert  color="success">
-                                    ทำการเพิ่มข้อมูลผู้ใช้สำเร็จ
-                                </UncontrolledAlert >
-                            </div>
-                      })
                     this.props.dispatch(loadUsers({farmId: 123456789}))
                 }
             })
@@ -145,14 +136,6 @@ class UserTab extends Component {
             this.props.dispatch(editUser(values)).then(() => {
                 if (!this.props.userSave.isRejected) {
                     this.toggle()
-                    this.setState({
-                        mss: 
-                            <div>
-                                <UncontrolledAlert  color="success">
-                                    ทำการแก้ไขข้อมูลผู้ใช้สำเร็จ
-                                </UncontrolledAlert >
-                            </div>
-                    })
                     this.props.dispatch(loadUsers({farmId: 123456789}))
                 }
             })

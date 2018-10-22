@@ -41,16 +41,12 @@ class TemperatureTab extends Component {
             <CssBaseline />
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
-                    <Container>
-                    <Row>
-                        <Col xs='12' sm='12' md='12' lg='12' xl='12'>
+                        <div className="w-full">
                             <Temperature />
-                        </Col>
-                        <Col xs='12' sm='12' md='12' lg='12' xl='12'>
+                        </div>
+                        <div className="w-full">
                             <TemperatureGraph />
-                        </Col>
-                    </Row>
-                    </Container>
+                        </div>
                     </Paper>
                 </main>
             </React.Fragment>

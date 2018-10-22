@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import TemperatureTab from '../components/Temperature/TemperatureTab';
-// import HumidityTab from '../components/Humidity/HumidityTab'
+import HumidityTab from '../components/Humidity/HumidityTab'
 import { withStyles } from '@material-ui/core/styles';
 import {FuseAnimate,FusePageCarded} from '@fuse';
 import {Icon, Typography} from '@material-ui/core';
@@ -37,7 +37,7 @@ class WeatherControl extends Component {
                     <FuseAnimate animation="transition.slideUpIn" delay={200}>
                         <div>
                             <TemperatureTab /><br/><hr/>
-                            {/* <HumidityTab /><br/> */}
+                            <HumidityTab /><br/>
                         </div>
                     </FuseAnimate>
                 }

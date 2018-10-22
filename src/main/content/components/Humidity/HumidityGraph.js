@@ -3,7 +3,7 @@ import { getHumidityHistory } from '../../../../store/actions/application/weathe
 import { connect } from 'react-redux'
 import LineGraph from '../../../Utils/LineGraph'
 import {Typography} from '@material-ui/core';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class HumidityGraph extends Component {
       
@@ -41,13 +41,13 @@ class HumidityGraph extends Component {
         const { data } = humidityHistory
 
         if (humidityHistory.isRejected) {
-            return <Typography variant="body1" className="alert alert-danger">Error: {humidityHistory.data}</Typography>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+humidityHistory.data}/>
         }
         if (humidityHistory.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <Typography variant="body1" className="alert alert-danger">{data.errorMessage}</Typography>
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
         const history = []
         for (let index = 0; index < data.humidityHistory.length; index++) {

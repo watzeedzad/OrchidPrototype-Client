@@ -3,9 +3,8 @@ import { getHumidity,saveHumidityConfig } from '../../../../store/actions/applic
 import { connect } from 'react-redux'
 import HumidityGauge from '../Humidity/HumidityGauge'
 import SettingHumidity from '../Humidity/SettingHumidity'
-import { Container, Row, Col } from 'reactstrap';
 import {Typography} from '@material-ui/core';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class Humidity extends Component {
 
@@ -46,36 +45,32 @@ class Humidity extends Component {
         const { data } = humidity
 
         if (humidity.isRejected) {
-            return <Typography variant="body1" className="alert alert-danger">Error: {humidity.data}</Typography>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+humidity.data}/>
         }
         if (humidity.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <Typography variant="body1" className="alert alert-danger">{data.errorMessage}</Typography>
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
     
         return (
-            <Container>
-                <div>
-                    <Row>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <HumidityGauge
-                                minConfig={data.minConfigHumidity}
-                                maxConfig={data.maxConfigHumidity}
-                                currentValue={data.currentHumidity}
-                            />
-                        </Col>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <SettingHumidity
-                                minConfig={data.minConfigHumidity}
-                                maxConfig={data.maxConfigHumidity}
-                                onSubmit={this.onSubmit}
-                            />
-                        </Col>
-                    </Row>
+            <div className="flex">
+                <div className="w-full">
+                    <HumidityGauge
+                        minConfig={data.minConfigHumidity}
+                        maxConfig={data.maxConfigHumidity}
+                        currentValue={data.currentHumidity}
+                    />
                 </div>
-            </Container>
+                <div className="w-full">
+                    <SettingHumidity
+                        minConfig={data.minConfigHumidity}
+                        maxConfig={data.maxConfigHumidity}
+                        onSubmit={this.onSubmit}
+                    />
+                </div>
+            </div>
         )
     }
 

@@ -8,7 +8,6 @@ import {
     XAxis,
     YAxis
 } from "react-jsx-highcharts";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 require("highcharts/highcharts-more")(Highcharts);
 require("highcharts/modules/solid-gauge")(Highcharts);
