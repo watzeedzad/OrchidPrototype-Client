@@ -26,13 +26,13 @@ export const fuseNavigationConfig = [
                 'icon' : 'wb_sunny',
                 'url'  : '/weatherControl'
             },
-            // {
-            //     'id'   : 'controllerManagement',
-            //     'title': 'จัดการคอนโทรลเลอร์',
-            //     'type' : 'item',
-            //     'icon' : 'wb_sunny',
-            //     'url'  : '/controllerManagement'
-            // }
+            {
+                'id'   : 'controllerManagement',
+                'title': 'จัดการคอนโทรลเลอร์',
+                'type' : 'item',
+                'icon' : 'wb_sunny',
+                'url'  : '/controllerManagement'
+            }
         ]
     }
 ];

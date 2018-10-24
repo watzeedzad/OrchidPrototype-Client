@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button } from 'reactstrap';
-import { getGreenHouseController } from '../../redux/actions/controllerActions'
+import { getGreenHouseController } from 'store/actions/application/controllerActions'
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -103,9 +103,9 @@ class GreenHouseControllerList extends Component {
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        gController: state.controllerReducers.gController,
+        gController: application.controllerReducers.gController,
     }
 }
 

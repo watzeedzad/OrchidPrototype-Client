@@ -9,7 +9,7 @@ import { getGreenHouse,deleteController,editController } from 'store/actions/app
 import GreenHouseControllerList from './GreenHouseControllerList';
 import { UncontrolledAlert, Modal, ModalHeader } from 'reactstrap';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
-import ControllerForm from './ControllerForm'
+// import ControllerForm from './ControllerForm'
 import ProjectTabs from './ProjectTabs';
 
 function TabContainer(props) {
@@ -86,9 +86,7 @@ class GreenHouseTabs extends Component {
               textColor="primary"
               scrollable
               scrollButtons="auto"
-              classes={{
-                  root: classes.tabsRoot
-              }}
+              classes={{root: "w-full h-64"}}
             >
               {greenHouses.data && greenHouses.data.map((e,index) => {
                 let label = "โรงเรือนที่ "+(parseInt(index)+1)
@@ -97,7 +95,7 @@ class GreenHouseTabs extends Component {
                     classes={{
                       root: classes.tabRoot
                     }}
-                    label={label} index
+                    label={"รหัสโรงเรือน : "+greenHouses.data[index].greenHouseId}
                   />
                 )
               })}
@@ -127,14 +125,14 @@ class GreenHouseTabs extends Component {
             </div>
           }
         />
-        <Modal isOpen={this.state.modal} toggle={this.toggle} 
+        {/* <Modal isOpen={this.state.modal} toggle={this.toggle} 
           className="modal-primary" autoFocus={false}>
             <ModalHeader toggle={this.toggle}>{this.state.modalTitle}คอนโทรลเลอร์</ModalHeader>
             <ControllerForm
               data={this.state.controllerData}
               onSubmit={this.handleSubmit}
               onToggle={this.toggle} />
-        </Modal>
+        </Modal> */}
       </React.Fragment>
     );
   }
@@ -158,14 +156,6 @@ class GreenHouseTabs extends Component {
   handleSubmit = (values) => {
     this.props.dispatch(editController(values)).then(() => {
         this.toggle()
-        this.setState({
-          mss: 
-              <div>
-                  <UncontrolledAlert  color="success">
-                      ทำการบันทึกข้อมูลคอนโทรลเลอร์สำเร็จ
-                  </UncontrolledAlert >
-              </div>
-        })
         this.props.dispatch(getGreenHouse())       
     })
   }
@@ -178,14 +168,6 @@ class GreenHouseTabs extends Component {
         confirmLabel: 'ยืนยัน ลบทันที!!',
         onConfirm: () => {
             this.props.dispatch(deleteController({macAddress: macAddress})).then(() => {
-              this.setState({
-                mss: 
-                    <div>
-                        <UncontrolledAlert  color="success">
-                            ทำการลบคอนโทรลเลอร์สำเร็จ
-                        </UncontrolledAlert >
-                    </div>
-              })
               this.props.dispatch(getGreenHouse())
             })
         }
@@ -194,9 +176,9 @@ class GreenHouseTabs extends Component {
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
   return {
-    greenHouses: state.controllerReducers.greenHouses,
+    greenHouses: application.controllerReducers.greenHouses,
   }
 }
 

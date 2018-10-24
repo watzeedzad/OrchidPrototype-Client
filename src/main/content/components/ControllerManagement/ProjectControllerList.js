@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getProjectController } from '../../redux/actions/controllerActions'
+import { getProjectController } from 'store/actions/application/controllerActions'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -55,7 +55,7 @@ class GreenHouseControllerList extends Component {
         if (pController.isLoading) {
             return <div>Loading...</div>
         }
-
+        console.log(this.props.projectId,pController)
         return (
             <div>
                 <Table className={classes.table}>
@@ -103,9 +103,9 @@ class GreenHouseControllerList extends Component {
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        pController: state.controllerReducers.pController,
+        pController: application.controllerReducers.pController,
     }
 }
 

@@ -16,7 +16,7 @@ const styles = theme => ({
     }
 });
 
-class CardedFullWidthTabbedSample extends Component {
+class GreenHouseTabDemo extends Component {
 
     state = {
         value: 0
@@ -47,10 +47,9 @@ class CardedFullWidthTabbedSample extends Component {
                         indicatorColor="primary"
                         textColor="primary"
                         scrollable
-                        scrollButtons="auto"
-                        classes={{
-                            root: classes.tabsRoot
-                        }}
+                        scrollButtons="on"
+                        classes={{root: "w-full h-64"}}
+
                     >
                         <Tab
                             classes={{
@@ -69,6 +68,42 @@ class CardedFullWidthTabbedSample extends Component {
                                 <DemoContent/>
                             </div>
                         )}
+                        {value === 1 && (
+                            <div>
+                                <h3 className="mb-16">Item Two</h3>
+                                <DemoContent/>
+                            </div>
+                        )}
+                        {value === 2 && (
+                            <div>
+                                <h3 className="mb-16">Item Three</h3>
+                                <DemoContent/>
+                            </div>
+                        )}
+                        {value === 3 && (
+                            <div>
+                                <h3 className="mb-16">Item Four</h3>
+                                <DemoContent/>
+                            </div>
+                        )}
+                        {value === 4 && (
+                            <div>
+                                <h3 className="mb-16">Item Five</h3>
+                                <DemoContent/>
+                            </div>
+                        )}
+                        {value === 5 && (
+                            <div>
+                                <h3 className="mb-16">Item Six</h3>
+                                <DemoContent/>
+                            </div>
+                        )}
+                        {value === 6 && (
+                            <div>
+                                <h3 className="mb-16">Item Seven</h3>
+                                <DemoContent/>
+                            </div>
+                        )}
                     </div>
                 }
             />
@@ -76,4 +111,4 @@ class CardedFullWidthTabbedSample extends Component {
     };
 }
 
-export default withStyles(styles, {withTheme: true})(CardedFullWidthTabbedSample);
+export default withStyles(styles, {withTheme: true})(GreenHouseTabDemo);

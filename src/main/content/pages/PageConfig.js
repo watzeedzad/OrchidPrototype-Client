@@ -18,12 +18,12 @@ export const PageConfig = {
             })
             
         },
-        // {
-        //     path     : '/controllerManagement',
-        //     component: FuseLoadable({
-        //         loader: () => import('./ControllerManagement')
-        //     })
+        {
+            path     : '/controllerManagement',
+            component: FuseLoadable({
+                loader: () => import('./ControllerManagement')
+            })
             
-        // }
+        }
     ]
 };

@@ -3,12 +3,14 @@ import weatherReducers from './weatherReducers';
 import { reducer as formReducer } from 'redux-form'
 import loginReducers from './loginReducers'
 import userReducers from './userReducers'
+import controllerReducers from './controllerReducers'
 
 const appReducers = combineReducers({
     form: formReducer,
     weatherReducers,
     loginReducers,
-    userReducers
+    userReducers,
+    controllerReducers
 });
 
 export default appReducers;

@@ -321,9 +321,9 @@ const form = reduxForm({
     validate
 })
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        dropdownController: state.controllerReducers.dropdownController,
+        dropdownController: application.controllerReducers.dropdownController,
     }
   }
 

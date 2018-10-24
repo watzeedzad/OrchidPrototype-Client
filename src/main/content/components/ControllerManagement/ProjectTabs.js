@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getProject } from '../../redux/actions/controllerActions'
+import { getProject } from 'store/actions/application/controllerActions'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'reactstrap';
 import ProjectControllerList from './ProjectControllerList'
@@ -52,9 +52,9 @@ class ProjectTabs extends Component {
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        projects: state.controllerReducers.projects,
+        projects: application.controllerReducers.projects,
     }
 }
 
