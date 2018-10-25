@@ -2,40 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { Button } from 'reactstrap';
+import { FuseAnimate } from '@fuse';
+import { Icon, IconButton, Typography} from '@material-ui/core';
+import ReactTable from "react-table";
+import classNames from 'classnames';
 import { getGreenHouseController } from 'store/actions/application/controllerActions'
 
 
-const CustomTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
 const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-  row: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default,
+    mailList: {
+        padding: 0
     },
-  },
+    mailItem: {},
+    avatar  : {
+        backgroundColor: theme.palette.primary[500]
+    },
+    labels  : {}
+
 });
 
 class GreenHouseControllerList extends Component {
@@ -45,7 +28,7 @@ class GreenHouseControllerList extends Component {
             greenHouseId: this.props.greenHouseId 
         }))
     }
-
+   
     render() {
         const { classes,gController,buttonDelete,buttonEdit,buttonCreate } = this.props;
 
@@ -55,49 +38,102 @@ class GreenHouseControllerList extends Component {
         if (gController.isLoading) {
             return <div>Loading...</div>
         }
-        
         return (
-                <Paper className={classes.root}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <CustomTableCell>Controller Name</CustomTableCell>
-                            <CustomTableCell >GreenHouseId</CustomTableCell>
-                            <CustomTableCell >IP</CustomTableCell>
-                            <CustomTableCell >Mac Address</CustomTableCell>
-                            <CustomTableCell >ปั๊มน้ำ</CustomTableCell>
-                            <CustomTableCell >ปั๊มปุ๋ย</CustomTableCell>
-                            <CustomTableCell >ปั๊มความชื้น</CustomTableCell>
-                            <CustomTableCell >หลอดไฟ</CustomTableCell>
-                            <CustomTableCell >
-                                <Button color="success" size="sm"
-                                    onClick={() => buttonCreate(this.props.greenHouseId,null)}>เพิ่มข้อมูล</Button>
-                            </CustomTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {gController.data.errorMessage
-                        ? <div className="alert alert-danger">{gController.data.errorMessage}</div>
-                        : gController.data && gController.data.map(e => {
-                        return (
-                            <TableRow className={classes.row} key={e.id}>
-                                <CustomTableCell component="th" scope="row">{e.name}</CustomTableCell>
-                                <CustomTableCell >{e.greenHouseId}</CustomTableCell>
-                                <CustomTableCell >{e.ip}</CustomTableCell>
-                                <CustomTableCell >{e.mac_address}</CustomTableCell>
-                                <CustomTableCell >{e.relayType.water?"มี":"ไม่มี"}</CustomTableCell>
-                                <CustomTableCell >{e.relayType.fertilizer?"มี":"ไม่มี"}</CustomTableCell>
-                                <CustomTableCell >{e.relayType.moisture?"มี":"ไม่มี"}</CustomTableCell>
-                                <CustomTableCell >{e.relayType.light?"มี":"ไม่มี"}</CustomTableCell>
-                                <CustomTableCell >
-                                    <Button color="secondary" size="sm" onClick={() => buttonEdit(e)}>แก้ไข</Button>{"  "}
-                                    <Button color="danger" size="sm" onClick={() => buttonDelete(e.mac_address)}>ลบ</Button> 
-                                </CustomTableCell>
-                            </TableRow>
-                        )})}
-                    </TableBody>
-                </Table>
-                </Paper>
+                <FuseAnimate animation="transition.slideUpIn" delay={300}>
+                <ReactTable
+                    className={classNames(classes.root, "-striped -highlight border-0")}
+                    getTrProps={(state, rowInfo, column) => {
+                        return {
+                            className: "cursor-pointer",
+                            onClick  : (e, handleOriginal) => {
+                                if ( rowInfo )
+                                {
+                                    buttonEdit(rowInfo.original);
+                                }
+                            }
+                        }
+                    }}
+                    data={gController.data}
+                    columns={[
+                        {
+                            Header    : "ชื่อ",
+                            accessor  : "name",
+                            filterable: true,
+                            className : "font-bold"
+                        },
+                        {
+                            Header    : "รหัสโรงเรือน",
+                            accessor  : "greenHouseId",
+                            filterable: true,
+                        },
+                        {
+                            Header    : "IP",
+                            accessor  : "ip",
+                            filterable: true,
+                        },
+                        {
+                            Header    : "รหัสเครื่อง",
+                            accessor  : "mac_address",
+                            filterable: true
+                        },
+                        {
+                            Header    : "ปั๊มน้ำ",
+                            accessor  : "water",
+                            filterable: true
+                        },
+                        {
+                            Header    : "ปั๊มปุ๋ย",
+                            accessor  : "fertilizer",
+                            filterable: true
+                        },
+                        {
+                            Header    : "ปั๊มความชื้น",
+                            accessor  : "moisture",
+                            filterable: true
+                        },
+                        {
+                            Header    : "หลอดไฟ",
+                            accessor  : "light",
+                            filterable: true
+                        },
+                        {
+                            Header:                                     
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    buttonCreate(this.props.greenHouseId,null);
+                                }}
+                            >
+                                <Icon>add_box</Icon>
+                            </IconButton>,
+                            width : 128,
+                            Cell  : row => (
+                                <div className="flex items-center">
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            buttonEdit(row.original);
+                                        }}
+                                    >
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            buttonDelete(row.original.mac_address);
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </div>
+                            )
+                        }
+                    ]}
+                    defaultPageSize={5}
+                    noDataText="ไม่มีคอนโทรลเลอร์ในโรงเรือนนี้"
+                />
+            </FuseAnimate>
+            
         );
     }
 
@@ -113,4 +149,4 @@ GreenHouseControllerList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(GreenHouseControllerList));
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(GreenHouseControllerList))

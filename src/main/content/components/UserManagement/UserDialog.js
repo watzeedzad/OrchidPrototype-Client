@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {
-    FormControlLabel, Radio, TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, Avatar
+    FormControlLabel, Radio, Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar
 } from '@material-ui/core';
-import {TextFieldFormsy, CheckboxFormsy, RadioGroupFormsy, SelectFormsy} from '@fuse';
+import {TextFieldFormsy, RadioGroupFormsy} from '@fuse';
 import Formsy from 'formsy-react';
 import {withStyles} from '@material-ui/core/styles/index';
 import _ from '@lodash';

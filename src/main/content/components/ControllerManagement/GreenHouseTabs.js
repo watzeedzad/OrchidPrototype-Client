@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
 import {FusePageCarded} from '@fuse';
 import {Tab, Tabs, Typography} from '@material-ui/core';
 import { getGreenHouse,deleteController,editController } from 'store/actions/application/controllerActions'
 import GreenHouseControllerList from './GreenHouseControllerList';
-import { UncontrolledAlert, Modal, ModalHeader } from 'reactstrap';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
-// import ControllerForm from './ControllerForm'
+import ControllerForm from './ControllerForm'
 import ProjectTabs from './ProjectTabs';
 
 function TabContainer(props) {
@@ -41,8 +39,8 @@ class GreenHouseTabs extends Component {
   state = {
     value: 0,
     mss: '',
-    modal: false,
-    modalTitle: '',
+    dialog: false,
+    dialogTitle: '',
     controllerData: []
   };
 
@@ -125,31 +123,29 @@ class GreenHouseTabs extends Component {
             </div>
           }
         />
-        {/* <Modal isOpen={this.state.modal} toggle={this.toggle} 
-          className="modal-primary" autoFocus={false}>
-            <ModalHeader toggle={this.toggle}>{this.state.modalTitle}คอนโทรลเลอร์</ModalHeader>
-            <ControllerForm
-              data={this.state.controllerData}
-              onSubmit={this.handleSubmit}
-              onToggle={this.toggle} />
-        </Modal> */}
+        <ControllerForm
+          isOpen={this.state.dialog} 
+          dialogTitle={this.state.dialogTitle}
+          data={this.state.controllerData}
+          onSubmit={this.handleSubmit}
+          onToggle={this.toggle} />
       </React.Fragment>
     );
   }
 
   toggle = () => {
     this.setState({
-        modal: !this.state.modal
+      dialog: !this.state.dialog
     })
   }
 
   handleNew = (greenHouseId,projectId) => {
-    this.setState({ modalTitle: 'เพิ่ม' ,controllerData: {greenHouseId: greenHouseId, projectId: projectId} })
+    this.setState({ dialogTitle: 'เพิ่ม' ,controllerData: {greenHouseId: greenHouseId, projectId: projectId} })
     this.toggle();
   }
 
   handleEdit = (data) => {
-    this.setState({ modalTitle: 'แก้ไข' ,controllerData: data})
+    this.setState({ dialogTitle: 'แก้ไข' ,controllerData: data})
     this.toggle()
   }
 

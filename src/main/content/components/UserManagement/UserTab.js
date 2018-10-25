@@ -12,7 +12,6 @@ import {
     loadUsers, addUser, editUser,
     deleteUser, resetStatus, searchUsers
 } from 'store/actions/application/userActions';
-import { UncontrolledAlert } from 'reactstrap';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
