@@ -5,7 +5,7 @@ import HumidityGauge from '../Humidity/HumidityGauge'
 import SettingHumidity from '../Humidity/SettingHumidity'
 import {Typography} from '@material-ui/core';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import Grid from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
 class Humidity extends Component {
 
