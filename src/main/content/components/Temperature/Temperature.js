@@ -5,7 +5,7 @@ import TemperatureGauge from '../Temperature/TemperatureGauge'
 import SettingTemperature from '../Temperature/SettingTemperature'
 import {Typography} from '@material-ui/core';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-
+import Grid from '@material-ui/core/Grid';
 
 class Temperature extends Component {
 
@@ -56,13 +56,17 @@ class Temperature extends Component {
     
         return (
             <div className="flex">
+             <Grid container spacing={24}>
+                <Grid item xs={12} sm={12} md={6}>
                 <div className="w-full">
                         <TemperatureGauge
                             minConfig={data.minConfigTemperature}
                             maxConfig={data.maxConfigTemperature}
                             currentValue={data.currentTemperature}
-                        />
+                        />    
                 </div>
+                </Grid> 
+                <Grid item xs={12} sm={12} md={6}>
                 <div className="w-full">
                         <SettingTemperature
                             minConfig={data.minConfigTemperature}
@@ -70,6 +74,8 @@ class Temperature extends Component {
                             onSubmit={this.onSubmit}
                         />
                 </div>
+                </Grid>
+             </Grid>    
             </div>
         )
     }

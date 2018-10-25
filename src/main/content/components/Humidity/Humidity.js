@@ -5,6 +5,7 @@ import HumidityGauge from '../Humidity/HumidityGauge'
 import SettingHumidity from '../Humidity/SettingHumidity'
 import {Typography} from '@material-ui/core';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Grid from '@material-ui/core/Grid';
 
 class Humidity extends Component {
 
@@ -56,6 +57,8 @@ class Humidity extends Component {
     
         return (
             <div className="flex">
+              <Grid container spacing={24}>
+                <Grid item xs={12} sm={12} md={6}>
                 <div className="w-full">
                     <HumidityGauge
                         minConfig={data.minConfigHumidity}
@@ -63,6 +66,8 @@ class Humidity extends Component {
                         currentValue={data.currentHumidity}
                     />
                 </div>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
                 <div className="w-full">
                     <SettingHumidity
                         minConfig={data.minConfigHumidity}
@@ -70,6 +75,8 @@ class Humidity extends Component {
                         onSubmit={this.onSubmit}
                     />
                 </div>
+                </Grid>
+                </Grid>    
             </div>
         )
     }
