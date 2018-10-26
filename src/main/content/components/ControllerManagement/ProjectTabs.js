@@ -35,7 +35,7 @@ class ProjectTabs extends Component {
                     {projects.data && projects.data.map(e => {
                         let breakLoop = true; 
                         return (
-                            <Grid item xs={10} sm={10} md={10}>
+                            <Grid item xs={12} sm={10} md={10}>
                                 <Typography variant="subtitle1">รหัสโปรเจ็ค : {e.projectId}</Typography>
                                 {pController.data.errorMessage
                                 ? <SnackbarContent className="bg-red-light" message={pController.data.errorMessage}/>
