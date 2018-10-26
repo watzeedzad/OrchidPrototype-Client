@@ -56,28 +56,22 @@ class Humidity extends Component {
         }
     
         return (
-            <div className="flex">
-              <Grid container spacing={24}>
+            <Grid container spacing={24}>
                 <Grid item xs={12} sm={12} md={6}>
-                <div className="w-full">
                     <HumidityGauge
                         minConfig={data.minConfigHumidity}
                         maxConfig={data.maxConfigHumidity}
                         currentValue={data.currentHumidity}
                     />
-                </div>
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
-                <div className="w-full">
                     <SettingHumidity
                         minConfig={data.minConfigHumidity}
                         maxConfig={data.maxConfigHumidity}
                         onSubmit={this.onSubmit}
                     />
-                </div>
                 </Grid>
-                </Grid>    
-            </div>
+            </Grid>    
         )
     }
 

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { getFertilityHistory } from '../../redux/actions/planterActions'
+import { getFertilityHistory } from 'store/actions/application/planterActions'
 import { connect } from 'react-redux'
-import LineGraph from '../../Utils/LineGraph'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import LineGraph from '../../../Utils/LineGraph'
+import {Typography} from '@material-ui/core';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class FertilityGraph extends Component {
 
@@ -40,13 +41,13 @@ class FertilityGraph extends Component {
         const { data } = fertilityHistory
 
         if (fertilityHistory.isRejected) {
-            return <div className="alert alert-danger">Error: {fertilityHistory.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+fertilityHistory.data}/>
         }
         if (fertilityHistory.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <div className="alert alert-danger">{data.errorMessage}</div>
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
         const history = []
         for (let index = 0; index < data.fertilityHistory.length; index++) {
@@ -61,9 +62,9 @@ class FertilityGraph extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        fertilityHistory: state.planterReducers.fertilityHistory,
+        fertilityHistory: application.planterReducers.fertilityHistory,
     }
 }
 

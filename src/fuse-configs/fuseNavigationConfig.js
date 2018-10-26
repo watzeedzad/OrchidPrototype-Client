@@ -6,18 +6,18 @@ export const fuseNavigationConfig = [
         'icon'    : 'apps',
         'children': [
             {
-                'id'   : 'example-component',
-                'title': 'Example',
-                'type' : 'item',
-                'icon' : 'whatshot',
-                'url'  : '/example'
-            },
-            {
                 'id'   : 'userManagement',
                 'title': 'รายชื่อผู้ใช้งาน',
                 'type' : 'item',
                 'icon' : 'account_box',
                 'url'  : '/userManagement'
+            },
+            {
+                'id'   : 'controllerManagement',
+                'title': 'จัดการคอนโทรลเลอร์',
+                'type' : 'item',
+                'icon' : 'cast',
+                'url'  : '/controllerManagement'
             },
             {
                 'id'   : 'weatherControl',
@@ -27,12 +27,12 @@ export const fuseNavigationConfig = [
                 'url'  : '/weatherControl'
             },
             {
-                'id'   : 'controllerManagement',
-                'title': 'จัดการคอนโทรลเลอร์',
+                'id'   : 'planterAnalyze',
+                'title': 'วิเคราะห์สภาพเครื่องปลูก',
                 'type' : 'item',
-                'icon' : 'wb_sunny',
-                'url'  : '/controllerManagement'
-            }
+                'icon' : 'filter_vintage',
+                'url'  : '/planterAnalyze'
+            },
         ]
     }
 ];

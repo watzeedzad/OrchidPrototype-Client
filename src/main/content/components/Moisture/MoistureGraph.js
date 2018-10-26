@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { getMoistureHistory } from '../../redux/actions/planterActions'
+import { getMoistureHistory } from 'store/actions/application/planterActions'
 import { connect } from 'react-redux'
-import LineGraph from '../../Utils/LineGraph'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import LineGraph from '../../../Utils/LineGraph'
+import {Typography} from '@material-ui/core';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class MoistureGraph extends Component {
 
@@ -40,13 +41,13 @@ class MoistureGraph extends Component {
         const { data } = moistureHistory
 
         if (moistureHistory.isRejected) {
-            return <div className="alert alert-danger">Error: {moistureHistory.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+moistureHistory.data}/>
         }
         if (moistureHistory.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <div className="alert alert-danger">{data.errorMessage}</div>
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
         const history = []
         for (let index = 0; index < data.soilMoistureHistory.length; index++) {
@@ -61,9 +62,9 @@ class MoistureGraph extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        moistureHistory: state.planterReducers.moistureHistory,
+        moistureHistory: application.planterReducers.moistureHistory,
     }
 }
 

@@ -1,39 +1,45 @@
-import React, { Component } from 'react'
+import React from 'react'
 import MoistureTab from '../components/Moisture/MoistureTab'
 import ShowAllFertility from '../components/Fertility/ShowAllFertility'
-import Sidebar from '../components/Sidebar/Drawers'
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import {FuseAnimate,FusePageCarded} from '@fuse';
+import {Icon, Typography} from '@material-ui/core';
 
 const styles = theme => ({
     root: {
-      flexGrow: 1,
-      zIndex: 1,
-      overflow: 'hidden',
-      position: 'relative',
-      display: 'flex',
+        width: '100%'
     },
-    content: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing.unit * 3,
-      },
-      toolbar: theme.mixins.toolbar,
-    });
+    layoutRoot: {}
+});
+
 function PlanterAnalyze(props){    
     const { classes } = props;
 
         return (
-            <div className={classes.root}>
-                <div>
-                    <Sidebar/>
-                </div>
-                <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <MoistureTab/><br/><hr/>
-                <ShowAllFertility/>
-                </main>
-            </div>
+            <FusePageCarded
+                classes={{
+                    root: classes.layoutRoot
+                }}
+                header={
+                    <div className="flex items-center">
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <Icon className="text-32 mr-12">filter_vintage</Icon>
+                        </FuseAnimate>
+                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                            <Typography variant="h6" >วิเคราะห์สภาพเครื่องปลูก</Typography>
+                        </FuseAnimate>
+                    </div>
+                }
+                content={
+                    <FuseAnimate animation="transition.slideUpIn" delay={200}>
+                        <div>
+                        <MoistureTab/><br/><hr/>
+                        <ShowAllFertility/>
+                        </div>
+                    </FuseAnimate>
+                }
+            />
+        
         )
     
 }

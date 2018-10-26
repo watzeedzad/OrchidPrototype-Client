@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Temperature from './Temperature'
 import TemperatureGraph from './TemperatureGraph'
-import { Container, Row, Col } from 'reactstrap';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';

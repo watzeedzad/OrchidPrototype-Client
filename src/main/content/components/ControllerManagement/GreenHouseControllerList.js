@@ -7,7 +7,7 @@ import { Icon, IconButton, Typography} from '@material-ui/core';
 import ReactTable from "react-table";
 import classNames from 'classnames';
 import { getGreenHouseController } from 'store/actions/application/controllerActions'
-
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 const styles = theme => ({
     mailList: {
@@ -33,10 +33,10 @@ class GreenHouseControllerList extends Component {
         const { classes,gController,buttonDelete,buttonEdit,buttonCreate } = this.props;
 
         if (gController.isRejected) {
-            return <div className="alert alert-danger">Error: {gController.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+gController.data}/>
         }
         if (gController.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         return (
                 <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -79,22 +79,22 @@ class GreenHouseControllerList extends Component {
                         {
                             Header    : "ปั๊มน้ำ",
                             accessor  : "water",
-                            filterable: true
+                            filterable: false
                         },
                         {
                             Header    : "ปั๊มปุ๋ย",
                             accessor  : "fertilizer",
-                            filterable: true
+                            filterable: false
                         },
                         {
                             Header    : "ปั๊มความชื้น",
                             accessor  : "moisture",
-                            filterable: true
+                            filterable: false
                         },
                         {
                             Header    : "หลอดไฟ",
                             accessor  : "light",
-                            filterable: true
+                            filterable: false
                         },
                         {
                             Header:                                     

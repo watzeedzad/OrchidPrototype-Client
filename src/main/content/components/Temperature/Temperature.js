@@ -55,28 +55,22 @@ class Temperature extends Component {
         }
     
         return (
-            <div className="flex">
              <Grid container spacing={24}>
                 <Grid item xs={12} sm={12} md={6}>
-                <div className="w-full">
-                        <TemperatureGauge
-                            minConfig={data.minConfigTemperature}
-                            maxConfig={data.maxConfigTemperature}
-                            currentValue={data.currentTemperature}
-                        />    
-                </div>
+                    <TemperatureGauge
+                        minConfig={data.minConfigTemperature}
+                        maxConfig={data.maxConfigTemperature}
+                        currentValue={data.currentTemperature}
+                    />    
                 </Grid> 
                 <Grid item xs={12} sm={12} md={6}>
-                <div className="w-full">
-                        <SettingTemperature
-                            minConfig={data.minConfigTemperature}
-                            maxConfig={data.maxConfigTemperature}
-                            onSubmit={this.onSubmit}
-                        />
-                </div>
+                    <SettingTemperature
+                        minConfig={data.minConfigTemperature}
+                        maxConfig={data.maxConfigTemperature}
+                        onSubmit={this.onSubmit}
+                    />
                 </Grid>
              </Grid>    
-            </div>
         )
     }
 

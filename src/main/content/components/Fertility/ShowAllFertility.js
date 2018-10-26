@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { getAllFertility, getFertility } from '../../redux/actions/planterActions'
+import { getAllFertility, getFertility } from 'store/actions/application/planterActions'
 import { connect } from 'react-redux'
-import { Container, Row, Col } from 'reactstrap';
-import Speedometer from '../../Utils/Speedometer'
+import Speedometer from '../../../Utils/Speedometer'
 import Button from '@material-ui/core/Button';
-import { browserHistory } from 'react-router'
+import history from '../../../../history'
 import { debounce } from 'lodash'
-import 'bootstrap/dist/css/bootstrap.min.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
+import {Typography} from '@material-ui/core';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     layout: {
@@ -66,10 +67,13 @@ class ShowAllFertility extends Component {
         const { data } = fertilitys
 
         if (fertilitys.isRejected) {
-            return <div className="alert alert-danger">Error: {fertilitys.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+fertilitys.data}/>
         }
         if (fertilitys.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
+        }
+        if (data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
 
         return (
@@ -77,38 +81,37 @@ class ShowAllFertility extends Component {
             <CssBaseline />
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
-                    <Container>                
-                    <Row>
-                        {data.allFertility && data.allFertility.map(e => {
-                            let projectId = e.projectId
-                            return (
-                                <Col xs='6' sm='6' md='6' lg='6' xl='6' key={e.projectId}>
-                                    โปรเจ็คที่ : {e.projectId}
-                                    <Speedometer
-                                        title={"ปริมาณแร่ธาตุ ณ ปัจจุบัน"}
-                                        min={0}
-                                        max={100}
-                                        minConfig={e.minFertility}
-                                        maxConfig={e.maxFertility}
-                                        currentValue={e.currentFertility}
-                                        minColor={"#E8B79E"}
-                                        midColor={"#D98559"}
-                                        maxColor={"#BE5C2A"} />
-                                    <Button color="primary"
-                                        variant="raised"
-                                        fullWidth
-                                        onClick={debounce(() => 
-                                            { this.props.dispatch(getFertility({ projectId:projectId,count:0 })).then(()=>{
-                                            browserHistory.push('/fertilityControl')
-                                            }) },500)}>
-                                        ตั้งค่า
-                                    </Button>
-                                    <br /><hr />
-                                </Col>
-                            )
-                        })}
-                    </Row>
-                    </Container>
+                        <Grid container spacing={24}>
+                            {data.allFertility && data.allFertility.map(e => {
+                                let projectId = e.projectId
+                                return (
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="subtitle1">รหัสโปรเจ็ค : {e.projectId}</Typography>
+                                        <Speedometer
+                                            title={"ปริมาณแร่ธาตุ ณ ปัจจุบัน"}
+                                            min={0}
+                                            max={100}
+                                            minConfig={e.minFertility}
+                                            maxConfig={e.maxFertility}
+                                            currentValue={e.currentFertility}
+                                            minColor={"#E8B79E"}
+                                            midColor={"#D98559"}
+                                            maxColor={"#BE5C2A"} />
+                                        <Button color="primary"
+                                            variant="raised"
+                                            fullWidth
+                                            onClick={debounce(() => 
+                                                { this.props.dispatch(getFertility({ projectId:projectId,count:0 })).then(()=>{
+                                                    history.push('/fertilityControl')
+                                                }) },500)}>
+                                            ตั้งค่า
+                                        </Button>
+                                        <br /><hr />
+                                    </Grid>
+                                )
+                            })}
+                            
+                        </Grid> 
                     </Paper>
                 </main>
             </React.Fragment>
@@ -117,9 +120,9 @@ class ShowAllFertility extends Component {
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        fertilitys: state.planterReducers.fertilitys,
+        fertilitys: application.planterReducers.fertilitys,
     }
 }
 

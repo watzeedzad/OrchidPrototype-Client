@@ -127,7 +127,7 @@ class ControllerForm extends Component {
         const { classes, dropdownController, dialogTitle } = this.props
 
         if (!this.props.data._id && dropdownController.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         return (
 

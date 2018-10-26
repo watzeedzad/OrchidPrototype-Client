@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { withStyles } from "@material-ui/core/styles";
-import {FusePageCarded} from '@fuse';
-import {Tab, Tabs, Typography} from '@material-ui/core';
+import {FusePageCarded,FuseAnimate} from '@fuse';
+import {Tab, Tabs, Typography, Icon} from '@material-ui/core';
 import { getGreenHouse,deleteController,editController } from 'store/actions/application/controllerActions'
 import GreenHouseControllerList from './GreenHouseControllerList';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import ControllerForm from './ControllerForm'
 import ProjectTabs from './ProjectTabs';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 function TabContainer(props) {
   return (
@@ -57,13 +58,13 @@ class GreenHouseTabs extends Component {
     const { value } = this.state;
     
     if (greenHouses.isRejected) {
-      return <div className="alert alert-danger">Error: {greenHouses.data}</div>
+      return <SnackbarContent className="bg-red-light" message={"Error: "+greenHouses.data}/>
     }
     if (greenHouses.isLoading) {
-      return <div>Loading...</div>
+      return <Typography variant="body1">Loading...</Typography>
     }
     if (greenHouses.data.errorMessage){
-      return <div className="alert alert-danger">{greenHouses.data.errorMessage}</div>
+      return <SnackbarContent className="bg-red-light" message={greenHouses.data.errorMessage}/>
     }
 
     return (
@@ -74,7 +75,14 @@ class GreenHouseTabs extends Component {
               toolbar: classes.layoutToolbar
           }}
           header={
-              <div className="py-24"><h4>Header</h4></div>
+            <div className="flex items-center">
+              <FuseAnimate animation="transition.expandIn" delay={300}>
+                  <Icon className="text-32 mr-12">cast</Icon>
+              </FuseAnimate>
+              <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                  <Typography variant="h6" >จัดการคอนโทรลเลอร์</Typography>
+              </FuseAnimate>
+            </div>
           }
           contentToolbar={
             <Tabs
@@ -105,7 +113,7 @@ class GreenHouseTabs extends Component {
                 return (
                   value === index && 
                   <TabContainer>
-                    <h3 className="mb-16">รายชื่อคอนโทรลเลอร์ในโรงเรือน</h3>
+                    <Typography variant="headline">รายชื่อคอนโทรลเลอร์ในโรงเรือน</Typography>
                     <GreenHouseControllerList 
                       greenHouseId={e.greenHouseId}
                       buttonCreate={this.handleNew} 

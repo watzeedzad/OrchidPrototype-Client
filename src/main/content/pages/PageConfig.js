@@ -24,6 +24,20 @@ export const PageConfig = {
                 loader: () => import('./ControllerManagement')
             })
             
+        },
+        {
+            path     : '/planterAnalyze',
+            component: FuseLoadable({
+                loader: () => import('./PlanterAnalyze')
+            })
+            
+        },
+        {
+            path     : '/fertilityControl',
+            component: FuseLoadable({
+                loader: () => import('./FertilityControl')
+            })
+            
         }
     ]
 };

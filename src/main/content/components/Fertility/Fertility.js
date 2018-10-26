@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { getFertility } from '../../redux/actions/planterActions'
+import { getFertility,saveFertilityConfig } from 'store/actions/application/planterActions'
 import { connect } from 'react-redux'
 import FertilityGauge from '../Fertility/FertilityGauge'
 import SettingFertility from '../Fertility/SettingFertility'
 import FertilityGraph from '../Fertility/FertilityGraph'
-import { Container, Row, Col } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Grid from '@material-ui/core/Grid';
+import {Typography} from '@material-ui/core';
 
 const styles = theme => ({
     layout: {
@@ -37,15 +38,51 @@ const styles = theme => ({
 
 class Fertility extends Component {
 
+    constructor() {
+        super();
+    
+        this.state = {
+            intervalId : null,
+        };
+    }
+
+    componentDidMount() {
+        this.fetchData(0)
+        var intervalId = setInterval( this.fetchData, 15000);
+        this.setState({intervalId: intervalId});
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if(this.props.fertility.data !== null && nextProps.fertility.data !== null){
+            return this.props.fertility.data.currentFertility !== nextProps.fertility.data.currentFertility
+        }else{
+            return true
+        }
+    }
+
+    componentWillUnmount() {
+        // use intervalId from the state to clear the interval
+        clearInterval(this.state.intervalId);
+    }
+    
+    fetchData = (count) => {
+        if(this.props.fertility.data!==null){
+            this.props.dispatch(getFertility({ projectId: this.props.fertility.data.projectId, count:count }))
+        }
+    }
+
     render() {
         const { classes,fertility } = this.props
         const { data } = fertility
 
         if (fertility.isRejected) {
-            return <div className="alert alert-danger">Error: {fertility.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+fertility.data}/>
         }
         if (fertility.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
+        }
+        if (data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
 
         return (
@@ -53,40 +90,44 @@ class Fertility extends Component {
             <CssBaseline />
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
-                    <Container>               
-                    <Row>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <FertilityGauge
-                                minConfig={data.minConfigFertility}
-                                maxConfig={data.maxConfigFertility}
-                                currentValue={data.currentFertility}
-                            />
-                        </Col>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <SettingFertility
-                                minConfig={data.minConfigFertility}
-                                maxConfig={data.maxConfigFertility}
-                                projectId={data.projectId}
-                                onToggle={() => {this.props.dispatch(getFertility({ projectId: data.projectId }))}}
-                            />
-                        </Col>
-                        <Col xs='12' sm='12' md='12' lg='12' xl='12'>
-                            <FertilityGraph projectId={data.projectId} />
-                        </Col>
-                    </Row>              
-                    </Container>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12} sm={12} md={6}>
+                                <FertilityGauge
+                                    minConfig={data.minConfigFertility}
+                                    maxConfig={data.maxConfigFertility}
+                                    currentValue={data.currentFertility}
+                                />
+                            </Grid> 
+                            <Grid item xs={12} sm={12} md={6}>
+                                <SettingFertility
+                                    minConfig={data.minConfigFertility}
+                                    maxConfig={data.maxConfigFertility}
+                                    projectId={data.projectId}
+                                    onSubmit={this.onSubmit}
+                                />
+                            </Grid> 
+                            <Grid item xs={12} sm={12} md={12}>
+                                <FertilityGraph projectId={data.projectId} />
+                            </Grid>
+                        </Grid>              
                     </Paper>
                 </main>
             </React.Fragment>
         )
     }
 
+    onSubmit = (values) => {
+        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        this.props.dispatch(saveFertilityConfig(values)).then(() => {
+            this.fetchData(0)
+        })
+    }
+
 }
 
-function mapStateToProps(state) {
-    console.log(123)
+function mapStateToProps({application}) {
     return {
-        fertility: state.planterReducers.fertility,
+        fertility: application.planterReducers.fertility,
     }
 }
 

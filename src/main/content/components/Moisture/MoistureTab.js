@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Moisture from './Moisture'
 import MoistureGraph from './MoistureGraph'
-import { Container, Row, Col } from 'reactstrap';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -41,16 +40,12 @@ class MoistureTab extends Component {
             <CssBaseline />
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
-                    <Container>             
-                    <Row>
-                        <Col xs='12' sm='12' md='12' lg='12' xl='12'>
+                        <div className="w-full">
                             <Moisture />
-                        </Col>
-                        <Col xs='12' sm='12' md='12' lg='12' xl='12'>
+                        </div>
+                        <div className="w-full">
                             <MoistureGraph />
-                        </Col>
-                    </Row>               
-                    </Container>
+                        </div>
                     </Paper>
                 </main>
             </React.Fragment>
@@ -58,4 +53,4 @@ class MoistureTab extends Component {
     }
 }
 
-export default withStyles(styles)(MoistureTab);
+export default withStyles(styles, {withTheme: true})(MoistureTab);

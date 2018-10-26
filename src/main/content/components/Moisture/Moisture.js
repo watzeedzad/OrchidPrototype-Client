@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { getMoisture } from '../../redux/actions/planterActions'
+import { getMoisture,saveMoistureConfig } from '../../../../store/actions/application/planterActions'
 import { connect } from 'react-redux'
 import MoistureGauge from '../Moisture/MoistureGauge'
 import SettingMoisture from '../Moisture/SettingMoisture'
-import { Container, Row, Col } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {Typography} from '@material-ui/core';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Grid from '@material-ui/core/Grid';
 
 class Moisture extends Component {
 
@@ -44,44 +45,47 @@ class Moisture extends Component {
         const { data } = moisture
 
         if (moisture.isRejected) {
-            return <div className="alert alert-danger">Error: {moisture.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+moisture.data}/>
         }
         if (moisture.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
+        }
+        if (data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
     
         return (
-            <Container>
-                <div>
-                    <Row>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <MoistureGauge
-                                minConfig={data.minConfigSoilMoisture}
-                                maxConfig={data.maxConfigSoilMoisture}
-                                currentValue={data.currentSoilMoisture}
-                            />
-                        </Col>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <SettingMoisture
-                                minConfig={data.minConfigSoilMoisture}
-                                maxConfig={data.maxConfigSoilMoisture}
-                                onToggle={this.toggle}
-                            />
-                        </Col>
-                    </Row>
-                </div>
-            </Container>
+            <Grid container spacing={24}>
+                <Grid item xs={12} sm={12} md={6}>
+                    <MoistureGauge
+                        minConfig={data.minConfigSoilMoisture}
+                        maxConfig={data.maxConfigSoilMoisture}
+                        currentValue={data.currentSoilMoisture}
+                    />
+                </Grid> 
+                <Grid item xs={12} sm={12} md={6}>
+                    <SettingMoisture
+                        minConfig={data.minConfigSoilMoisture}
+                        maxConfig={data.maxConfigSoilMoisture}
+                        onSubmit={this.onSubmit}
+                    />
+                </Grid>
+            </Grid>  
         )
     }
 
-    toggle = () => {
-        this.props.dispatch(getMoisture({ greenHouseId: 789456123 }))
+    onSubmit = (values) => {
+        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        this.props.dispatch(saveMoistureConfig(values)).then(() => {
+            this.fetchData(0)
+        })
     }
+
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        moisture: state.planterReducers.moisture,
+        moisture: application.planterReducers.moisture,
     }
 }
 

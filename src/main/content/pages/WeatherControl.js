@@ -29,7 +29,7 @@ class WeatherControl extends Component {
                             <Icon className="text-32 mr-12">wb_sunny</Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                            <Typography variant="h6" className="hidden sm:flex">ควบคุมสภาพอากาศ</Typography>
+                            <Typography variant="h6" >ควบคุมสภาพอากาศ</Typography>
                         </FuseAnimate>
                     </div>
                 }
