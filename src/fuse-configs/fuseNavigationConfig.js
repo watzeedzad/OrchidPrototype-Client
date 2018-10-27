@@ -33,6 +33,13 @@ export const fuseNavigationConfig = [
                 'icon' : 'filter_vintage',
                 'url'  : '/planterAnalyze'
             },
+            {
+                'id'   : 'waterControl',
+                'title': 'ตั้งค่าการให้น้ำ',
+                'type' : 'item',
+                'icon' : 'waves',
+                'url'  : '/waterControl'
+            },
         ]
     }
 ];

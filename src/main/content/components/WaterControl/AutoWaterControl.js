@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { UncontrolledAlert } from 'reactstrap';
-import { Container, Row, Col } from 'reactstrap';
 import WateringTimeList from '../WaterControl/WateringTimeList'
-import { getWateringTime } from '../../redux/actions/waterActions'
+import { getWateringTime } from 'store/actions/application/waterActions'
+import {Typography} from '@material-ui/core';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Grid from '@material-ui/core/Grid';
 
 class AutoWaterControl extends Component {
     state = {
@@ -19,60 +20,49 @@ class AutoWaterControl extends Component {
         const { wateringTimeList} = this.props
 
         if (wateringTimeList.isRejected) {
-            return <div className="alert alert-danger">Error: {wateringTimeList.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+wateringTimeList.data}/>
         }
         if (wateringTimeList.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
-        if (wateringTimeList.data.errorMessage) {
-            return <div className="alert alert-danger">Error: {wateringTimeList.data.errorMessage}</div>
+        if (wateringTimeList.data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={wateringTimeList.data.errorMessage}/>
         }
 
         return (
-            <Container>
-                <div>
-                    <Row>
-                        <Col xs='12' sm='12' md='12' lg='12' xl='12'>
-                            <WateringTimeList wateringTimeList={wateringTimeList} 
-                            onToggle={this.toggle} 
-                            onDelete={this.delete} 
-                            mss={this.state.mss}/>
-                        </Col>
-                    </Row>
-                </div>
-            </Container>
-        );
+            <Grid container spacing={24}>
+                <Grid item xs={12} sm={12} md={12}>
+                    <div className="pl-60 pt-40">
+                        <Typography variant="headline">สั่งให้น้ำตามเวลา</Typography>
+                    </div>
+                    <WateringTimeList wateringTimeList={wateringTimeList} 
+                    onToggle={this.toggle} 
+                    onDelete={this.delete} 
+                    mss={this.state.mss}/>
+                </Grid>
+            </Grid>
+        )   
     }
 
     toggle = () => {
         this.setState({
-            mss: 
-                <div>
-                    <UncontrolledAlert  color="success">
-                        บันทึกการตั้งค่าเวลาการให้น้ำสำเร็จ
-                    </UncontrolledAlert >
-                </div>
+            mss: <SnackbarContent className="bg-red-light" message="บันทึกการตั้งค่าเวลาการให้น้ำสำเร็จ"/>
         })
         this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
     }
 
     delete = () => {
         this.setState({
-            mss: 
-                <div>
-                    <UncontrolledAlert  color="success">
-                        ทำการลบเวลาการให้น้ำสำเร็จ
-                    </UncontrolledAlert >
-                </div>
+            mss: <SnackbarContent className="bg-red-light" message="ทำการลบเวลาการให้น้ำสำเร็จ"/>
         })
         this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
     }
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        wateringTimeList: state.waterReducers.wateringTimeList,
+        wateringTimeList: application.waterReducers.wateringTimeList,
     }
 }
 

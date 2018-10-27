@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { getMoisture } from '../../redux/actions/planterActions'
+import { getMoisture } from 'store/actions/application/planterActions'
+import { manaulWatering } from 'store/actions/application/waterActions'
 import { connect } from 'react-redux'
 import MoistureGauge from '../Moisture/MoistureGauge'
 import ManualWaterField from '../WaterControl/ManualWaterField'
-import { Container, Row, Col } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
+import {Grid, CssBaseline, Typography, SnackbarContent, Paper} from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
@@ -23,14 +21,12 @@ const styles = theme => ({
     },
     paper: {
       marginTop: theme.spacing.unit * 4,
+      marginBottom: theme.spacing.unit * 4,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
-    headName:{
-      margin: theme.spacing.unit,
-    }
   
 });
 
@@ -53,7 +49,7 @@ class ManualWaterControl extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if(this.props.moisture.data !== null && nextProps.moisture.data !== null){
-            return this.props.moisture.data.currentSoilMoisture !== nextProps.temp.moisture.currentSoilMoisture
+            return this.props.moisture.data.currentSoilMoisture !== nextProps.moisture.currentSoilMoisture
         }else{
             return true
         }
@@ -73,48 +69,55 @@ class ManualWaterControl extends Component {
         const { data } = moisture
 
         if (moisture.isRejected) {
-            return <div className="alert alert-danger">Error: {moisture.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+moisture.data}/>
         }
         if (moisture.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
+        }
+        if (data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
     
         return (
             <React.Fragment>
             <CssBaseline />
-                <main className={classes.layout}>
+                <div className="pl-60">
+                    <Typography variant="headline">สั่งให้น้ำแบบทันที</Typography>
+                </div>
+                <main className={classes.layout}>                
                     <Paper className={classes.paper}>
-                    <Container>
-                    <Row>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <MoistureGauge
-                                minConfig={data.minConfigSoilMoisture}
-                                maxConfig={data.maxConfigSoilMoisture}
-                                currentValue={data.currentSoilMoisture}
-                            />
-                        </Col>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <ManualWaterField
-                                greenHouseId={789456123}
-                                onToggle={this.toggle}
-                            />
-                        </Col>
-                    </Row>
-                    </Container>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12} sm={12} md={6}>
+                                <MoistureGauge
+                                    minConfig={data.minConfigSoilMoisture}
+                                    maxConfig={data.maxConfigSoilMoisture}
+                                    currentValue={data.currentSoilMoisture}
+                                />
+                            </Grid> 
+                            <Grid item xs={12} sm={12} md={6}>
+                                <ManualWaterField
+                                    greenHouseId={789456123}
+                                    onSubmit={this.onSubmit}
+                                />
+                            </Grid>
+                        </Grid>   
                     </Paper>
                 </main>
             </React.Fragment>
         )
     }
 
-    toggle = () => {
-        this.fetchData(0)
+    onSubmit = (values) => {
+        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        this.props.dispatch(manaulWatering(values)).then(() => {
+            this.fetchData(0)
+        })
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        moisture: state.planterReducers.moisture,
+        moisture: application.planterReducers.moisture,
     }
 }
 

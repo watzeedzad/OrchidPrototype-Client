@@ -1,38 +1,44 @@
 import React, { Component } from 'react'
-import Sidebar from '../components/Sidebar/Drawers'
 import { withStyles } from '@material-ui/core/styles';
 import AutoWaterControl from '../components/WaterControl/AutoWaterControl';
 import ManualWaterControl from '../components/WaterControl/ManualWaterControl';
+import {FuseAnimate,FusePageCarded} from '@fuse';
+import {Icon, Typography} from '@material-ui/core';
 
 const styles = theme => ({
     root: {
-      flexGrow: 1,
-      zIndex: 1,
-      overflow: 'hidden',
-      position: 'relative',
-      display: 'flex',
+        width: '100%'
     },
-    content: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing.unit * 3,
-      },
-      toolbar: theme.mixins.toolbar,
-    });
+    layoutRoot: {}
+});
+
 function WaterControl(props){    
     const { classes } = props;
 
         return (
-            <div className={classes.root}>
-                <div>
-                    <Sidebar/>
+            <FusePageCarded
+            classes={{
+                root: classes.layoutRoot
+            }}
+            header={
+                <div className="flex items-center">
+                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                        <Icon className="text-32 mr-12">waves</Icon>
+                    </FuseAnimate>
+                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                        <Typography variant="h6" >ตั้งค่าการให้น้ำ</Typography>
+                    </FuseAnimate>
                 </div>
-                <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <AutoWaterControl/><br/><hr/>
-                <ManualWaterControl/>
-                </main>
-            </div>
+            }
+            content={
+                <FuseAnimate animation="transition.slideUpIn" delay={200}>
+                    <div>
+                        <AutoWaterControl/><br/><hr/>
+                        <ManualWaterControl/>
+                    </div>
+                </FuseAnimate>
+            }
+        />
         )
     
 }

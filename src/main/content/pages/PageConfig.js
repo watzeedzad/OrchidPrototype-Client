@@ -38,6 +38,13 @@ export const PageConfig = {
                 loader: () => import('./FertilityControl')
             })
             
+        },
+        {
+            path     : '/waterControl',
+            component: FuseLoadable({
+                loader: () => import('./WaterControl')
+            })
+            
         }
     ]
 };

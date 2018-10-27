@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { manaulWatering } from '../../redux/actions/waterActions'
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import MaterialRenderTextField from '../../Utils/MaterialRenderTextField';
+import Formsy from 'formsy-react';
+import {TextFieldFormsy} from '@fuse';
+import {withStyles} from '@material-ui/core/styles/index';
+import {Button, Typography, CssBaseline} from '@material-ui/core';
 
 const styles = theme => ({
     layout: {
@@ -41,54 +37,84 @@ const styles = theme => ({
 
 class ManualWaterField extends Component {
 
-    componentDidMount() {
-        //เรียกใช้ฟังก์ชันในการก�ำหนด value ให้กับ textbox และ control ต่างๆ
-        this.handleInitialize()
-    }
+    state = {
+        greenHouseId: 789456123,
+        litre: 0,
+        canSubmit: false
+    };
 
-    handleInitialize() {
-        let initData = {
-            "greenHouseId": this.props.greenHouseId,
-            "litre": 0,
-        };
-        this.props.initialize(initData);
-    }
+    form = React.createRef();
+
+    disableButton = () => {
+        this.setState({canSubmit: false});
+    };
+
+    enableButton = () => {
+        this.setState({canSubmit: true});
+    };
 
     render() {
-        const { classes,handleSubmit } = this.props
+        const { classes,onSubmit } = this.props
+        const {canSubmit} = this.state;
 
         return (
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
                 <Typography variant="headline">กรอกปริมาณน้ำที่ต้องการให้</Typography>
-                <form className={classes.form}>
-                  <FormControl margin="normal" required fullWidth>
-                    <Field name="litre"  component={MaterialRenderTextField} type='number' label="ปริมาณน้ำที่จะให้(ลิตร)" />
-                  </FormControl>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="raised"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={handleSubmit(this.onSubmit)}
-                  >
-                    ให้น้ำทันที
-                  </Button>
-                </form>
+
+                <Formsy
+                    onValidSubmit={onSubmit}
+                    onValid={this.enableButton}
+                    onInvalid={this.disableButton}
+                    ref={(form) => this.form = form}
+                    className="flex flex-col justify-center w-full"
+                >
+                    <TextFieldFormsy
+                        className="mb-16"
+                        type="number"
+                        name="litre"
+                        label="ปริมาณน้ำที่จะให้(ลิตร)"
+                        value={this.state.litre}
+                        // validations={{
+                        //     minLength: 1                          
+                        // }}
+                        // validationErrors={{
+                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
+                        // }}
+                        // InputProps={{
+                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
+                        // }}
+                        variant="outlined"
+                        fullWidth
+                        required
+                    />
+
+                    <TextFieldFormsy
+                        type="hidden"
+                        name="greenHouseId"
+                        value={this.state.greenHouseId}
+                    />
+
+                    <Button
+                        type="submit"
+                        variant="raised"
+                        color="primary"
+                        className="w-full mx-auto mt-16 normal-case"
+                        aria-label="บันทึก"
+                        disabled={!canSubmit}
+                        value="legacy"
+                    >
+                        ให้น้ำทันที
+                    </Button>
+                </Formsy>  
             </main>
           </React.Fragment>
         )
     }
 
 
-    onSubmit = (values) => {
-        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
-        this.props.dispatch(manaulWatering(values)).then(() => {
-            this.props.onToggle()
-        })
-    }
+    
 }
 
 
@@ -106,9 +132,4 @@ function validate(values) {
     return errors;
 }
 
-const form = reduxForm({
-    form: 'manaulWatering',
-    validate
-})
-
-export default withStyles(styles)(form(ManualWaterField));
+export default withStyles(styles, {withTheme: true})(ManualWaterField);
