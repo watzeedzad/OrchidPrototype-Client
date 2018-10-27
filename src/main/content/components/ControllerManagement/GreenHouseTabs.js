@@ -164,14 +164,14 @@ class GreenHouseTabs extends Component {
     })
   }
 
-  handleDelete = (macAddress) => {
+  handleDelete = (id) => {
     confirmModalDialog({
         show: true,
         title: 'ยืนยันการลบ',
         message: 'คุณต้องการลบคอนโทรลเลอร์นี้ใช่หรือไม่',
         confirmLabel: 'ยืนยัน ลบทันที!!',
         onConfirm: () => {
-            this.props.dispatch(deleteController({macAddress: macAddress})).then(() => {
+            this.props.dispatch(deleteController({id: id})).then(() => {
               this.props.dispatch(getGreenHouse())
             })
         }

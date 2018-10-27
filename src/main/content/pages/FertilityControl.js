@@ -5,20 +5,11 @@ import {FuseAnimate,FusePageCarded} from '@fuse';
 import {Icon, Typography} from '@material-ui/core';
 
 const styles = theme => ({
-root: {
-    flexGrow: 1,
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex',
-  },
-  content: {
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 3,
+    root: {
+        width: '100%'
     },
-    toolbar: theme.mixins.toolbar,
-  });
+    layoutRoot: {}
+});
   
 
 function FertilityControl (props) {   

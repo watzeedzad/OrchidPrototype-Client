@@ -31,7 +31,7 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#33FFFF',
+        backgroundColor: '#6FCEE6',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
 });
@@ -67,7 +67,7 @@ class WateringTimeList extends Component {
         const { classes,waterConfig} = this.props
 
         if (waterConfig.isRejected) {
-            return <div className="alert alert-danger">Error: {waterConfig.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+waterConfig.data}/>
         }
 
         return (

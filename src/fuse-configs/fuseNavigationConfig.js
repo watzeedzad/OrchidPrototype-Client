@@ -40,6 +40,13 @@ export const fuseNavigationConfig = [
                 'icon' : 'waves',
                 'url'  : '/waterControl'
             },
+            {
+                'id'   : 'fertilizerControl',
+                'title': 'ตั้งค่าการให้ปุ๋ย',
+                'type' : 'item',
+                'icon' : 'local_florist',
+                'url'  : '/fertilizerControl'
+            },
         ]
     }
 ];

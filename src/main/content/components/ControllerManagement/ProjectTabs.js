@@ -40,7 +40,7 @@ class ProjectTabs extends Component {
                                 {pController.data.errorMessage
                                 ? <SnackbarContent className="bg-red-light" message={pController.data.errorMessage}/>
                                 :pController.data && pController.data.map((c,index) => {                               
-                                    if(c.controllerData[0].projectId === e.projectId){
+                                    if(c.projectId === e.projectId){
                                         breakLoop = false
                                         return (
                                             <React.Fragment>
@@ -55,6 +55,19 @@ class ProjectTabs extends Component {
                                             </React.Fragment>                                              
                                         )
                                     }else if(index === pController.data.length - 1 && breakLoop){
+                                        return (
+                                            <React.Fragment>
+                                                <ProjectControllerList
+                                                    greenHouseId={this.props.greenHouseId}
+                                                    projectId={e.projectId}  
+                                                    data={[]}
+                                                    buttonCreate={this.props.buttonCreate} 
+                                                    buttonDelete={this.props.buttonDelete}
+                                                    buttonEdit={this.props.buttonEdit}/>
+                                                <hr/>
+                                            </React.Fragment>                                               
+                                        )
+                                    }else if(c.projectId === -1){
                                         return (
                                             <React.Fragment>
                                                 <ProjectControllerList

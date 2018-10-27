@@ -17,28 +17,28 @@ function WaterControl(props){
 
         return (
             <FusePageCarded
-            classes={{
-                root: classes.layoutRoot
-            }}
-            header={
-                <div className="flex items-center">
-                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                        <Icon className="text-32 mr-12">waves</Icon>
-                    </FuseAnimate>
-                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                        <Typography variant="h6" >ตั้งค่าการให้น้ำ</Typography>
-                    </FuseAnimate>
-                </div>
-            }
-            content={
-                <FuseAnimate animation="transition.slideUpIn" delay={200}>
-                    <div>
-                        <AutoWaterControl/><br/><hr/>
-                        <ManualWaterControl/>
+                classes={{
+                    root: classes.layoutRoot
+                }}
+                header={
+                    <div className="flex items-center">
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <Icon className="text-32 mr-12">waves</Icon>
+                        </FuseAnimate>
+                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                            <Typography variant="h6" >ตั้งค่าการให้น้ำ</Typography>
+                        </FuseAnimate>
                     </div>
-                </FuseAnimate>
-            }
-        />
+                }
+                content={
+                    <FuseAnimate animation="transition.slideUpIn" delay={200}>
+                        <div>
+                            <AutoWaterControl/><br/><hr/>
+                            <ManualWaterControl/>
+                        </div>
+                    </FuseAnimate>
+                }
+            />
         )
     
 }

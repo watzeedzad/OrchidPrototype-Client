@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import WateringTimeList from '../WaterControl/WateringTimeList'
 import { getWateringTime } from 'store/actions/application/waterActions'
-import {Typography} from '@material-ui/core';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import Grid from '@material-ui/core/Grid';
+import {Typography, Grid, SnackbarContent} from '@material-ui/core';
 
 class AutoWaterControl extends Component {
+    
     state = {
         mss: '',
     }
@@ -36,9 +35,9 @@ class AutoWaterControl extends Component {
                         <Typography variant="headline">สั่งให้น้ำตามเวลา</Typography>
                     </div>
                     <WateringTimeList wateringTimeList={wateringTimeList} 
-                    onToggle={this.toggle} 
-                    onDelete={this.delete} 
-                    mss={this.state.mss}/>
+                        onToggle={this.toggle} 
+                        onDelete={this.delete} 
+                        mss={this.state.mss}/>
                 </Grid>
             </Grid>
         )   
@@ -46,14 +45,14 @@ class AutoWaterControl extends Component {
 
     toggle = () => {
         this.setState({
-            mss: <SnackbarContent className="bg-red-light" message="บันทึกการตั้งค่าเวลาการให้น้ำสำเร็จ"/>
+            mss: <SnackbarContent className="bg-green-light" message="บันทึกการตั้งค่าเวลาการให้น้ำสำเร็จ"/>
         })
         this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
     }
 
     delete = () => {
         this.setState({
-            mss: <SnackbarContent className="bg-red-light" message="ทำการลบเวลาการให้น้ำสำเร็จ"/>
+            mss: <SnackbarContent className="bg-green-light" message="ทำการลบเวลาการให้น้ำสำเร็จ"/>
         })
         this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
     }

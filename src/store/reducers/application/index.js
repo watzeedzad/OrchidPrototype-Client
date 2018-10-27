@@ -6,6 +6,7 @@ import userReducers from './userReducers'
 import controllerReducers from './controllerReducers'
 import planterReducers from './planterReducers'
 import waterReducers from './waterReducers'
+import fertilizerReducers from './fertilizerReducers'
 
 const appReducers = combineReducers({
     form: formReducer,
@@ -14,7 +15,8 @@ const appReducers = combineReducers({
     userReducers,
     controllerReducers,
     planterReducers,
-    waterReducers
+    waterReducers,
+    fertilizerReducers
 });
 
 export default appReducers;

@@ -78,22 +78,34 @@ class GreenHouseControllerList extends Component {
                         },
                         {
                             Header    : "ปั๊มน้ำ",
-                            accessor  : "water",
+                            Cell  : row => (<div>
+                                {gController.data[0].relayType.water? <Icon>check</Icon>:<Icon>close</Icon>}
+                                </div>
+                            ),
                             filterable: false
                         },
                         {
                             Header    : "ปั๊มปุ๋ย",
-                            accessor  : "fertilizer",
+                            Cell  : row => (<div>
+                                {gController.data[0].relayType.fertilizer? <Icon>check</Icon>:<Icon>close</Icon>}
+                                </div>
+                            ),
                             filterable: false
                         },
                         {
                             Header    : "ปั๊มความชื้น",
-                            accessor  : "moisture",
+                            Cell  : row => (<div>
+                                {gController.data[0].relayType.moisture? <Icon>check</Icon>:<Icon>close</Icon>}
+                                </div>
+                            ),
                             filterable: false
                         },
                         {
                             Header    : "หลอดไฟ",
-                            accessor  : "light",
+                            Cell  : row => (<div>
+                                {gController.data[0].relayType.light? <Icon>check</Icon>:<Icon>close</Icon>}
+                                </div>
+                            ),
                             filterable: false
                         },
                         {
@@ -120,7 +132,7 @@ class GreenHouseControllerList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            buttonDelete(row.original.mac_address);
+                                            buttonDelete(row.original._id);
                                         }}
                                     >
                                         <Icon>delete</Icon>
