@@ -23,7 +23,7 @@ export const fuseNavigationConfig = [
                 'id'   : 'weatherControl',
                 'title': 'ควบคุมสภาพอากาศ',
                 'type' : 'item',
-                'icon' : 'wb_sunny',
+                'icon' : 'wb_cloudy',
                 'url'  : '/weatherControl'
             },
             {
@@ -32,6 +32,13 @@ export const fuseNavigationConfig = [
                 'type' : 'item',
                 'icon' : 'filter_vintage',
                 'url'  : '/planterAnalyze'
+            },
+            {
+                'id'   : 'lightControl',
+                'title': 'ควบคุมการให้แสง',
+                'type' : 'item',
+                'icon' : 'wb_sunny',
+                'url'  : '/lightControl'
             },
             {
                 'id'   : 'waterControl',

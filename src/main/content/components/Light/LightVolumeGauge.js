@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ReactProgressMeter  from 'react-progress-meter'
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class LightIntensityGauge extends Component {
     
     render() {
         if (!this.props.currentValue){
-            return <div className="alert alert-danger">ไม่มีข้อมูลจากเซนเซอร์</div>
+            return <SnackbarContent className="bg-red-light" message="ไม่มีข้อมูลในฐานข้อมูล"/>
         }
 
         return (

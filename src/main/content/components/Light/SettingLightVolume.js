@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { saveLightVolume } from '../../redux/actions/lightActions'
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import MaterialRenderTextField from '../../Utils/MaterialRenderTextField';
+import Formsy from 'formsy-react';
+import {TextFieldFormsy} from '@fuse';
+import {withStyles} from '@material-ui/core/styles/index';
+import {Button, Typography, CssBaseline} from '@material-ui/core';
 
 const styles = theme => ({
     layout: {
@@ -41,56 +37,82 @@ const styles = theme => ({
 
 class SettingLightVolume extends Component {
 
-    componentDidMount() {
-        //เรียกใช้ฟังก์ชันในการก�ำหนด value ให้กับ textbox และ control ต่างๆ
-        this.handleInitialize()
-    }
+    state = {
+        greenHouseId: 789456123,
+        maxLightVolume: this.props.maxLightVolume,
+        canSubmit: false
+    };
 
-    handleInitialize() {
-        let initData = {
-            "greenHouseId": 789456123,
-            "maxLightVolume": this.props.maxConfig,
-        };
-        this.props.initialize(initData);
-    }
+    form = React.createRef();
+
+    disableButton = () => {
+        this.setState({canSubmit: false});
+    };
+
+    enableButton = () => {
+        this.setState({canSubmit: true});
+    };
 
     render() {
-        const { classes,handleSubmit } = this.props
+        const { classes,onSubmit } = this.props
+        const {canSubmit} = this.state;
 
         return (
             <React.Fragment>
-            <CssBaseline />
-            <main className={classes.layout}>
-                <Typography variant="headline">ปริมาณแสงที่ต้องการต่อวัน</Typography>
-                <form className={classes.form}>
-                  <FormControl margin="normal" required fullWidth>
-                    <Field name="maxLightVolume"  component={MaterialRenderTextField} type='number' label="ปริมาณแสงที่ต้องการต่อวัน(ชม.)" />
-                  </FormControl>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="raised"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={handleSubmit(this.onSubmit)}
-                  >
-                    บันทึก
-                  </Button>
-                </form>
-            </main>
+                <CssBaseline />
+                <main className={classes.layout}>
+                    <Typography variant="headline">ปริมาณแสงที่ต้องการต่อวัน</Typography>
+                    <Formsy
+                        onValidSubmit={onSubmit}
+                        onValid={this.enableButton}
+                        onInvalid={this.disableButton}
+                        ref={(form) => this.form = form}
+                        className="flex flex-col justify-center w-full"
+                    >
+
+                        <TextFieldFormsy
+                            className="mb-16"
+                            type="number"
+                            name="maxLightVolume"
+                            label="ปริมาณแสงที่ต้องการต่อวัน(ชม.)"
+                            value={this.state.maxLightVolume}
+                            // validations={{
+                            //     minLength: 1                          
+                            // }}
+                            // validationErrors={{
+                            //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
+                            // }}
+                            // InputProps={{
+                            //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
+                            // }}
+                            variant="outlined"
+                            required
+                        />
+                        
+                        <TextFieldFormsy
+                            type="hidden"
+                            name="greenHouseId"
+                            value={this.state.greenHouseId}
+                        />
+
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className="w-full mx-auto mt-16 normal-case"
+                            aria-label="บันทึก"
+                            disabled={!canSubmit}
+                            value="legacy"
+                        >
+                            บันทึก
+                        </Button>
+
+                    </Formsy>                
+                </main>
             </React.Fragment>
         )
     }
-
-
-    onSubmit = (values) => {
-        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
-        this.props.dispatch(saveLightVolume(values)).then(() => {
-            this.props.onToggle()
-        })
-    }
 }
-
 
 function validate(values) {
     const errors = {};
@@ -105,9 +127,5 @@ function validate(values) {
     return errors;
 }
 
-const form = reduxForm({
-    form: 'settingLightVolume',
-    validate
-})
 
-export default withStyles(styles)(form(SettingLightVolume));
+export default withStyles(styles, {withTheme: true})(SettingLightVolume);

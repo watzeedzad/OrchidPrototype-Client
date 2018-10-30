@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { getTemp,saveTempConfig } from '../../../../store/actions/application/weatherActions'
+import { getTemp,saveTempConfig } from 'store/actions/application/weatherActions'
 import { connect } from 'react-redux'
 import TemperatureGauge from '../Temperature/TemperatureGauge'
 import SettingTemperature from '../Temperature/SettingTemperature'
-import {Typography} from '@material-ui/core';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import Grid from '@material-ui/core/Grid';
+import {Typography, SnackbarContent, Grid} from '@material-ui/core';
 
 class Temperature extends Component {
 

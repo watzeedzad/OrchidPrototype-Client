@@ -26,7 +26,7 @@ class WeatherControl extends Component {
                 header={
                     <div className="flex items-center">
                         <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Icon className="text-32 mr-12">wb_sunny</Icon>
+                            <Icon className="text-32 mr-12">wb_cloudy</Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                             <Typography variant="h6" >ควบคุมสภาพอากาศ</Typography>

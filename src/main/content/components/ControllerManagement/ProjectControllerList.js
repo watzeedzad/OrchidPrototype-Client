@@ -127,7 +127,7 @@ class GreenHouseControllerList extends Component {
                     }
                 ]}
                 defaultPageSize={3}
-                noDataText="ไม่มีคอนโทรลเลอร์ในโรงเรือนนี้"
+                noDataText="ไม่มีคอนโทรลเลอร์ในโปรเจ็คนี้"
             />
             </FuseAnimate>
         );

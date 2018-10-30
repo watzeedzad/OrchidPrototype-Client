@@ -52,6 +52,13 @@ export const PageConfig = {
                 loader: () => import('./FertilizerControl')
             })
             
+        },
+        {
+            path     : '/lightControl',
+            component: FuseLoadable({
+                loader: () => import('./LightControl')
+            })
+            
         }
     ]
 };

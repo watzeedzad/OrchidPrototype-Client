@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { getLightIntensity } from '../../redux/actions/lightActions'
+import { getLightIntensity, saveLightIntensity } from 'store/actions/application/lightActions'
 import { connect } from 'react-redux'
 import LightIntensityGauge from './LightIntensityGauge'
 import SettingLightIntensity from './SettingLightIntensity'
-import { Container, Row, Col } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
+import {Typography, SnackbarContent, Grid, Paper, CssBaseline} from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
@@ -23,6 +20,7 @@ const styles = theme => ({
     },
     paper: {
       marginTop: theme.spacing.unit * 4,
+      marginBottom: theme.spacing.unit * 4,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -45,14 +43,16 @@ class LightIntensity extends Component {
     }
 
     componentDidMount() {
-        this.fetchData()
-        var intervalId = setInterval( this.fetchData, 150000);
+        this.fetchData(0)
+        var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if(nextProps.intensity.data != null) {
-            return this.props.intensity.data != nextProps.intensity.data
+        if(this.props.intensity.data !== null && nextProps.intensity.data !== null){
+            return this.props.intensity.data.currentLightIntensity !== nextProps.intensity.data.currentLightIntensity
+        }else{
+            return true
         }
     }
 
@@ -61,8 +61,8 @@ class LightIntensity extends Component {
         clearInterval(this.state.intervalId);
     }
     
-    fetchData = () => {
-        this.props.dispatch(getLightIntensity({ greenHouseId: 789456123 }))
+    fetchData = (count) => {
+        this.props.dispatch(getLightIntensity({ greenHouseId: 789456123 , count: count }))
     }
 
     render() {
@@ -70,10 +70,13 @@ class LightIntensity extends Component {
         const { data } = intensity
 
         if (intensity.isRejected) {
-            return <div className="alert alert-danger">Error: {intensity.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+intensity.data}/>
         }
         if (intensity.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
+        }
+        if (data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
     
         return (
@@ -81,38 +84,39 @@ class LightIntensity extends Component {
             <CssBaseline />
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
-                    <Container>
-                    <Row>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <LightIntensityGauge
-                                minConfig={data.minLightIntensity}
-                                maxConfig={data.maxLightIntensity}
-                                currentValue={data.currentLightIntensity}
-                            />
-                        </Col>
-                        <Col xs='6' sm='6' md='6' lg='6' xl='6'>
-                            <SettingLightIntensity
-                                minConfig={data.minLightIntensity}
-                                maxConfig={data.maxLightIntensity}
-                                onToggle={this.toggle}
-                            />
-                        </Col>
-                    </Row>
-                    </Container>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12} sm={12} md={6}>
+                                <LightIntensityGauge
+                                    minConfig={data.minLightIntensity}
+                                    maxConfig={data.maxLightIntensity}
+                                    currentValue={data.currentLightIntensity}
+                                />
+                            </Grid> 
+                            <Grid item xs={12} sm={12} md={6}>
+                                <SettingLightIntensity
+                                    minConfig={data.minLightIntensity}
+                                    maxConfig={data.maxLightIntensity}
+                                    onSubmit={this.onSubmit}
+                                />
+                            </Grid>
+                        </Grid>  
                     </Paper>
                 </main>
             </React.Fragment>
         )
     }
 
-    toggle = () => {
-        this.props.dispatch(getLightIntensity({ greenHouseId: 789456123 }))
+    onSubmit = (values) => {
+        //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
+        this.props.dispatch(saveLightIntensity(values)).then(() => {
+            this.fetchData(0)
+        })
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        intensity: state.lightReducers.intensity,
+        intensity: application.lightReducers.intensity,
     }
 }
 
