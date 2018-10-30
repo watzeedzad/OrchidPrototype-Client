@@ -58,13 +58,20 @@ export const getLightIntensity = ({greenHouseId,count}) => {
 
 export const saveLightVolume = (values) => {
 
+    let maxLightVolume = values.maxLightVolume*60*60*1000
+    
+    let data = {
+        greenHouseId: values.greenHouseId,
+        maxLightVolume: maxLightVolume
+    }
+
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
         return axios({
             method: 'post',
             url: `${BASE_URL}/lightControl/lightVolumeConfig`,
-            data: values,
+            data: data,
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
             //headers: { authorization: localStorage.getItem('token') }

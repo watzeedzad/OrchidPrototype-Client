@@ -5,7 +5,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 class LightIntensityGauge extends Component {
     
     render() {
-        if (!this.props.currentValue){
+        if (this.props.currentProgress === null){
             return <SnackbarContent className="bg-red-light" message="ไม่มีข้อมูลในฐานข้อมูล"/>
         }
 

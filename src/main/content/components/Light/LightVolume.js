@@ -19,13 +19,14 @@ const styles = theme => ({
       },
     },
     paper: {
+      marginBottom: theme.spacing.unit * 4,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
-    headName:{
-      margin: theme.spacing.unit,
+    gauge:{
+      margin: theme.spacing.unit*3,
     }
   
 });
@@ -79,8 +80,10 @@ class LightVolume extends Component {
                     </Paper>
         }
         
-        var currentProgress = Math.floor((data.currentLightVolume/data.maxLightVolume)*100)
+        let currentVolume = this.msToTime(data.currentLightVolume)
+        let maxVolume= this.msToTime(data.maxLightVolume)
 
+        let currentProgress = Math.floor((data.currentLightVolume/data.maxLightVolume)*100)
         return (
             <React.Fragment>
             <CssBaseline />
@@ -88,12 +91,14 @@ class LightVolume extends Component {
                     <Paper className={classes.paper}>
                         <Grid container spacing={24}>
                             <Grid item xs={12} sm={12} md={6}>
+                                <div className={classes.gauge}>
                                 <Typography variant="headline">
-                                    ปริมาณแสงที่ได้รับ {data.currentLightVolume} ชม./{data.maxLightVolume} ชม.
+                                    ปริมาณแสงที่ได้รับ {currentVolume} / {maxVolume}
                                 </Typography>
                                 <LightVolumeGauge
                                     currentProgress={currentProgress}
                                 />
+                                </div>
                             </Grid> 
                             <Grid item xs={12} sm={12} md={6}>
                                 <SettingLightVolume
@@ -114,6 +119,16 @@ class LightVolume extends Component {
             this.fetchData(0)
         })
     }
+
+    msToTime = (duration) => {
+        var minutes = parseInt((duration / (1000 * 60)) % 60),
+          hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+      
+        hours = (hours < 10 && hours > 0) ? "0" + hours : hours;
+        minutes = (minutes < 10 && minutes > 0) ? "0" + minutes : minutes;
+
+        return hours + " ชม. " + minutes + " นาที" ;
+      }
 
 }
 
