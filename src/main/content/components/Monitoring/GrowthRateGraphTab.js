@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import GrowthRateGraph from '../../Utils/GrowthRateGraph'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import GrowthRateGraph from '../../../Utils/GrowthRateGraph'
+import {Typography, SnackbarContent} from '@material-ui/core';
 
 class GrowthRateGraphTab extends Component {
 
@@ -9,13 +9,13 @@ class GrowthRateGraphTab extends Component {
         const { data } = growthRate
 
         if (growthRate.isRejected) {
-            return <div className="alert alert-danger">Error: {growthRate.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+growthRate.data}/>
         }
         if (growthRate.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <div className="alert alert-danger">{data.errorMessage}</div>
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
         const timeStamp = []
         for (let index = 0; index < data.length; index++) {
@@ -43,11 +43,12 @@ class GrowthRateGraphTab extends Component {
         }
       
         return (
-            <div>
-                <GrowthRateGraph timeStamp={timeStamp} data={trunkDiameter} name='อัตราการเจริญเติบโตทางเส้นผ่านศูนย์กลางลำต้น' yName='เส้นผ่านศูนย์กลางลำต้น'/><br/><hr/>
-                <GrowthRateGraph timeStamp={timeStamp} data={leafWidth} name='อัตราการเจริญเติบโตทางความกว้างของใบ' yName='ความกว้างของใบ'/><br/><hr/>
-                <GrowthRateGraph timeStamp={timeStamp} data={totalLeaf} name='อัตราการเจริญเติบโตทางจำนวนของใบ' yName='จำนวนใบ'/><br/><hr/>
-                <GrowthRateGraph timeStamp={timeStamp} data={height} name='อัตราการเจริญเติบโตทางความสูงของลำต้น' yName='ความสูงลำต้น'/><br/><hr/>
+            <div className="flex w-full flex-col ">
+                {/* <div></div> */}
+                <GrowthRateGraph timeStamp={timeStamp} data={trunkDiameter} name='อัตราการเจริญเติบโตทางเส้นผ่านศูนย์กลางลำต้น' yName='เส้นผ่านศูนย์กลางลำต้น'/>
+                <GrowthRateGraph timeStamp={timeStamp} data={leafWidth} name='อัตราการเจริญเติบโตทางความกว้างของใบ' yName='ความกว้างของใบ'/>
+                <GrowthRateGraph timeStamp={timeStamp} data={totalLeaf} name='อัตราการเจริญเติบโตทางจำนวนของใบ' yName='จำนวนใบ'/>
+                <GrowthRateGraph timeStamp={timeStamp} data={height} name='อัตราการเจริญเติบโตทางความสูงของลำต้น' yName='ความสูงลำต้น'/>
             </div>
         )
     }

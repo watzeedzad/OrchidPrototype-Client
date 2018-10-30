@@ -59,6 +59,13 @@ export const PageConfig = {
                 loader: () => import('./LightControl')
             })
             
+        },
+        {
+            path     : '/monitoring',
+            component: FuseLoadable({
+                loader: () => import('./Monitoring')
+            })
+            
         }
     ]
 };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadGrowthRate, addGrowthRate, resetStatus } from '../../redux/actions/monitoringActions'
-import { UncontrolledAlert, Modal, ModalHeader, Button } from 'reactstrap';
+import { loadGrowthRate, addGrowthRate, resetStatus } from 'store/actions/application/monitoringActions'
+import {Button,SnackbarContent} from '@material-ui/core';
 import GrowthRateForm from './GrowthRateForm'
 import CSVModal from './CSVModal'
 import GrowthRateGraphTab from './GrowthRateGraphTab';
@@ -9,9 +9,9 @@ import GrowthRateGraphTab from './GrowthRateGraphTab';
 class GrowthRateTab extends Component {
     //มีการใช้ Modal ของ reactstrap ซึ่งจะต้องเก็บ State การแสดง modal ไว้
     state = {
-        modal: false,
-        csvModal: false,
-        modalTitle: '',
+        dialog: false,
+        csvDialog: false,
+        dialogTitle: '',
         data: [],
         mss: ''
     }
@@ -26,34 +26,30 @@ class GrowthRateTab extends Component {
 
         return (
             <div>
-                {this.state.mss}
-                <Button color="success" size="sm" onClick={this.csvToggle}>export ข้อมูล</Button>{' '}
-                <Button color="success" size="sm" onClick={this.handleNew}>เพิ่มข้อมูล</Button><br/><hr/>
+                <div className="p-24 pl-80">
+                    {this.state.mss}
+                </div>
+                <div className="pl-80 pb-48">
+                    <Button variant="contained" color="primary" onClick={this.csvToggle}>export ข้อมูล</Button>{' '}
+                    <Button variant="contained" color="primary" onClick={this.handleNew}>เพิ่มข้อมูล</Button>
+                </div>
 
                 <GrowthRateGraphTab growthRate={growthRate}/>
 
-                {/* เป็น Component สำหรับแสดง Modal ของ reactstrap 
-                ซึ่งเราต้องควบคุมการแสดงไว้ที่ไฟล์นี้ ถ้าทำแยกไฟล์จะควบคุมยากมากครับ */}
-                <Modal isOpen={this.state.modal} toggle={this.toggle}
-                    className="modal-primary" autoFocus={false}>
-                    <ModalHeader toggle={this.toggle}>{this.state.modalTitle}การเจริญเติบโต</ModalHeader>
-                    {/* เรียกใช้งาน Component UserForm และส่ง props ไปด้วย 4 ตัว */}
-                    <GrowthRateForm
-                        data={this.state.data}
-                        growthRateSave={growthRateSave}
-                        onSubmit={this.handleSubmit}
-                        onToggle={this.toggle} />
-                </Modal>
+                <GrowthRateForm
+                    isOpen={this.state.dialog} 
+                    dialogTitle={this.state.dialogTitle}
+                    data={this.state.data}
+                    growthRateSave={growthRateSave}
+                    onSubmit={this.handleSubmit}
+                    onToggle={this.toggle} />
 
-                <Modal isOpen={this.state.csvModal} toggle={this.csvToggle}
-                    className="modal-primary" autoFocus={false}>
-                    <ModalHeader toggle={this.csvToggle}>ดาวน์โหลดไฟล์ csv</ModalHeader>
-                    {/* เรียกใช้งาน Component UserForm และส่ง props ไปด้วย 4 ตัว */}
-                    <CSVModal
-                        farmId={123456789}
-                        greenHouseId={789456123}
-                        projectId={1} />
-                </Modal>
+                <CSVModal
+                    isOpen={this.state.csvDialog} 
+                    farmId={123456789}
+                    greenHouseId={789456123}
+                    projectId={1} 
+                    onToggle={this.csvToggle}/>
             </div>
         )
     }
@@ -61,13 +57,13 @@ class GrowthRateTab extends Component {
     //ฟังก์ชันสั่งแสดง/ปิด modal
     toggle = () => {
         this.setState({
-            modal: !this.state.modal
+            dialog: !this.state.dialog
         })
     }
 
     csvToggle = () => {
         this.setState({
-            csvModal: !this.state.csvModal
+            csvDialog: !this.state.csvDialog
         })
     }
 
@@ -75,7 +71,7 @@ class GrowthRateTab extends Component {
     handleNew = () => {
         this.props.dispatch(resetStatus())
 
-        this.setState({ modalTitle: 'เพิ่ม' ,data:{greenHouseId: 789456123,projectId: 1}})
+        this.setState({ dialogTitle: 'เพิ่ม' ,data:{greenHouseId: 789456123,projectId: 1}})
         this.toggle();
     }
 
@@ -85,13 +81,8 @@ class GrowthRateTab extends Component {
                 if (!this.props.growthRateSave.isRejected) {
                     this.toggle()
                     this.setState({
-                        mss: 
-                            <div>
-                                <UncontrolledAlert  color="success">
-                                    ทำการเพิ่มข้อมูลสำเร็จ
-                                </UncontrolledAlert >
-                            </div>
-                      })
+                        mss: <SnackbarContent className="bg-green-light" message="ทำการเพิ่มข้อมูลสำเร็จ"/>
+                    })
                     this.props.dispatch(loadGrowthRate({greenHouseId: 789456123, projectId: 1 }))
                 }
             })
@@ -99,10 +90,10 @@ class GrowthRateTab extends Component {
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        growthRate: state.monitoringReducers.growthRate,
-        growthRateSave: state.monitoringReducers.growthRateSave
+        growthRate: application.monitoringReducers.growthRate,
+        growthRateSave: application.monitoringReducers.growthRateSave
     }
 }
 

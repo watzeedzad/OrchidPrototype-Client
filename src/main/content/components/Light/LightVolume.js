@@ -124,9 +124,6 @@ class LightVolume extends Component {
         var minutes = parseInt((duration / (1000 * 60)) % 60),
           hours = parseInt((duration / (1000 * 60 * 60)) % 24);
       
-        hours = (hours < 10 && hours > 0) ? "0" + hours : hours;
-        minutes = (minutes < 10 && minutes > 0) ? "0" + minutes : minutes;
-
         return hours + " ชม. " + minutes + " นาที" ;
       }
 

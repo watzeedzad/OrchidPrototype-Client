@@ -1,8 +1,18 @@
 import React, { Component } from 'react'
 import { ModalBody } from 'reactstrap';
-import { loadFarmCSV, loadGreenHouseCSV, loadProjectCSV } from '../../redux/actions/monitoringActions'
+import { loadFarmCSV, loadGreenHouseCSV, loadProjectCSV } from 'store/actions/application/monitoringActions'
 import { connect } from 'react-redux'
 import {CSVLink} from 'react-csv';
+import {
+    Dialog, DialogContent, Typography, Toolbar, AppBar, withStyles, SnackbarContent
+} from '@material-ui/core';
+
+const styles = theme => ({
+    root       : {},
+    formControl: {
+        marginBottom: 24
+    }
+});
 
 class CSVModal extends Component {
 
@@ -16,21 +26,41 @@ class CSVModal extends Component {
     }
 
     render() {
-        const { farmCSV,greenHouseCSV,projectCSV } = this.props
+        const { classes,farmCSV,greenHouseCSV,projectCSV,onToggle,isOpen } = this.props
 
         if (farmCSV.isRejected || greenHouseCSV.isRejected || projectCSV.isRejected) {
-            return <div className="alert alert-danger">Error:{farmCSV.data}</div>
+            return <SnackbarContent className="bg-red-light" message={"Error: "+farmCSV.data}/>
         }
         if (farmCSV.isLoading || greenHouseCSV.isLoading || projectCSV.isLoading) {
-            return <div>Loading...</div>
+            return <Typography variant="body1">Loading...</Typography>
         }
         if (farmCSV.data.errorMessage || greenHouseCSV.data.errorMessage || projectCSV.data.errorMessage) {
-            return 
-                <div>
-                    <ModalBody>
-                        {farmCSV.data.errorMessage}
-                    </ModalBody>
-                </div>
+            return (
+                <Dialog
+                    classes={{
+                        root : classes.root,
+                        paper: "m-24"
+                    }}
+                    className={classes.root}
+                    onClose={onToggle}
+                    open={isOpen}
+                    fullWidth
+                    maxWidth="xs"
+                >
+                    <AppBar position="static" elevation={1}>
+                        <Toolbar className="flex w-full">
+                            <Typography variant="subtitle1" color="inherit">
+                                ส่งออกข้อมูลการเจริญเติบโต
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <DialogContent classes={{root: "p-24"}}>
+                        <div align="center">
+                            {farmCSV.data.errorMessage}
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )
         }
         
         const headers = [
@@ -44,24 +74,49 @@ class CSVModal extends Component {
         ]
 
         return (
-            <div>
-                <ModalBody>
-                    <CSVLink data={farmCSV.data} headers={headers}> export ข้อมูลของทั้งฟาร์ม </CSVLink><br /><br /><hr />
-                    <CSVLink data={greenHouseCSV.data} headers={headers}> export ข้อมูลของทั้งโรงเรือน </CSVLink><br /><br /><hr />
-                    <CSVLink data={projectCSV.data} headers={headers}> export ข้อมูลของทั้งโปรเจ็ค </CSVLink><br /><br /><hr />
-                </ModalBody>
-            </div>
+            <Dialog
+                classes={{
+                    root : classes.root,
+                    paper: "m-24"
+                }}
+                className={classes.root}
+                onClose={onToggle}
+                open={isOpen}
+                fullWidth
+                maxWidth="xs"
+            >
+                <AppBar position="static" elevation={1}>
+                    <Toolbar className="flex w-full">
+                        <Typography variant="headline" color="inherit">
+                            ส่งออกข้อมูลการเจริญเติบโต
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <DialogContent classes={{root: "p-24"}}>
+                    <div className="flex flex-col">
+                        <CSVLink data={farmCSV.data} headers={headers}>
+                            <Typography variant="subtitle1">export ข้อมูลของทั้งฟาร์ม</Typography>
+                        </CSVLink>
+                        <CSVLink data={greenHouseCSV.data} headers={headers}>
+                            <Typography variant="subtitle1">export ข้อมูลของทั้งโรงเรือน</Typography>
+                        </CSVLink>
+                        <CSVLink data={projectCSV.data} headers={headers}>
+                            <Typography variant="subtitle1">export ข้อมูลของทั้งโปรเจ็ค</Typography>
+                        </CSVLink>
+                    </div>
+                </DialogContent>
+            </Dialog>
         )
     }
 
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({application}) {
     return {
-        farmCSV: state.monitoringReducers.farmCSV,
-        greenHouseCSV: state.monitoringReducers.greenHouseCSV,
-        projectCSV: state.monitoringReducers.projectCSV
+        farmCSV: application.monitoringReducers.farmCSV,
+        greenHouseCSV: application.monitoringReducers.greenHouseCSV,
+        projectCSV: application.monitoringReducers.projectCSV
     }
 }
 
-export default connect(mapStateToProps)(CSVModal)
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(CSVModal));

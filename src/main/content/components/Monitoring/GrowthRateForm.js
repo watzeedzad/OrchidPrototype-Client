@@ -1,101 +1,210 @@
 import React, { Component } from 'react'
-import { Button, ModalBody, ModalFooter } from 'reactstrap';
-import { Field, reduxForm } from 'redux-form';
-import FormControl from '@material-ui/core/FormControl';
-import withStyles from '@material-ui/core/styles/withStyles';
-import MaterialRenderTextField from '../../Utils/MaterialRenderTextField';
+import {
+    Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar, SnackbarContent
+} from '@material-ui/core';
+import {TextFieldFormsy} from '@fuse';
+import Formsy from 'formsy-react';
+import {withStyles} from '@material-ui/core/styles/index';
+import _ from '@lodash';
 
 const styles = theme => ({
-    layout: {
-      width: 'auto',
-      display: 'block', // Fix IE11 issue.
-      marginTop: theme.spacing.unit * 8,
-      marginLeft: theme.spacing.unit * 3,
-      marginRight: theme.spacing.unit * 3,
-      [theme.breakpoints.up(250 + theme.spacing.unit * 3 * 2)]: {
-        width: 250,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      },
-    },
-    form: {
-      width: '100%', // Fix IE11 issue.
-      marginTop: theme.spacing.unit,
-    },
-    submit: {
-      marginTop: theme.spacing.unit * 3,
-    },
-  
+    root       : {},
+    formControl: {
+        marginBottom: 24
+    }
 });
 
 class GrowthRateForm extends Component {
 
-    constructor() {
-        super();
-    
-        this.state = {
-            role: 'เจ้าของฟาร์ม',
-        }
-    }
+    state = {
+        timeStamp: new Date().toJSON().slice(0,10).replace(/-/g,'/'),
+        trunkDiameter: '',
+        leafWidth: '',
+        totalLeaf: '',
+        height: '',
+        canSubmit: false
+    };
 
+    form = React.createRef();
 
-    componentDidMount() {
-        //เรียกใช้ฟังก์ชันในการกำหนด value ให้กับ textbox และ control ต่างๆ
-        this.handleInitialize()
-    }
+    disableButton = () => {
+        this.setState({canSubmit: false});
+    };
 
-    //กำหนดค่า value ให้กับ textbox หรือ control ต่างๆ ในฟอร์ม
-    //ถ้าเป็น HTML ธรรมดาก็จะกำหนดเป็น value="xxx" แต่สำหรับ redux-form
-    //ต้องใช้ initialize ถ้าเป็น redux-form v.6 ต้องประกาศใช้ initialize แต่ v.7 เรียกใช้ได้เลย
-    handleInitialize() {
-        let initData = {
-            "greenHouseId": this.props.data.greenHouseId,
-            "projectId": this.props.data.projectId,
-            "timeStamp": new Date().toJSON().slice(0,10).replace(/-/g,'/'),
-            "trunkDiameter": '',
-            "leafWidth": '',
-            "totalLeaf": '',
-            "height": ''
-        };
+    enableButton = () => {
+        this.setState({canSubmit: true});
+    };
 
-        this.props.initialize(initData);
-    }
+    handleChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+    };
 
     render() {
-        //redux-form จะมี props ที่ชื่อ handleSubmit เพื่อใช้ submit ค่า
-        const { classes, handleSubmit, growthRateSave } = this.props
+        const { classes,dialogTitle,growthRateSave } = this.props
+        const {canSubmit} = this.state;        
+        
         return (
-            <div>
-                <ModalBody>
-                    <div className="col-sm-9">
-                    {/* ตรวจสอบว่ามี err หรือไม่ */}
-                        {growthRateSave.isRejected && <div className="alert alert-danger">{growthRateSave.data}</div>}
-                        <form className={classes.form}>
-                            <FormControl margin="normal" required fullWidth>
-                            <Field name="timeStamp"  component={MaterialRenderTextField} type='text' label="วันที่" disabled/>
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                            <Field name="trunkDiameter" component={MaterialRenderTextField} type="number" label="เส้นผ่านศูนย์กลางลำต้น (ซม.)" />
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                            <Field name="leafWidth" component={MaterialRenderTextField} type="number" label="ความกว้างใบ (ซม.)" />
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                            <Field name="totalLeaf" component={MaterialRenderTextField} type="number" label="จำนวนใบ" />
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                            <Field name="height" component={MaterialRenderTextField} type="number" label="ความสูง (ซม.)" />
-                            </FormControl>
-                        </form>
+            <Dialog
+                classes={{
+                    root : classes.root,
+                    paper: "m-24"
+                }}
+                className={classes.root}
+                onClose={this.toggle}
+                open={this.props.isOpen}
+                fullWidth
+                maxWidth="xs"
+            >
+
+            <AppBar position="static" elevation={1}>
+                <Toolbar className="flex w-full">
+                    <Typography variant="subtitle1" color="inherit">
+                        {dialogTitle}การเจริญเติบโต
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            
+            <Formsy
+                onValidSubmit={this.onSubmit}
+                onValid={this.enableButton}
+                onInvalid={this.disableButton}
+                ref={(form) => this.form = form}
+                className="flex flex-col justify-center"
+            >
+                <DialogContent classes={{root: "p-24"}}>
+                    {growthRateSave.isRejected &&
+                        <div className="flex">
+                            <div className="min-w-48 pt-20">
+                            </div>
+                            <SnackbarContent className="bg-green-light" message={growthRateSave.data}/>
+                        </div>
+                    }
+
+                    <div className="flex">
+                        <div className="min-w-48 pt-20">
+                            <Icon color="action">calendar_today</Icon>
+                        </div>
+                        
+                        <TextFieldFormsy
+                            className={classes.formControl}
+                            label="วันที่"
+                            autoFocus
+                            type="text"
+                            id="timeStamp"
+                            name="timeStamp"
+                            value={this.state.timeStamp}
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            disabled
+                            fullWidth
+                        />
                     </div>
 
-                </ModalBody>
+                    <div className="flex">
+                        <div className="min-w-48 pt-20">
+                        </div>
+                        
+                        <TextFieldFormsy
+                            className={classes.formControl}
+                            label="เส้นผ่านศูนย์กลางลำต้น"
+                            type="number"
+                            id="trunkDiameter"
+                            name="trunkDiameter"
+                            value={this.state.trunkDiameter}
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </div>
 
-                <ModalFooter>
-                    <Button color="primary" onClick={handleSubmit(this.onSubmit)}>บันทึก</Button>{' '}
-                    <Button color="secondary" onClick={this.toggle}>ยกเลิก</Button>
-                </ModalFooter>
-            </div>
+                    <div className="flex">
+                        <div className="min-w-48 pt-20">
+                        </div>
+                        
+                        <TextFieldFormsy
+                            className={classes.formControl}
+                            label="ความกว้างใบ (ซม.)"
+                            type="number"
+                            id="leafWidth"
+                            name="leafWidth"
+                            value={this.state.leafWidth}
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </div>
+
+                    <div className="flex">
+                        <div className="min-w-48 pt-20">
+                        </div>
+                        
+                        <TextFieldFormsy
+                            className={classes.formControl}
+                            label="จำนวนใบ"
+                            type="number"
+                            id="totalLeaf"
+                            name="totalLeaf"
+                            value={this.state.totalLeaf}
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </div>
+
+                    <div className="flex">
+                        <div className="min-w-48 pt-20">
+                        </div>
+                        
+                        <TextFieldFormsy
+                            className={classes.formControl}
+                            label="ความสูง (ซม.)"
+                            type="number"
+                            id="height"
+                            name="height"
+                            value={this.state.height}
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </div>
+
+                    <TextFieldFormsy
+                        type="hidden"
+                        id="greenHouseId"
+                        name="greenHouseId"
+                        value={this.props.data.greenHouseId}
+                        onChange={this.handleChange}
+                    />
+
+                    <TextFieldFormsy
+                        type="hidden"
+                        id="projectId"
+                        name="projectId"
+                        value={this.props.data.projectId}
+                        onChange={this.handleChange}
+                    />
+
+                </DialogContent>
+
+                <DialogActions className="justify-between pl-16">
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={!canSubmit}
+                    >
+                        บันทึก
+                </Button>
+
+                </DialogActions>
+
+            </Formsy>
+
+            </Dialog>
         )
     }
 
@@ -126,12 +235,4 @@ function validate(values) {
     return errors;
 }
 
-//เรียกใช้ redux-form โดยให้มีการเรียกใช้การ validate ด้วย
-const form = reduxForm({
-    form: 'GrowthRateForm',
-    validate
-})
-
-//สังเกตุว่าไม่มีการใช้ connect เลยเพราะเราไม่ได้เป็นตัวจัดการ data โดยตรง
-//แต่ส่งสิ่งต่างผ่าน props ที่ได้จาก src/pages/User.js
-export default withStyles(styles)(form(GrowthRateForm))
+export default withStyles(styles, {withTheme: true})(GrowthRateForm)

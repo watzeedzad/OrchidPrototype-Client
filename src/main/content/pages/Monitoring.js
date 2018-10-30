@@ -1,41 +1,43 @@
 import React from 'react'
 import GrowthRateTab from '../components/Monitoring/GrowthRateTab'
-import Sidebar from '../components/Sidebar/Drawers'
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types'
-
+import {FuseAnimate,FusePageCarded} from '@fuse';
+import {Icon, Typography} from '@material-ui/core';
 
 const styles = theme => ({
-root: {
-    flexGrow: 1,
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex',
-  },
-  content: {
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 3,
+    root: {
+        width: '100%'
     },
-    toolbar: theme.mixins.toolbar,
-  });
-  
+    layoutRoot: {}
+});
 
 function Monitoring (props) {   
     const { classes } = props;
-        return (
-            <div className={classes.root}>
-                <div>
-                <Sidebar/>
+
+    return (
+        <FusePageCarded
+            classes={{
+                root: classes.layoutRoot
+            }}
+            header={
+                <div className="flex items-center">
+                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                        <Icon className="text-32 mr-12">show_chart</Icon>
+                    </FuseAnimate>
+                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                        <Typography variant="h6" >ติดตามการเจริญเติบโต</Typography>
+                    </FuseAnimate>
                 </div>
-                <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <GrowthRateTab />
-                </main>
-              
-            </div>
-        )
+            }
+            content={
+                <FuseAnimate animation="transition.slideUpIn" delay={200}>
+                    <div>
+                        <GrowthRateTab />
+                    </div>
+                </FuseAnimate>
+            }
+        />
+    )
     
 }
 
