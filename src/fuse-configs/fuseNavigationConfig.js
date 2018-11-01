@@ -1,6 +1,13 @@
 export const fuseNavigationConfig = [
 
     {
+        'id'   : 'greenHouse',
+        'title': 'จัดการโรงเรือน',
+        'type' : 'item',
+        'icon' : 'panorama',
+        'url'  : '/greenHouse'
+    },
+    {
         'id'   : 'userManagement',
         'title': 'รายชื่อผู้ใช้งาน',
         'type' : 'item',
