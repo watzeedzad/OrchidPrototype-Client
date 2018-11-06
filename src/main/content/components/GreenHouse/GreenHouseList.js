@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {withStyles, Typography, Icon, Avatar} from '@material-ui/core';
+import {withStyles, Typography, Icon, Avatar, IconButton, SnackbarContent} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimateGroup, FuseAnimate} from '@fuse';
-import { showGreenHouse } from 'store/actions/application/greenHouseActions'
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-
+import { showGreenHouse, resetStatus, addGreenHouse, deleteGreenHouse, editGreenHouse } from 'store/actions/application/greenHouseActions'
+import GreenHouseDialog from './GreenHouseDialog';
+import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
+import axios from 'axios'
 
 const styles = theme => ({
     root    : {
@@ -26,6 +27,15 @@ const styles = theme => ({
             boxShadow: theme.shadows[6]
         }
     },
+    boardFooter   : {
+        cursor                  : 'pointer',
+        boxShadow               : theme.shadows[0],
+        transitionProperty      : 'box-shadow border-color',
+        transitionDuration      : theme.transitions.duration.short,
+        transitionTimingFunction: theme.transitions.easing.easeInOut,
+        background              : "lightgrey",
+        color                   : theme.palette.getContrastText(theme.palette.primary.dark),
+    },
     newBoard: {
         borderWidth: 2,
         borderStyle: 'dashed',
@@ -37,21 +47,19 @@ const styles = theme => ({
     avatar: {
         width     : 144,
         height    : 144,
-        // position  : 'absolute',
-        // top       : 92,
-        // padding   : 8,
-        // background: theme.palette.background.default,
-        // boxSizing : 'content-box',
-        // left      : '50%',
-        // transform : 'translateX(-50%)',
-        // '& > img' : {
-        //     borderRadius: '50%'
-        // }
     }
 });
 
 
 class GreenHouseList extends Component {
+
+    state = {
+        dialog: false,
+        dialogTitle: '',
+        data: [],
+        selectedFile: null,
+        picture: null
+    }
 
     componentDidMount()
     {
@@ -60,8 +68,7 @@ class GreenHouseList extends Component {
 
     render()
     {
-        const {classes, greenHouses, newBoard} = this.props;
-        console.log(greenHouses)
+        const {classes, greenHouses, greenHouseSave} = this.props;
 
         if (greenHouses.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+greenHouses.data}/>
@@ -86,7 +93,7 @@ class GreenHouseList extends Component {
                         }}
                     >
                         {greenHouses.data && greenHouses.data.map(e => (
-                            <div className="w-xs p-16" key={greenHouses._id}>
+                            <div className="w-xs p-16" key={e._id}>
                                 <Link
                                     to={'/weatherControl'}
                                     className={classNames(classes.board, "flex flex-col items-center justify-center w-full h-full rounded py-24")}
@@ -100,13 +107,34 @@ class GreenHouseList extends Component {
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.greenHouseId}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">ชื่อ : {e.name}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">คำอธิบาย : {e.desc?e.desc:' - '}</Typography>
+                                    
                                 </Link>
+
+                                <div className={classNames(classes.boardFooter, "flex justify-end")}>
+                                        <IconButton
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                this.handleEdit(e)
+                                            }}
+                                        >
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                this.handleDelete(e._id)
+                                            }}
+                                        >
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                </div>
+
                             </div>
                         ))}
                         <div className="w-xs p-16">
                             <div
                                 className={classNames(classes.board, classes.newBoard, "flex flex-col items-center justify-center w-full h-full rounded py-24")}
-                                // onClick={() => newBoard()}
+                                onClick={() => this.handleNew()}
                             >
                                 <Icon className="text-56">add_circle</Icon>
                                 <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">เพิ่มโรงเรือนใหม่</Typography>
@@ -115,8 +143,75 @@ class GreenHouseList extends Component {
                     </FuseAnimateGroup>
 
                 </div>
+                <GreenHouseDialog
+                    isOpen={this.state.dialog} 
+                    dialogTitle={this.state.dialogTitle}
+                    data={this.state.data}
+                    greenHouseSave={greenHouseSave}
+                    onSubmit={this.handleSubmit}
+                    fileChangedHandler={this.fileChangedHandler}
+                    selectedFile={this.state.selectedFile}
+                    onToggle={this.toggle}/>
             </div>
         );
+    }
+
+    toggle = () => {
+        this.setState({
+            dialog: !this.state.dialog
+        })
+    }
+
+    //ฟังก์ชันสร้างข้อมูลใหม่โดยจะสั่งให้เปิด Modal
+    handleNew = () => {
+        this.props.dispatch(resetStatus())
+
+        this.setState({ dialogTitle: 'เพิ่ม' })
+        this.toggle();
+    }
+
+    //ฟังก์ชันแก้ไขข้อมูล และสั่งให้เปิด Modal โดยส่งข้อมูลไปแป๊ะให้กับฟอร์มด้วย
+    handleEdit = (data) => {
+        this.props.dispatch(resetStatus())
+        
+        this.setState({ dialogTitle: 'แก้ไข' ,data: data})
+        this.toggle()
+    }
+
+    //ฟังก์ชันบันทึกข้อมูล
+    handleSubmit = (values) => {
+        if(this.state.dialogTitle === 'เพิ่ม'){
+            this.props.dispatch(addGreenHouse(values,this.state.picture)).then(() => {
+                if (!this.props.greenHouseSave.isRejected) {
+                    this.toggle()
+                    this.props.dispatch(showGreenHouse());
+                }
+            })
+        }else if(this.state.dialogTitle === 'แก้ไข'){
+            this.props.dispatch(editGreenHouse(values,this.state.picture)).then(() => {
+                if (!this.props.greenHouseSave.isRejected) {
+                    this.toggle()
+                    this.props.dispatch(showGreenHouse());
+                }
+            })
+        }
+    }
+
+    //ฟังก์ชันลบข้อมูล
+    handleDelete = (id) => {
+        confirmModalDialog({
+            show: true,
+            title: 'ยืนยันการลบ',
+            message: 'คุณต้องการลบข้อมูลนี้ใช่หรือไม่',
+            confirmLabel: 'ยืนยัน ลบทันที!!',
+            onConfirm: () => this.props.dispatch(deleteGreenHouse({id:id})).then(() => {
+                this.props.dispatch(showGreenHouse());
+            })
+        })
+    }
+
+    fileChangedHandler = (event) => {
+        this.setState({picture: event.target.files[0],selectedFile: URL.createObjectURL(event.target.files[0])})
     }
 }
 
@@ -124,7 +219,8 @@ class GreenHouseList extends Component {
 function mapStateToProps({application})
 {
     return {
-        greenHouses: application.greenHouseReducers.greenHouses
+        greenHouses: application.greenHouseReducers.greenHouses,
+        greenHouseSave: application.greenHouseReducers.greenHouseSave
     }
 }
 

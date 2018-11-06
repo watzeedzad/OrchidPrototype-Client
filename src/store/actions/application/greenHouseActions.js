@@ -28,3 +28,86 @@ export const showGreenHouse = () => {
         })
     }
 }
+
+export const addGreenHouse = (values,picture) => {
+
+    values = {
+        name : values.name,
+        desc : values.desc,
+        picture : picture
+    }
+    console.log(values)
+    return (dispatch) => {
+        //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
+        //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
+        return axios({
+            method:'post',
+            url:`${BASE_URL}/greenHouse/addGreenHouse`,
+            data: values,
+            headers:{'Content-type': 'application/json'},
+            withCredentials: true
+        }).then(results => {
+            //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
+            //โดยserver จะส่ง object ที่ชื่อว่า status และ message กลับมา
+            if (results.data.errorMessage) {
+                dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: results.data.errorMessage })
+            } else {
+                dispatch({ type: 'SAVE_GREENHOUSE_SUCCESS' })
+            }
+        }).catch(err => {
+            //กรณี error
+            dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: err.message })
+        })
+    }
+}
+
+//ฟังก์ชันลบข้อมูลผู้ใช้ตาม id ที่ส่งเข้ามา
+export const deleteGreenHouse = (value) => {
+    return (dispatch) => {
+        return axios({
+            method:'post',
+            url:`${BASE_URL}/greenHouse/deleteGreenHouse`,
+            data: value,
+            headers:{'Content-type': 'application/json'},
+            withCredentials: true
+        }).then(results => {
+            //ลบข้อมูลสำเร็จ
+            dispatch({ type: 'DELETE_GREENHOUSE_SUCCESS' })
+        }).catch(err => {
+            //กรณี error
+            dispatch({ type: 'DELETE_GREENHOUSE_REJECTED', payload: err.message })
+        })
+    }
+}
+
+export const editGreenHouse = (values) => {
+
+    return (dispatch) => {
+        //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
+        //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
+        return axios({
+            method:'post',
+            url:`${BASE_URL}/greenHouse/editGreenHouse`,
+            data: values,
+            headers:{'Content-type': 'application/json'},
+            withCredentials: true
+        }).then(results => {
+            //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
+            //โดยserver จะส่ง object ที่ชื่อว่า status และ message กลับมา
+            if (results.data.errorMessage) {
+                dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: results.data.errorMessage })
+            } else {
+                dispatch({ type: 'SAVE_GREENHOUSE_SUCCESS' })
+            }
+        }).catch(err => {
+            //กรณี error
+            dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: err.message })
+        })
+    }
+}
+
+export const resetStatus = () => {
+    return (dispatch) => {
+        dispatch({ type: 'SAVE_GREENHOUSES_SUCCESS' })
+    }
+}
