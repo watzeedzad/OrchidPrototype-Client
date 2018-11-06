@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimateGroup, FuseAnimate} from '@fuse';
-import { showGreenHouse, resetStatus, addGreenHouse, deleteGreenHouse, editGreenHouse } from 'store/actions/application/greenHouseActions'
-import GreenHouseDialog from './GreenHouseDialog';
+import { showProject, resetStatus, addProject, deleteProject, editProject } from 'store/actions/application/projectActions'
+import ProjectDialog from './ProjectDialog';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 
 const styles = theme => ({
@@ -51,7 +51,7 @@ const styles = theme => ({
 });
 
 
-class GreenHouseList extends Component {
+class ProjectList extends Component {
 
     state = {
         dialog: false,
@@ -63,17 +63,17 @@ class GreenHouseList extends Component {
 
     componentDidMount()
     {
-        this.props.dispatch(showGreenHouse());
+        this.props.dispatch(showProject({greenHouseId: 789456123}));
     }
 
     render()
     {
-        const {classes, greenHouses, greenHouseSave} = this.props;
+        const {classes, projects, projectSave} = this.props;
 
-        if (greenHouses.isRejected) {
-            return <SnackbarContent className="bg-red-light" message={"Error: "+greenHouses.data}/>
+        if (projects.isRejected) {
+            return <SnackbarContent className="bg-red-light" message={"Error: "+projects.data}/>
         }
-        if (greenHouses.isLoading) {
+        if (projects.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
 
@@ -92,7 +92,7 @@ class GreenHouseList extends Component {
                             duration : 300
                         }}
                     >
-                        {greenHouses.data && greenHouses.data.map(e => (
+                        {projects.data && projects.data.map(e => (
                             <div className="w-xs p-16 pb-64" key={e._id}>
                                 <Link
                                     to={'/weatherControl'}
@@ -104,7 +104,7 @@ class GreenHouseList extends Component {
                                         alt="user photo"
                                         src={"assets/images/farm/123456789.jpg"}
                                     />
-                                    <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.greenHouseId}</Typography>
+                                    <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.projectId}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">ชื่อ : {e.name}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">คำอธิบาย : {e.desc?e.desc:' - '}</Typography>
                                     
@@ -143,15 +143,16 @@ class GreenHouseList extends Component {
                     </FuseAnimateGroup>
 
                 </div>
-                <GreenHouseDialog
+                <ProjectDialog
                     isOpen={this.state.dialog} 
                     dialogTitle={this.state.dialogTitle}
                     data={this.state.data}
-                    greenHouseSave={greenHouseSave}
+                    projectSave={projectSave}
                     onSubmit={this.handleSubmit}
                     fileChangedHandler={this.fileChangedHandler}
                     selectedFile={this.state.selectedFile}
-                    onToggle={this.toggle}/>
+                    onToggle={this.toggle}
+                    greenHouseId={789456123}/>
             </div>
         );
     }
@@ -181,17 +182,17 @@ class GreenHouseList extends Component {
     //ฟังก์ชันบันทึกข้อมูล
     handleSubmit = (values) => {
         if(this.state.dialogTitle === 'เพิ่ม'){
-            this.props.dispatch(addGreenHouse(values,this.state.picture)).then(() => {
-                if (!this.props.greenHouseSave.isRejected) {
+            this.props.dispatch(addProject(values,this.state.picture)).then(() => {
+                if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showGreenHouse());
+                    this.props.dispatch(showProject({greenHouseId: 789456123}));
                 }
             })
         }else if(this.state.dialogTitle === 'แก้ไข'){
-            this.props.dispatch(editGreenHouse(values,this.state.picture)).then(() => {
-                if (!this.props.greenHouseSave.isRejected) {
+            this.props.dispatch(editProject(values,this.state.picture)).then(() => {
+                if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showGreenHouse());
+                    this.props.dispatch(showProject({greenHouseId: 789456123}));
                 }
             })
         }
@@ -204,8 +205,8 @@ class GreenHouseList extends Component {
             title: 'ยืนยันการลบ',
             message: 'คุณต้องการลบข้อมูลนี้ใช่หรือไม่',
             confirmLabel: 'ยืนยัน ลบทันที!!',
-            onConfirm: () => this.props.dispatch(deleteGreenHouse({id:id})).then(() => {
-                this.props.dispatch(showGreenHouse());
+            onConfirm: () => this.props.dispatch(deleteProject({id:id})).then(() => {
+                this.props.dispatch(showProject({greenHouseId: 789456123}));
             })
         })
     }
@@ -219,9 +220,9 @@ class GreenHouseList extends Component {
 function mapStateToProps({application})
 {
     return {
-        greenHouses: application.greenHouseReducers.greenHouses,
-        greenHouseSave: application.greenHouseReducers.greenHouseSave
+        projects: application.projectReducers.projects,
+        projectSave: application.projectReducers.projectSave
     }
 }
 
-export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(GreenHouseList));
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(ProjectList));

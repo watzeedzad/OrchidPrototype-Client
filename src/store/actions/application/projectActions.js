@@ -6,14 +6,15 @@ const BASE_URL = config.BASE_URL
 
 //ฟังก์ชันดึงข้อมูลผู้ใช้ทุกรายการโดยจะส่ง query ชื่อ term เข้าไปด้วยเพื่อนำไป filter
 //สำหรับ es6 เราสามารถกำหนดค่า default ของ parameter ได้ด้วยครับ
-export const showGreenHouse = () => {
+export const showProject = (values) => {
 
     return (dispatch) => {
         //ก่อนดึงข้อมูลสั่ง dispatch ให้ reducer รู้ว่าก่อนเพื่อจะแสดง loading
-        dispatch({ type: 'LOAD_GREENHOUSES_PENDING' })
+        dispatch({ type: 'LOAD_PROJECTS_PENDING' })
         return axios({
             method: 'post',
-            url: `${BASE_URL}/greenHouse/showGreenHouse`,
+            data: values,
+            url: `${BASE_URL}/project/showProject`,
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
             //headers: { authorization: localStorage.getItem('token') }
@@ -21,19 +22,20 @@ export const showGreenHouse = () => {
             //เมื่อข้อมูลส่งกลับมาก็สั่ง dispatch ให้ reducer รู้พร้อมส่ง payload
             //เนื่องจากเราใช้ axios แทน fetch ดังนั้นข้อมูลที่ส่งมาจะอยู่ใน object ชื่อ data
             //ที่มี Array อยู่ข้างใน ดังนั้นนำไป data.map ได้เลยครับ
-            dispatch({ type: 'LOAD_GREENHOUSES_SUCCESS', payload: results.data })
+            dispatch({ type: 'LOAD_PROJECTS_SUCCESS', payload: results.data })
         }).catch(err => {
             //กรณี error
-            dispatch({ type: 'LOAD_GREENHOUSES_REJECTED', payload: err.message })
+            dispatch({ type: 'LOAD_PROJECTS_REJECTED', payload: err.message })
         })
     }
 }
 
-export const addGreenHouse = (values,picture) => {
+export const addProject = (values,picture) => {
 
     values = {
         name : values.name,
-        desc : values.desc,
+        tribeName : values.desc,
+        currentRatio : values.currentRatio,
         picture : picture
     }
     console.log(values)
@@ -42,7 +44,7 @@ export const addGreenHouse = (values,picture) => {
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
         return axios({
             method:'post',
-            url:`${BASE_URL}/greenHouse/addGreenHouse`,
+            url:`${BASE_URL}/project/addProject`,
             data: values,
             headers:{'Content-type': 'application/json'},
             withCredentials: true
@@ -50,42 +52,43 @@ export const addGreenHouse = (values,picture) => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
             //โดยserver จะส่ง object ที่ชื่อว่า status และ message กลับมา
             if (results.data.errorMessage) {
-                dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: results.data.errorMessage })
+                dispatch({ type: 'SAVE_PROJECT_REJECTED', payload: results.data.errorMessage })
             } else {
-                dispatch({ type: 'SAVE_GREENHOUSE_SUCCESS' })
+                dispatch({ type: 'SAVE_PROJECT_SUCCESS' })
             }
         }).catch(err => {
             //กรณี error
-            dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: err.message })
+            dispatch({ type: 'SAVE_PROJECT_REJECTED', payload: err.message })
         })
     }
 }
 
 //ฟังก์ชันลบข้อมูลผู้ใช้ตาม id ที่ส่งเข้ามา
-export const deleteGreenHouse = (value) => {
+export const deleteProject = (value) => {
     return (dispatch) => {
         return axios({
             method:'post',
-            url:`${BASE_URL}/greenHouse/deleteGreenHouse`,
+            url:`${BASE_URL}/project/deleteProject`,
             data: value,
             headers:{'Content-type': 'application/json'},
             withCredentials: true
         }).then(results => {
             //ลบข้อมูลสำเร็จ
-            dispatch({ type: 'DELETE_GREENHOUSE_SUCCESS' })
+            dispatch({ type: 'DELETE_PROJECT_SUCCESS' })
         }).catch(err => {
             //กรณี error
-            dispatch({ type: 'DELETE_GREENHOUSE_REJECTED', payload: err.message })
+            dispatch({ type: 'DELETE_PROJECT_REJECTED', payload: err.message })
         })
     }
 }
 
-export const editGreenHouse = (values,picture) => {
+export const editProject = (values,picture) => {
 
     values = {
         id : values.id,
         name : values.name,
-        desc : values.desc,
+        tribeName : values.desc,
+        currentRatio : values.currentRatio,
         picture : picture
     }
 
@@ -94,7 +97,7 @@ export const editGreenHouse = (values,picture) => {
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
         return axios({
             method:'post',
-            url:`${BASE_URL}/greenHouse/editGreenHouse`,
+            url:`${BASE_URL}/project/editProject`,
             data: values,
             headers:{'Content-type': 'application/json'},
             withCredentials: true
@@ -102,19 +105,19 @@ export const editGreenHouse = (values,picture) => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
             //โดยserver จะส่ง object ที่ชื่อว่า status และ message กลับมา
             if (results.data.errorMessage) {
-                dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: results.data.errorMessage })
+                dispatch({ type: 'SAVE_PROJECT_REJECTED', payload: results.data.errorMessage })
             } else {
-                dispatch({ type: 'SAVE_GREENHOUSE_SUCCESS' })
+                dispatch({ type: 'SAVE_PROJECT_SUCCESS' })
             }
         }).catch(err => {
             //กรณี error
-            dispatch({ type: 'SAVE_GREENHOUSE_REJECTED', payload: err.message })
+            dispatch({ type: 'SAVE_PROJECT_REJECTED', payload: err.message })
         })
     }
 }
 
 export const resetStatus = () => {
     return (dispatch) => {
-        dispatch({ type: 'SAVE_GREENHOUSES_SUCCESS' })
+        dispatch({ type: 'SAVE_PROJECTS_SUCCESS' })
     }
 }

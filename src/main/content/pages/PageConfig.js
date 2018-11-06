@@ -73,6 +73,13 @@ export const PageConfig = {
                 loader: () => import('./GreenHouse')
             })
             
+        },
+        {
+            path     : '/project',
+            component: FuseLoadable({
+                loader: () => import('./Project')
+            })
+            
         }
     ]
 };

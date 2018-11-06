@@ -10,6 +10,7 @@ import fertilizerReducers from './fertilizerReducers'
 import lightReducers from './lightReducers'
 import monitoringReducers from './monitoringReducers'
 import greenHouseReducers from './greenHouseReducers'
+import projectReducers from './projectReducers'
 
 const appReducers = combineReducers({
     form: formReducer,
@@ -22,7 +23,8 @@ const appReducers = combineReducers({
     fertilizerReducers,
     lightReducers,
     monitoringReducers,
-    greenHouseReducers
+    greenHouseReducers,
+    projectReducers
 });
 
 export default appReducers;

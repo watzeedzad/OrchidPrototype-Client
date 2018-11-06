@@ -1,6 +1,6 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles';
-import GreenHouseList from '../components/GreenHouse/GreenHouseList'
+import ProjectList from '../components/Project/ProjectList'
 
 const styles = theme => ({
     root: {
@@ -9,12 +9,12 @@ const styles = theme => ({
     layoutRoot: {}
 });
 
-function GreenHouse(props){    
-    
+function Project(props){  
+      
         return (
-            <GreenHouseList/>
+            <ProjectList/>
         )
     
 }
 
-export default withStyles(styles, { withTheme: true })(GreenHouse)
+export default withStyles(styles, { withTheme: true })(Project)

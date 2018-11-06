@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import Speedometer from '../../../Utils/Speedometer'
-import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 class FertilityGauge extends Component {
 
     render() {
-        if (!this.props.currentValue){
-            return <SnackbarContent className="bg-red-light" message="ไม่มีข้อมูลจากเซนเซอร์"/>
-        }
-
         return (
             <Speedometer
                 title={"ปริมาณแร่ธาตุ ณ ปัจจุบัน"}
