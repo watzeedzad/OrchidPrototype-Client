@@ -32,21 +32,22 @@ export const showProject = (values) => {
 
 export const addProject = (values,picture) => {
 
-    values = {
-        name : values.name,
-        tribeName : values.desc,
-        currentRatio : values.currentRatio,
-        picture : picture
-    }
-    console.log(values)
+    const formData = new FormData();
+    formData.append('picture', picture);
+
+    console.log("actions: ",values.greenHouseId)
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
         return axios({
             method:'post',
             url:`${BASE_URL}/project/addProject`,
-            data: values,
-            headers:{'Content-type': 'application/json'},
+            data: formData,
+            headers:{'Content-type': 'application/json',
+                    'greenHouseId' : values.greenHouseId,
+                    'name' : values.name,
+                    'tribeName' : values.tribeName,
+                    'currentRatio' : values.currentRatio,},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
@@ -87,7 +88,7 @@ export const editProject = (values,picture) => {
     values = {
         id : values.id,
         name : values.name,
-        tribeName : values.desc,
+        tribeName : values.tribeName,
         currentRatio : values.currentRatio,
         picture : picture
     }

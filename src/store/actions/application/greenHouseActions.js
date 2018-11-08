@@ -31,20 +31,19 @@ export const showGreenHouse = () => {
 
 export const addGreenHouse = (values,picture) => {
 
-    values = {
-        name : values.name,
-        desc : values.desc,
-        picture : picture
-    }
-    console.log(values)
+    const formData = new FormData();
+    formData.append('picture', picture);
+
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
         return axios({
             method:'post',
             url:`${BASE_URL}/greenHouse/addGreenHouse`,
-            data: values,
-            headers:{'Content-type': 'application/json'},
+            data: formData,
+            headers:{'Content-type': 'application/json',
+                    'greenHouseDesc': values.desc,
+                    'greenHouseName': values.name},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่

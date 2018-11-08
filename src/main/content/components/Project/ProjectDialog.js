@@ -30,6 +30,7 @@ class ProjectDialog extends Component {
             currentRatio : '',
             picturePath : '',
             canSubmit: false,
+            greenHouseId: ''
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -45,6 +46,7 @@ class ProjectDialog extends Component {
                 tribeName : data.tribeName,
                 currentRatio : data.currentRatio,
                 picturePath : data.picturePath,
+                greenHouseId: this.props.greenHouseId
             })
         }else {
             this.setState({ 
@@ -53,6 +55,7 @@ class ProjectDialog extends Component {
                 tribeName : '',
                 currentRatio : '',
                 picturePath : '',
+                greenHouseId: this.props.greenHouseId
             })
         }
     }
@@ -191,7 +194,7 @@ class ProjectDialog extends Component {
                             type="hidden"
                             id="greenHouseId"
                             name="greenHouseId"
-                            value={this.props.greenHouseId}
+                            value={this.state.greenHouseId}
                         />
 
                     </DialogContent>
