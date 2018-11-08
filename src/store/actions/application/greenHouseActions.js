@@ -81,12 +81,8 @@ export const deleteGreenHouse = (value) => {
 
 export const editGreenHouse = (values,picture) => {
 
-    values = {
-        id : values.id,
-        name : values.name,
-        desc : values.desc,
-        picture : picture
-    }
+    const formData = new FormData();
+    formData.append('picture', picture);
 
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
@@ -94,8 +90,11 @@ export const editGreenHouse = (values,picture) => {
         return axios({
             method:'post',
             url:`${BASE_URL}/greenHouse/editGreenHouse`,
-            data: values,
-            headers:{'Content-type': 'application/json'},
+            data: formData,
+            headers:{'Content-type': 'application/json',
+                    'id' : values.id,
+                    'name' : values.name,
+                    'desc' : values.desc},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่

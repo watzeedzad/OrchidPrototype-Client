@@ -35,7 +35,6 @@ export const addProject = (values,picture) => {
     const formData = new FormData();
     formData.append('picture', picture);
 
-    console.log("actions: ",values.greenHouseId)
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
@@ -85,13 +84,8 @@ export const deleteProject = (value) => {
 
 export const editProject = (values,picture) => {
 
-    values = {
-        id : values.id,
-        name : values.name,
-        tribeName : values.tribeName,
-        currentRatio : values.currentRatio,
-        picture : picture
-    }
+    const formData = new FormData();
+    formData.append('picture', picture);
 
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
@@ -100,7 +94,11 @@ export const editProject = (values,picture) => {
             method:'post',
             url:`${BASE_URL}/project/editProject`,
             data: values,
-            headers:{'Content-type': 'application/json'},
+            headers:{'Content-type': 'application/json',
+                    'id' : values.id,
+                    'name' : values.name,
+                    'tribeName' : values.tribeName,
+                    'currentRatio' : values.currentRatio},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
