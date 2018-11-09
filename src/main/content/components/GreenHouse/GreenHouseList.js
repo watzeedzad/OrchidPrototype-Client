@@ -8,6 +8,8 @@ import {FuseAnimateGroup, FuseAnimate} from '@fuse';
 import { showGreenHouse, resetStatus, addGreenHouse, deleteGreenHouse, editGreenHouse } from 'store/actions/application/greenHouseActions'
 import GreenHouseDialog from './GreenHouseDialog';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { farmNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 const styles = theme => ({
     root    : {
@@ -63,6 +65,7 @@ class GreenHouseList extends Component {
 
     componentDidMount()
     {
+        this.props.dispatch(setNavigation(farmNavigation))
         this.props.dispatch(showGreenHouse());
     }
 
@@ -94,8 +97,11 @@ class GreenHouseList extends Component {
                     >
                         {greenHouses.data && greenHouses.data.map(e => (
                             <div className="w-xs p-16 pb-64" key={e._id}>
-                                <Link
-                                    to={'/weatherControl'}
+                                <Link 
+                                    to={{
+                                        pathname: '/project',
+                                        state: { greenHouse: e }
+                                    }}
                                     className={classNames(classes.board, "flex flex-col items-center justify-center w-full h-full rounded py-24")}
                                     role="button"
                                 >

@@ -22,7 +22,7 @@ export const login = (values) => {
             //headers: { authorization: localStorage.getItem('token') }
         }).then(result => {
             //สั่ง redirect ไปหน้าแรก (/)
-            history.push('/userManagement')
+            history.push('/greenHouse')
             dispatch({ type: 'LOGIN_SUCCESS' })
         }).catch(err => {
             //กรณี error         

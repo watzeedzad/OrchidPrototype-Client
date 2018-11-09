@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {withStyles, Typography, Icon, Avatar, IconButton, SnackbarContent} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import {Link,withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {fade} from '@material-ui/core/styles/colorManipulator';
@@ -8,6 +8,9 @@ import {FuseAnimateGroup, FuseAnimate} from '@fuse';
 import { showProject, resetStatus, addProject, deleteProject, editProject } from 'store/actions/application/projectActions'
 import ProjectDialog from './ProjectDialog';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
+import { selectGreenHouse } from 'store/actions/application/greenHouseActions'
 
 const styles = theme => ({
     root    : {
@@ -62,18 +65,23 @@ class ProjectList extends Component {
     }
 
     componentDidMount()
-    {
-        this.props.dispatch(showProject({greenHouseId: 789456123}));
+    {   
+        console.log(this.props)
+        this.props.dispatch(setNavigation(greenHouseNavigation))
+        if(this.props.location.state){
+            this.props.dispatch(selectGreenHouse(this.props.location.state.greenHouse))
+            this.props.dispatch(showProject({greenHouseId: this.props.location.state.greenHouse.greenHouseId}));
+        }
     }
 
     render()
     {
-        const {classes, projects, projectSave} = this.props;
+        const {classes, projects, projectSave, greenHouse} = this.props;
 
         if (projects.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+projects.data}/>
         }
-        if (projects.isLoading) {
+        if (projects.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
 
@@ -81,7 +89,7 @@ class ProjectList extends Component {
             <div className={classNames(classes.root, "flex flex-grow flex-no-shrink flex-col items-center")}>
 
                 <FuseAnimate>
-                    <Typography className="mt-44 sm:mt-88 sm:py-24 text-32 sm:text-40 font-300" color="inherit">จัดการโรงเรือน</Typography>
+                    <Typography className="mt-44 sm:mt-88 sm:py-24 text-32 sm:text-40 font-300" color="inherit">จัดการโปรเจ็ค</Typography>
                 </FuseAnimate>
 
                 <div>
@@ -92,7 +100,7 @@ class ProjectList extends Component {
                             duration : 300
                         }}
                     >
-                        {projects.data && projects.data.map(e => (
+                        {projects.data && !projects.data.errorMessage && projects.data.map(e => (
                             <div className="w-xs p-16 pb-64" key={e._id}>
                                 <Link
                                     to={'/weatherControl'}
@@ -137,7 +145,7 @@ class ProjectList extends Component {
                                 onClick={() => this.handleNew()}
                             >
                                 <Icon className="text-56">add_circle</Icon>
-                                <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">เพิ่มโรงเรือนใหม่</Typography>
+                                <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">เพิ่มโปรเจ็ค</Typography>
                             </div>
                         </div>
                     </FuseAnimateGroup>
@@ -152,7 +160,7 @@ class ProjectList extends Component {
                     fileChangedHandler={this.fileChangedHandler}
                     selectedFile={this.state.selectedFile}
                     onToggle={this.toggle}
-                    greenHouseId={789456123}/>
+                    greenHouseId={greenHouse.greenHouseId}/>
             </div>
         );
     }
@@ -185,14 +193,14 @@ class ProjectList extends Component {
             this.props.dispatch(addProject(values,this.state.picture)).then(() => {
                 if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showProject({greenHouseId: 789456123}));
+                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.greenHouseId}));
                 }
             })
         }else if(this.state.dialogTitle === 'แก้ไข'){
             this.props.dispatch(editProject(values,this.state.picture)).then(() => {
                 if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showProject({greenHouseId: 789456123}));
+                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.greenHouseIdd}));
                 }
             })
         }
@@ -206,7 +214,7 @@ class ProjectList extends Component {
             message: 'คุณต้องการลบข้อมูลนี้ใช่หรือไม่',
             confirmLabel: 'ยืนยัน ลบทันที!!',
             onConfirm: () => this.props.dispatch(deleteProject({id:id})).then(() => {
-                this.props.dispatch(showProject({greenHouseId: 789456123}));
+                this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.greenHouseId}));
             })
         })
     }
@@ -221,8 +229,9 @@ function mapStateToProps({application})
 {
     return {
         projects: application.projectReducers.projects,
-        projectSave: application.projectReducers.projectSave
+        projectSave: application.projectReducers.projectSave,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 
-export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(ProjectList));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps)(ProjectList)));

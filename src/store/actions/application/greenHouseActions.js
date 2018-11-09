@@ -111,6 +111,12 @@ export const editGreenHouse = (values,picture) => {
     }
 }
 
+export const selectGreenHouse = (greenHouse) => {
+    return (dispatch) => {
+        dispatch({ type: 'SET_GREENHOUSE' , payload:greenHouse})
+    }
+}
+
 export const resetStatus = () => {
     return (dispatch) => {
         dispatch({ type: 'SAVE_GREENHOUSES_SUCCESS' })

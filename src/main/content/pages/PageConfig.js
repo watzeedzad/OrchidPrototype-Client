@@ -80,6 +80,13 @@ export const PageConfig = {
                 loader: () => import('./Project')
             })
             
+        },
+        {
+            path     : '/error-404',
+            component: FuseLoadable({
+                loader: () => import('./Error404Page')
+            })
+            
         }
     ]
 };

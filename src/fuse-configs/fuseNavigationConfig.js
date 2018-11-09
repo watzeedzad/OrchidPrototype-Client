@@ -1,4 +1,4 @@
-export const fuseNavigationConfig = [
+export const farmNavigation = [
 
     {
         'id'   : 'greenHouse',
@@ -7,13 +7,7 @@ export const fuseNavigationConfig = [
         'icon' : 'panorama',
         'url'  : '/greenHouse'
     },
-    {
-        'id'   : 'project',
-        'title': 'จัดการโปรเจ็ค',
-        'type' : 'item',
-        'icon' : 'panorama',
-        'url'  : '/project'
-    },
+    
     {
         'id'   : 'userManagement',
         'title': 'รายชื่อผู้ใช้งาน',
@@ -27,6 +21,17 @@ export const fuseNavigationConfig = [
         'type' : 'item',
         'icon' : 'cast',
         'url'  : '/controllerManagement'
+    },
+
+];
+
+export const greenHouseNavigation = [
+    {
+        'id'   : 'project',
+        'title': 'จัดการโปรเจ็ค',
+        'type' : 'item',
+        'icon' : 'panorama',
+        'url'  : '/project'
     },
     {
         'id'   : 'weatherControl',
@@ -56,6 +61,16 @@ export const fuseNavigationConfig = [
         'icon' : 'waves',
         'url'  : '/waterControl'
     },
+]
+
+export const projectNavigation = [
+    {
+        'id'   : 'fertilityControl',
+        'title': 'วิเคราะห์สภาพเครื่องปลูก',
+        'type' : 'item',
+        'icon' : 'filter_vintage',
+        'url'  : '/fertilityControl'
+    },
     {
         'id'   : 'fertilizerControl',
         'title': 'ตั้งค่าการให้ปุ๋ย',
@@ -70,5 +85,4 @@ export const fuseNavigationConfig = [
         'icon' : 'show_chart',
         'url'  : '/monitoring'
     },
-
-];
+]

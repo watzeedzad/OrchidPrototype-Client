@@ -68,6 +68,8 @@ class Fertility extends Component {
     fetchData = (count) => {
         if(this.props.fertility.data!==null){
             this.props.dispatch(getFertility({ projectId: this.props.fertility.data.projectId, count:count }))
+        }else if(this.props.projectId!==null){
+            this.props.dispatch(getFertility({ projectId: this.props.projectId, count:count }))
         }
     }
 

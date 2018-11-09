@@ -4,7 +4,7 @@ const initialState = {
     greenHouses: { data: null, isLoading: true, isRejected: false },
     greenHouseSave: { data: null, isLoading: true, isRejected: false },
     greenHouseDelete: { success: false, isLoading: true, isRejected: false },
-
+    greenHouse: {data: null, isLoading:true}
 }
 
 export default (state = initialState, action) => {
@@ -26,6 +26,9 @@ export default (state = initialState, action) => {
             return { ...state, greenHouseDelete: { data: true, isLoading: false, isRejected: false } }
         case 'DELETE_GREENHOUSE_REJECTED':
             return { ...state, greenHouseDelete: { data: action.payload, isLoading: false, isRejected: true } }
+
+        case 'SET_GREENHOUSE':
+            return { ...state, greenHouse: { data: action.payload, isLoading: false} }
 
         default:
             return state
