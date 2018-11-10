@@ -6,6 +6,8 @@ import SettingHumidity from '../Humidity/SettingHumidity'
 import {Typography} from '@material-ui/core';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Grid from '@material-ui/core/Grid';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 class Humidity extends Component {
 
@@ -18,6 +20,7 @@ class Humidity extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
@@ -38,17 +41,19 @@ class Humidity extends Component {
      }
     
     fetchData = (count) => {
-        this.props.dispatch(getHumidity({ greenHouseId: 789456123, count:count }))
+        if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(getHumidity({ greenHouseId: this.props.greenHouse.data.greenHouseId, count:count }))
+        }
     }
 
     render() {
-        const { humidity } = this.props
+        const { humidity,greenHouse } = this.props
         const { data } = humidity
 
         if (humidity.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+humidity.data}/>
         }
-        if (humidity.isLoading) {
+        if (humidity.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -86,6 +91,7 @@ class Humidity extends Component {
 function mapStateToProps({application}) {
     return {
         humidity: application.weatherReducers.humidity,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

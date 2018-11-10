@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import WateringTimeList from '../WaterControl/WateringTimeList'
 import { getWateringTime } from 'store/actions/application/waterActions'
 import {Typography, Grid, SnackbarContent} from '@material-ui/core';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 class AutoWaterControl extends Component {
     
@@ -11,17 +13,20 @@ class AutoWaterControl extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         //ดึงข้อมูลเวลาที่ตั้งไว้ทั้งหมดมาลง state
-        this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
+        if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouse.data.greenHouseId }))
+        }
     }
 
     render() {
-        const { wateringTimeList} = this.props
+        const { wateringTimeList, greenHouse } = this.props
 
         if (wateringTimeList.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+wateringTimeList.data}/>
         }
-        if (wateringTimeList.isLoading) {
+        if (wateringTimeList.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (wateringTimeList.data.errorMessage){
@@ -47,14 +52,14 @@ class AutoWaterControl extends Component {
         this.setState({
             mss: <SnackbarContent className="bg-green-light" message="บันทึกการตั้งค่าเวลาการให้น้ำสำเร็จ"/>
         })
-        this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
+        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouse.data.greenHouseId }))
     }
 
     delete = () => {
         this.setState({
             mss: <SnackbarContent className="bg-green-light" message="ทำการลบเวลาการให้น้ำสำเร็จ"/>
         })
-        this.props.dispatch(getWateringTime({ greenHouseId: 789456123 }))
+        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouse.data.greenHouseId }))
     }
 
 }
@@ -62,6 +67,7 @@ class AutoWaterControl extends Component {
 function mapStateToProps({application}) {
     return {
         wateringTimeList: application.waterReducers.wateringTimeList,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

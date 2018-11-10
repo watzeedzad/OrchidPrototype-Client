@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import TemperatureGauge from '../Temperature/TemperatureGauge'
 import SettingTemperature from '../Temperature/SettingTemperature'
 import {Typography, SnackbarContent, Grid} from '@material-ui/core';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 class Temperature extends Component {
 
@@ -16,6 +18,8 @@ class Temperature extends Component {
     }
 
     componentDidMount() {
+
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData , 15000);
         this.setState({intervalId: intervalId});
@@ -35,17 +39,19 @@ class Temperature extends Component {
     }
     
     fetchData = (count) => {
-        this.props.dispatch(getTemp({ greenHouseId: 789456123 , count: count}))
+        if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(getTemp({ greenHouseId: this.props.greenHouse.data.greenHouseId , count: count}))
+        }
     }
 
     render() {
-        const { temp } = this.props
+        const { temp,greenHouse } = this.props
         const { data } = temp
 
         if (temp.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+temp.data}/>
         }
-        if (temp.isLoading) {
+        if (temp.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -83,6 +89,7 @@ class Temperature extends Component {
 function mapStateToProps({application}) {
     return {
         temp: application.weatherReducers.temp,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

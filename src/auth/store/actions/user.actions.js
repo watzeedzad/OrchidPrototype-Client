@@ -2,7 +2,7 @@ import history from 'history.js';
 import {setDefaultSettings} from 'store/actions/fuse';
 import {FuseDefaultSettings} from '@fuse';
 import _ from '@lodash';
-import store from 'store';
+import configureStore from 'configureStore';
 import * as Actions from 'store/actions';
 import firebase from 'firebase/app';
 import firebaseService from 'firebaseService';
@@ -11,6 +11,8 @@ import auth0Service from 'auth0Service';
 export const SET_USER_DATA = '[USER] SET DATA';
 export const REMOVE_USER_DATA = '[USER] REMOVE DATA';
 export const USER_LOGGED_OUT = '[USER] LOGGED OUT';
+
+const { store } = configureStore()
 
 /**
  * Set user data from Auth0 token data

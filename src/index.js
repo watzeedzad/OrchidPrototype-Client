@@ -19,9 +19,12 @@ import MainNavbarHeader from './main/MainNavbarHeader';
 import MainFooter from './main/MainFooter';
 import jssExtend from 'jss-extend'
 import QuickPanel from 'main/quickPanel/QuickPanel';
-import store from 'store';
+import configureStore from 'configureStore';
 import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
+
+
+const { persistor, store } = configureStore()
 
 const jss = create({
     ...jssPreset(),

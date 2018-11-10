@@ -6,6 +6,8 @@ import SettingMoisture from '../Moisture/SettingMoisture'
 import {Typography} from '@material-ui/core';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Grid from '@material-ui/core/Grid';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 class Moisture extends Component {
 
@@ -18,6 +20,7 @@ class Moisture extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
@@ -37,17 +40,19 @@ class Moisture extends Component {
     }
     
     fetchData = (count) => {
-        this.props.dispatch(getMoisture({ greenHouseId: 789456123, count:count }))
+        if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(getMoisture({ greenHouseId: this.props.greenHouse.data.greenHouseId, count:count }))
+        }
     }
 
     render() {
-        const { moisture } = this.props
+        const { moisture,greenHouse } = this.props
         const { data } = moisture
 
         if (moisture.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+moisture.data}/>
         }
-        if (moisture.isLoading) {
+        if (moisture.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -86,6 +91,7 @@ class Moisture extends Component {
 function mapStateToProps({application}) {
     return {
         moisture: application.planterReducers.moisture,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

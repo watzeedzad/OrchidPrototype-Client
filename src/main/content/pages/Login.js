@@ -8,7 +8,9 @@ import classNames from 'classnames';
 import _ from '@lodash';
 import {FuseAnimate} from '@fuse';
 import connect from 'react-redux/es/connect/connect';
-import { login } from '../../../store/actions/application/loginActions'; 
+import { login } from 'store/actions/application/loginActions';
+import { setSettings } from 'store/actions/fuse/settings.actions'
+import {LoginConfig} from './LoginConfig'
 
 const styles = theme => ({
     root: {
@@ -25,6 +27,10 @@ class Login extends Component {
     state = {
         canSubmit: false
     };
+
+    componentDidMount() {
+        this.props.dispatch(setSettings(LoginConfig.settings))
+    }
 
     form = React.createRef();
 

@@ -66,11 +66,12 @@ class ProjectList extends Component {
 
     componentDidMount()
     {   
-        console.log(this.props)
         this.props.dispatch(setNavigation(greenHouseNavigation))
         if(this.props.location.state){
             this.props.dispatch(selectGreenHouse(this.props.location.state.greenHouse))
             this.props.dispatch(showProject({greenHouseId: this.props.location.state.greenHouse.greenHouseId}));
+        }else if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.data.greenHouseId}));
         }
     }
 
@@ -193,14 +194,14 @@ class ProjectList extends Component {
             this.props.dispatch(addProject(values,this.state.picture)).then(() => {
                 if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.greenHouseId}));
+                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.data.greenHouseId}));
                 }
             })
         }else if(this.state.dialogTitle === 'แก้ไข'){
             this.props.dispatch(editProject(values,this.state.picture)).then(() => {
                 if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.greenHouseIdd}));
+                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.data.greenHouseIdd}));
                 }
             })
         }
@@ -214,7 +215,7 @@ class ProjectList extends Component {
             message: 'คุณต้องการลบข้อมูลนี้ใช่หรือไม่',
             confirmLabel: 'ยืนยัน ลบทันที!!',
             onConfirm: () => this.props.dispatch(deleteProject({id:id})).then(() => {
-                this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.greenHouseId}));
+                this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.data.greenHouseId}));
             })
         })
     }

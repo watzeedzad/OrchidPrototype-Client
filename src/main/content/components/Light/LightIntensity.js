@@ -5,6 +5,8 @@ import LightIntensityGauge from './LightIntensityGauge'
 import SettingLightIntensity from './SettingLightIntensity'
 import {Typography, SnackbarContent, Grid, Paper, CssBaseline} from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 const styles = theme => ({
     layout: {
@@ -43,6 +45,7 @@ class LightIntensity extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
@@ -62,21 +65,25 @@ class LightIntensity extends Component {
     }
     
     fetchData = (count) => {
-        this.props.dispatch(getLightIntensity({ greenHouseId: 789456123 , count: count }))
+        if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(getLightIntensity({ greenHouseId: this.props.greenHouse.data.greenHouseId , count: count }))
+        }
     }
 
     render() {
-        const { classes,intensity } = this.props
+        const { classes,intensity,greenHouse } = this.props
         const { data } = intensity
 
         if (intensity.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+intensity.data}/>
         }
-        if (intensity.isLoading) {
+        if (intensity.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
-            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
+            return  <Paper className={classes.paper}>
+                        <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
+                    </Paper>
         }
     
         return (
@@ -117,6 +124,7 @@ class LightIntensity extends Component {
 function mapStateToProps({application}) {
     return {
         intensity: application.lightReducers.intensity,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

@@ -11,6 +11,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import {Typography} from '@material-ui/core';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Grid from '@material-ui/core/Grid';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 const styles = theme => ({
     layout: {
@@ -48,6 +50,7 @@ class ShowAllFertility extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
@@ -59,17 +62,19 @@ class ShowAllFertility extends Component {
     }
     
     fetchData = (count) => {
-        this.props.dispatch(getAllFertility({ greenHouseId: 789456123 ,count:count}))
+        if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(getAllFertility({ greenHouseId: this.props.greenHouse.data.greenHouseId ,count:count}))
+        }
     }
 
     render() {
-        const { classes,fertilitys } = this.props
+        const { classes,fertilitys,greenHouse } = this.props
         const { data } = fertilitys
 
         if (fertilitys.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+fertilitys.data}/>
         }
-        if (fertilitys.isLoading) {
+        if (fertilitys.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -123,6 +128,7 @@ class ShowAllFertility extends Component {
 function mapStateToProps({application}) {
     return {
         fertilitys: application.planterReducers.fertilitys,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

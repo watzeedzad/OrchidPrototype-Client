@@ -5,6 +5,8 @@ import LightVolumeGauge from './LightVolumeGauge'
 import SettingLightVolume from './SettingLightVolume'
 import {Typography, SnackbarContent, Grid, Paper, CssBaseline} from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 const styles = theme => ({
     layout: {
@@ -42,6 +44,7 @@ class LightVolume extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(greenHouseNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
@@ -61,17 +64,19 @@ class LightVolume extends Component {
     }
     
     fetchData = (count) => {
-        this.props.dispatch(getLightVolume({ greenHouseId: 789456123,count:count }))
+        if(!this.props.greenHouse.isLoading){
+        this.props.dispatch(getLightVolume({ greenHouseId: this.props.greenHouse.data.greenHouseId,count:count }))
+        }
     }
 
     render() {
-        const { classes,volume } = this.props
+        const { classes,volume,greenHouse } = this.props
         const { data } = volume
 
         if (volume.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+volume.data}/>
         }
-        if (volume.isLoading) {
+        if (volume.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -132,6 +137,7 @@ class LightVolume extends Component {
 function mapStateToProps({application}) {
     return {
         volume: application.lightReducers.volume,
+        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 
