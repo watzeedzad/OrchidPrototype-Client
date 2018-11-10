@@ -22,6 +22,7 @@ import QuickPanel from 'main/quickPanel/QuickPanel';
 import configureStore from 'configureStore';
 import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 const { persistor, store } = configureStore()
@@ -37,38 +38,40 @@ const generateClassName = createGenerateClassName();
 ReactDOM.render(
     <JssProvider jss={jss} generateClassName={generateClassName}>
         <Provider store={store}>
-            <Auth>
-                <Router history={history}>
-                    <FuseAuthorization routes={routes}>
-                        <FuseTheme>
-                            <FuseLayout
-                                routes={routes}
-                                toolbar={
-                                    <MainToolbar/>
-                                }
-                                navbarHeader={
-                                    <MainNavbarHeader/>
-                                }
-                                navbarContent={
-                                    <MainNavbarContent/>
-                                }
-                                footer={
-                                    <MainFooter/>
-                                }
-                                rightSidePanel={
-                                    <React.Fragment>
-                                        <QuickPanel/>
-                                    </React.Fragment>
-                                }
-                                contentWrapper={
-                                    <SettingsPanel/>
-                                }
-                            >
-                            </FuseLayout>
-                        </FuseTheme>
-                    </FuseAuthorization>
-                </Router>
-            </Auth>
+            <PersistGate loading={null} persistor={persistor}>
+                <Auth>
+                    <Router history={history}>
+                        <FuseAuthorization routes={routes}>
+                            <FuseTheme>
+                                <FuseLayout
+                                    routes={routes}
+                                    toolbar={
+                                        <MainToolbar/>
+                                    }
+                                    navbarHeader={
+                                        <MainNavbarHeader/>
+                                    }
+                                    navbarContent={
+                                        <MainNavbarContent/>
+                                    }
+                                    footer={
+                                        <MainFooter/>
+                                    }
+                                    rightSidePanel={
+                                        <React.Fragment>
+                                            <QuickPanel/>
+                                        </React.Fragment>
+                                    }
+                                    contentWrapper={
+                                        <SettingsPanel/>
+                                    }
+                                >
+                                </FuseLayout>
+                            </FuseTheme>
+                        </FuseAuthorization>
+                    </Router>
+                </Auth>
+            </PersistGate>
         </Provider>
     </JssProvider>
     , document.getElementById('root'));

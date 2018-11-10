@@ -2,7 +2,25 @@ import {FuseLoadable} from '@fuse';
 
 export const PageConfig = {
     settings: {
-        layout: {}
+        layout: {
+            config: {
+                navbar        : {
+                    display: true
+                },
+                toolbar       : {
+                    display: true
+                },
+                footer        : {
+                    display: false
+                },
+                leftSidePanel : {
+                    display: false
+                },
+                rightSidePanel: {
+                    display: false
+                }
+            }
+        }   
     },
     routes  : [
         {

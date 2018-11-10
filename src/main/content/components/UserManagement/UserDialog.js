@@ -19,7 +19,6 @@ class UserDialog extends Component {
     constructor() {
         super();
         this.state = {
-            farmId : '',
             role : 'เจ้าของฟาร์ม',
             firstname : '',
             lastname : '',
@@ -38,7 +37,6 @@ class UserDialog extends Component {
         const {data} = nextProps
         if (data._id) {
             this.setState({ 
-                farmId : data.farmId,
                 role : data.role,
                 firstname : data.firstname,
                 lastname : data.lastname,
@@ -48,7 +46,6 @@ class UserDialog extends Component {
             })
         }else {
             this.setState({ 
-                farmId : data.farmId,
                 role : 'เจ้าของฟาร์ม',
                 firstname : '',
                 lastname : '',
@@ -232,15 +229,6 @@ class UserDialog extends Component {
                         </div>
                         }
 
-                        <TextFieldFormsy
-                                className={classes.formControl}
-                                autoFocus
-                                type="hidden"
-                                id="farmId"
-                                name="farmId"
-                                value={this.state.farmId}
-                                onChange={this.handleChange}
-                            />
                         <TextFieldFormsy
                                 className={classes.formControl}
                                 autoFocus

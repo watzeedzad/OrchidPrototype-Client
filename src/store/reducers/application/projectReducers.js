@@ -4,7 +4,7 @@ const initialState = {
     projects: { data: null, isLoading: true, isRejected: false },
     projectSave: { data: null, isLoading: true, isRejected: false },
     projectDelete: { success: false, isLoading: true, isRejected: false },
-
+    project: { data: null , isLoading: true}
 }
 
 export default (state = initialState, action) => {
@@ -26,6 +26,9 @@ export default (state = initialState, action) => {
             return { ...state, projectDelete: { data: true, isLoading: false, isRejected: false } }
         case 'DELETE_PROJECT_REJECTED':
             return { ...state, projectDelete: { data: action.payload, isLoading: false, isRejected: true } }
+
+        case 'SET_PROJECT':
+            return { ...state, project: { data: action.payload, isLoading: false} }
 
         default:
             return state

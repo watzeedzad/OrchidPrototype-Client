@@ -14,6 +14,8 @@ import {
 } from 'store/actions/application/userActions';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { farmNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 const styles = theme => ({
     addButton: {
@@ -34,7 +36,8 @@ class UserTab extends Component {
 
     componentDidMount()
     {
-        this.props.dispatch(loadUsers({farmId: 123456789}))
+        this.props.dispatch(setNavigation(farmNavigation))
+        this.props.dispatch(loadUsers())
     }
 
     render()
@@ -102,14 +105,14 @@ class UserTab extends Component {
 
     //ฟังก์ชัน filter ข้อมูล
     handleSearch = (term) => {
-        this.props.dispatch(searchUsers({farmId:123456789,term:term}))
+        this.props.dispatch(searchUsers({term:term}))
     }
 
     //ฟังก์ชันสร้างข้อมูลใหม่โดยจะสั่งให้เปิด Modal
     handleNew = () => {
         this.props.dispatch(resetStatus())
 
-        this.setState({ dialogTitle: 'เพิ่ม' ,data:{farmId:123456789}})
+        this.setState({ dialogTitle: 'เพิ่ม' })
         this.toggle();
     }
 
@@ -128,14 +131,14 @@ class UserTab extends Component {
             this.props.dispatch(addUser(values)).then(() => {
                 if (!this.props.userSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(loadUsers({farmId: 123456789}))
+                    this.props.dispatch(loadUsers())
                 }
             })
         }else if(this.state.dialogTitle === 'แก้ไข'){
             this.props.dispatch(editUser(values)).then(() => {
                 if (!this.props.userSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(loadUsers({farmId: 123456789}))
+                    this.props.dispatch(loadUsers())
                 }
             })
         }
@@ -149,7 +152,7 @@ class UserTab extends Component {
             message: 'คุณต้องการลบข้อมูลนี้ใช่หรือไม่',
             confirmLabel: 'ยืนยัน ลบทันที!!',
             onConfirm: () => this.props.dispatch(deleteUser({id:id})).then(() => {
-                this.props.dispatch(loadUsers({farmId: 123456789}))
+                this.props.dispatch(loadUsers())
             })
         })
     }

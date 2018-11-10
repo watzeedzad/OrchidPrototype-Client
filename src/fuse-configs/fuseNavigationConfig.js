@@ -65,6 +65,13 @@ export const greenHouseNavigation = [
 
 export const projectNavigation = [
     {
+        'id'   : 'monitoring',
+        'title': 'ติดตามการเจริญเติบโต',
+        'type' : 'item',
+        'icon' : 'show_chart',
+        'url'  : '/monitoring'
+    },
+    {
         'id'   : 'fertilityControl',
         'title': 'วิเคราะห์สภาพเครื่องปลูก',
         'type' : 'item',
@@ -77,12 +84,5 @@ export const projectNavigation = [
         'type' : 'item',
         'icon' : 'local_florist',
         'url'  : '/fertilizerControl'
-    },
-    {
-        'id'   : 'monitoring',
-        'title': 'ติดตามการเจริญเติบโต',
-        'type' : 'item',
-        'icon' : 'show_chart',
-        'url'  : '/monitoring'
     },
 ]

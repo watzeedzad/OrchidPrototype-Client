@@ -4,7 +4,7 @@ const initialState = {
     greenHouses: { data: null, isLoading: true, isRejected: false },
     greenHouseSave: { data: null, isLoading: true, isRejected: false },
     greenHouseDelete: { success: false, isLoading: true, isRejected: false },
-    greenHouse: {data: null, isLoading:true}
+    greenHouse: {data: null, isLoading:true},
 }
 
 export default (state = initialState, action) => {

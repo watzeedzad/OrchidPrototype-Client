@@ -19,20 +19,9 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, createReducer())
-let store = createStore(persistedReducer,enhancer)
-store.asyncReducers = {};
-
-export const injectReducer = (key, reducer) => {
-    if ( store.asyncReducers[key] )
-    {
-        return;
-    }
-    store.asyncReducers[key] = reducer;
-    store.replaceReducer(createReducer(store.asyncReducers));
-    return store;
-};
 
 export default () => {
+    let store = createStore(persistedReducer,enhancer)
     let persistor = persistStore(store)
     return { store, persistor }
 }

@@ -104,7 +104,10 @@ class ProjectList extends Component {
                         {projects.data && !projects.data.errorMessage && projects.data.map(e => (
                             <div className="w-xs p-16 pb-64" key={e._id}>
                                 <Link
-                                    to={'/weatherControl'}
+                                    to={{
+                                        pathname: '/monitoring',
+                                        state: { project: e }
+                                    }}
                                     className={classNames(classes.board, "flex flex-col items-center justify-center w-full h-full rounded py-24")}
                                     role="button"
                                 >
@@ -115,7 +118,8 @@ class ProjectList extends Component {
                                     />
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.projectId}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">ชื่อ : {e.name}</Typography>
-                                    <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">คำอธิบาย : {e.desc?e.desc:' - '}</Typography>
+                                    <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">สายพันธุ์ : {e.tribeName}</Typography>
+                                    <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">สูตรปุ๋ย : {e.currentRatio}</Typography>
                                     
                                 </Link>
 
@@ -161,7 +165,7 @@ class ProjectList extends Component {
                     fileChangedHandler={this.fileChangedHandler}
                     selectedFile={this.state.selectedFile}
                     onToggle={this.toggle}
-                    greenHouseId={greenHouse.greenHouseId}/>
+                    greenHouseId={greenHouse.data.greenHouseId}/>
             </div>
         );
     }

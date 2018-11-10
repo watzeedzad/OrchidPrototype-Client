@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { loadGrowthRate, addGrowthRate, resetStatus } from 'store/actions/application/monitoringActions'
-import {Button,SnackbarContent} from '@material-ui/core';
+import {Button,SnackbarContent,Typography} from '@material-ui/core';
+import {withRouter} from 'react-router-dom';
 import GrowthRateForm from './GrowthRateForm'
 import CSVModal from './CSVModal'
 import GrowthRateGraphTab from './GrowthRateGraphTab';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { projectNavigation } from 'fuse-configs/fuseNavigationConfig';
+import { selectProject } from 'store/actions/application/projectActions'
 
 class GrowthRateTab extends Component {
     //มีการใช้ Modal ของ reactstrap ซึ่งจะต้องเก็บ State การแสดง modal ไว้
@@ -18,11 +22,21 @@ class GrowthRateTab extends Component {
 
     //สั่ง dispach ฟังก์ชัน loadUsers
     componentDidMount() {
-        this.props.dispatch(loadGrowthRate({ greenHouseId: 789456123, projectId: 1 }))
+        this.props.dispatch(setNavigation(projectNavigation))
+        if(this.props.location.state){
+            this.props.dispatch(selectProject(this.props.location.state.project))
+            this.props.dispatch(loadGrowthRate({ projectId: this.props.location.state.project.projectId }));
+        }else if(!this.props.greenHouse.isLoading){
+            this.props.dispatch(loadGrowthRate({projectId: this.props.project.data.projectId}));
+        }
     }
 
     render() {
-        const { growthRate,growthRateSave } = this.props
+        const { growthRate,growthRateSave,project,greenHouse } = this.props
+        console.log(this.props)
+        if (project.isLoading || greenHouse.isLoading) {
+            return <Typography variant="body1">Loading...</Typography>
+        }
 
         return (
             <div>
@@ -46,9 +60,8 @@ class GrowthRateTab extends Component {
 
                 <CSVModal
                     isOpen={this.state.csvDialog} 
-                    farmId={123456789}
-                    greenHouseId={789456123}
-                    projectId={1} 
+                    greenHouseId={greenHouse.data.greenHouseId}
+                    projectId={project.data.projectId} 
                     onToggle={this.csvToggle}/>
             </div>
         )
@@ -71,7 +84,7 @@ class GrowthRateTab extends Component {
     handleNew = () => {
         this.props.dispatch(resetStatus())
 
-        this.setState({ dialogTitle: 'เพิ่ม' ,data:{greenHouseId: 789456123,projectId: 1}})
+        this.setState({ dialogTitle: 'เพิ่ม' ,data:{greenHouseId: this.props.greenHouse.data.greenHouseId,projectId: this.props.project.data.projectId}})
         this.toggle();
     }
 
@@ -83,7 +96,7 @@ class GrowthRateTab extends Component {
                     this.setState({
                         mss: <SnackbarContent className="bg-green-light" message="ทำการเพิ่มข้อมูลสำเร็จ"/>
                     })
-                    this.props.dispatch(loadGrowthRate({greenHouseId: 789456123, projectId: 1 }))
+                    this.props.dispatch(loadGrowthRate({greenHouseId: this.props.greenHouse.data.greenHouseId,projectId: this.props.project.data.projectId}))
                 }
             })
     }
@@ -93,8 +106,10 @@ class GrowthRateTab extends Component {
 function mapStateToProps({application}) {
     return {
         growthRate: application.monitoringReducers.growthRate,
-        growthRateSave: application.monitoringReducers.growthRateSave
+        growthRateSave: application.monitoringReducers.growthRateSave,
+        greenHouse: application.greenHouseReducers.greenHouse,
+        project: application.projectReducers.project,
     }
 }
 
-export default connect(mapStateToProps)(GrowthRateTab)
+export default connect(mapStateToProps)(withRouter(GrowthRateTab))

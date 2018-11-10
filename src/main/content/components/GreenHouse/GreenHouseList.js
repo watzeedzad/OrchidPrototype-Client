@@ -10,6 +10,8 @@ import GreenHouseDialog from './GreenHouseDialog';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import { setNavigation } from 'store/actions/fuse/navigation.actions'
 import { farmNavigation } from 'fuse-configs/fuseNavigationConfig';
+import { setSettings } from 'store/actions/fuse/settings.actions'
+import {PageConfig} from '../../pages/PageConfig'
 
 const styles = theme => ({
     root    : {
@@ -64,7 +66,8 @@ class GreenHouseList extends Component {
     }
 
     componentDidMount()
-    {
+    {   
+        this.props.dispatch(setSettings(PageConfig.settings))
         this.props.dispatch(setNavigation(farmNavigation))
         this.props.dispatch(showGreenHouse());
     }

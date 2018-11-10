@@ -10,6 +10,8 @@ import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import ControllerForm from './ControllerForm'
 import ProjectTabs from './ProjectTabs';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { farmNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 function TabContainer(props) {
   return (
@@ -46,6 +48,7 @@ class GreenHouseTabs extends Component {
   };
 
   componentDidMount() {
+    this.props.dispatch(setNavigation(farmNavigation))
     this.props.dispatch(getGreenHouse())
   }
 

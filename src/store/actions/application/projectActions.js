@@ -93,7 +93,7 @@ export const editProject = (values,picture) => {
         return axios({
             method:'post',
             url:`${BASE_URL}/project/editProject`,
-            data: values,
+            data: formData,
             headers:{'Content-type': 'application/json',
                     'id' : values.id,
                     'name' : values.name,
@@ -112,6 +112,12 @@ export const editProject = (values,picture) => {
             //กรณี error
             dispatch({ type: 'SAVE_PROJECT_REJECTED', payload: err.message })
         })
+    }
+}
+
+export const selectProject = (project) => {
+    return (dispatch) => {
+        dispatch({ type: 'SET_PROJECT' , payload:project})
     }
 }
 
