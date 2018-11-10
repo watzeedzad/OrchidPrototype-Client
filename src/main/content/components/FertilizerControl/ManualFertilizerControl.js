@@ -6,6 +6,8 @@ import FertilityGauge from '../Fertility/FertilityGauge'
 import ManualFertilizerField from '../FertilizerControl/ManualFertilizerField'
 import {Grid, CssBaseline, Typography, SnackbarContent, Paper} from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { setNavigation } from 'store/actions/fuse/navigation.actions'
+import { projectNavigation } from 'fuse-configs/fuseNavigationConfig';
 
 const styles = theme => ({
     layout: {
@@ -43,6 +45,7 @@ class ManualFertilizerControl extends Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setNavigation(projectNavigation))
         this.fetchData(0)
         var intervalId = setInterval( this.fetchData, 15000);
         this.setState({intervalId: intervalId});
@@ -62,17 +65,19 @@ class ManualFertilizerControl extends Component {
     }
     
     fetchData = (count) => {
-        this.props.dispatch(getFertility({ projectId: 1 , count:count}))
+        if(!this.props.project.isLoading){
+            this.props.dispatch(getFertility({ projectId: this.props.project.data.projectId , count:count}))
+        }
     }
 
     render() {
-        const { classes,fertility } = this.props
+        const { classes,fertility,project } = this.props
         const { data } = fertility
 
         if (fertility.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+fertility.data}/>
         }
-        if (fertility.isLoading) {
+        if (fertility.isLoading || project.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -118,6 +123,7 @@ class ManualFertilizerControl extends Component {
 function mapStateToProps({application}) {
     return {
         fertility: application.planterReducers.fertility,
+        project: application.projectReducers.project,
     }
 }
 

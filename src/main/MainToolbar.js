@@ -36,9 +36,9 @@ class MainToolbar extends Component {
 
                     <div className={classes.seperator}/>
 
-                    <IconButton className="w-64 h-64" onClick={() => toggleQuickPanel(true)}>
+                    {/* <IconButton className="w-64 h-64" onClick={() => toggleQuickPanel(true)}>
                         <Icon>format_list_bulleted</Icon>
-                    </IconButton>
+                    </IconButton> */}
                 </div>
             </div>
         );

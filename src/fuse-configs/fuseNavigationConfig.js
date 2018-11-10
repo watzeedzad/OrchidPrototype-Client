@@ -27,6 +27,13 @@ export const farmNavigation = [
 
 export const greenHouseNavigation = [
     {
+        'id'   : 'greenHouse',
+        'title': 'จัดการโรงเรือน',
+        'type' : 'item',
+        'icon' : 'panorama',
+        'url'  : '/greenHouse'
+    },
+    {
         'id'   : 'project',
         'title': 'จัดการโปรเจ็ค',
         'type' : 'item',
@@ -64,6 +71,20 @@ export const greenHouseNavigation = [
 ]
 
 export const projectNavigation = [
+    {
+        'id'   : 'greenHouse',
+        'title': 'จัดการโรงเรือน',
+        'type' : 'item',
+        'icon' : 'panorama',
+        'url'  : '/greenHouse'
+    },
+    {
+        'id'   : 'project',
+        'title': 'จัดการโปรเจ็ค',
+        'type' : 'item',
+        'icon' : 'panorama',
+        'url'  : '/project'
+    },
     {
         'id'   : 'monitoring',
         'title': 'ติดตามการเจริญเติบโต',

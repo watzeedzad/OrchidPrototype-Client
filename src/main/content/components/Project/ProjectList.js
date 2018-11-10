@@ -11,7 +11,6 @@ import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import { setNavigation } from 'store/actions/fuse/navigation.actions'
 import { greenHouseNavigation } from 'fuse-configs/fuseNavigationConfig';
 import { selectGreenHouse } from 'store/actions/application/greenHouseActions'
-
 const styles = theme => ({
     root    : {
         background: theme.palette.primary.main,

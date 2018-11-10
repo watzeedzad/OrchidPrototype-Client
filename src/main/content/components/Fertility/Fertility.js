@@ -68,19 +68,19 @@ class Fertility extends Component {
     fetchData = (count) => {
         if(this.props.fertility.data!==null){
             this.props.dispatch(getFertility({ projectId: this.props.fertility.data.projectId, count:count }))
-        }else if(this.props.projectId!==null){
-            this.props.dispatch(getFertility({ projectId: this.props.projectId, count:count }))
+        }else if(this.props.project.data!==null){
+            this.props.dispatch(getFertility({ projectId: this.props.project.data.projectId, count:count }))
         }
     }
 
     render() {
-        const { classes,fertility } = this.props
+        const { classes,fertility,project } = this.props
         const { data } = fertility
 
         if (fertility.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+fertility.data}/>
         }
-        if (fertility.isLoading) {
+        if (fertility.isLoading || project.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -130,6 +130,7 @@ class Fertility extends Component {
 function mapStateToProps({application}) {
     return {
         fertility: application.planterReducers.fertility,
+        project: application.projectReducers.project,
     }
 }
 
