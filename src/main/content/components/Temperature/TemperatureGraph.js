@@ -33,7 +33,7 @@ class TemperatureGraph extends Component {
      }
     
     fetchData = () => {
-        this.props.dispatch(getTempHistory({ greenHouseId: 789456123 }))
+        this.props.dispatch(getTempHistory({ greenHouseId: 2 }))
     }
 
     render() {
