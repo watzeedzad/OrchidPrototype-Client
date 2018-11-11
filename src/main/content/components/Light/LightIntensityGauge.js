@@ -9,7 +9,7 @@ class LightIntensityGauge extends Component {
             <Speedometer
                 title={"ความเข้มของแสง ณ ปัจจุบัน"}
                 min= {0}
-                max= {100}
+                max= {5000}
                 minConfig={this.props.minConfig}
                 maxConfig={this.props.maxConfig}
                 currentValue={this.props.currentValue}

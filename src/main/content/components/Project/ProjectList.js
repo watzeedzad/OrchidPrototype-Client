@@ -204,7 +204,7 @@ class ProjectList extends Component {
             this.props.dispatch(editProject(values,this.state.picture)).then(() => {
                 if (!this.props.projectSave.isRejected) {
                     this.toggle()
-                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.data.greenHouseIdd}));
+                    this.props.dispatch(showProject({greenHouseId: this.props.greenHouse.data.greenHouseId}));
                 }
             })
         }
