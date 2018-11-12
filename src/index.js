@@ -24,7 +24,6 @@ import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
 import { PersistGate } from 'redux-persist/integration/react'
 
-
 const { persistor, store } = configureStore()
 
 const jss = create({

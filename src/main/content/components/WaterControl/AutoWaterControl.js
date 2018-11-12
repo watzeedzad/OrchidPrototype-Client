@@ -15,18 +15,16 @@ class AutoWaterControl extends Component {
     componentDidMount() {
         this.props.dispatch(setNavigation(greenHouseNavigation))
         //ดึงข้อมูลเวลาที่ตั้งไว้ทั้งหมดมาลง state
-        if(!this.props.greenHouse.isLoading){
-            this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouse.data.greenHouseId }))
-        }
+        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouseId }))
     }
 
     render() {
-        const { wateringTimeList, greenHouse } = this.props
+        const { wateringTimeList } = this.props
 
         if (wateringTimeList.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+wateringTimeList.data}/>
         }
-        if (wateringTimeList.isLoading || greenHouse.isLoading) {
+        if (wateringTimeList.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (wateringTimeList.data.errorMessage){
@@ -40,7 +38,7 @@ class AutoWaterControl extends Component {
                         <Typography variant="headline">สั่งให้น้ำตามเวลา</Typography>
                     </div>
                     <WateringTimeList wateringTimeList={wateringTimeList}
-                        greenHouseId={greenHouse.data.greenHouseId} 
+                        greenHouseId={this.props.greenHouseId} 
                         onToggle={this.toggle} 
                         onDelete={this.delete} 
                         mss={this.state.mss}/>
@@ -53,14 +51,14 @@ class AutoWaterControl extends Component {
         this.setState({
             mss: <SnackbarContent className="bg-green-light" message="บันทึกการตั้งค่าเวลาการให้น้ำสำเร็จ"/>
         })
-        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouse.data.greenHouseId }))
+        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouseIdd }))
     }
 
     delete = () => {
         this.setState({
             mss: <SnackbarContent className="bg-green-light" message="ทำการลบเวลาการให้น้ำสำเร็จ"/>
         })
-        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouse.data.greenHouseId }))
+        this.props.dispatch(getWateringTime({ greenHouseId: this.props.greenHouseId }))
     }
 
 }
@@ -68,7 +66,6 @@ class AutoWaterControl extends Component {
 function mapStateToProps({application}) {
     return {
         wateringTimeList: application.waterReducers.wateringTimeList,
-        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import AutoWaterControl from '../components/WaterControl/AutoWaterControl';
 import ManualWaterControl from '../components/WaterControl/ManualWaterControl';
+import WaterHistory from '../components/WaterControl/WaterHistory';
 import {FuseAnimate,FusePageCarded} from '@fuse';
-import {Icon, Typography} from '@material-ui/core';
+import {Typography, SnackbarContent, withStyles, Icon} from '@material-ui/core';
+import { connect } from 'react-redux'
 
 const styles = theme => ({
     root: {
@@ -13,7 +14,18 @@ const styles = theme => ({
 });
 
 function WaterControl(props){    
-    const { classes } = props;
+    const { classes,greenHouse } = props;
+    const { data } = greenHouse
+
+    if (greenHouse.isRejected) {
+        return <SnackbarContent className="bg-red-light" message={"Error: "+greenHouse.data}/>
+    }
+    if (greenHouse.isLoading) {
+        return <Typography variant="body1">Loading...</Typography>
+    }
+    if (data.errorMessage){
+        return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
+    }
 
         return (
             <FusePageCarded
@@ -33,8 +45,9 @@ function WaterControl(props){
                 content={
                     <FuseAnimate animation="transition.slideUpIn" delay={200}>
                         <div>
-                            <AutoWaterControl/><br/><hr/>
-                            <ManualWaterControl/>
+                            <AutoWaterControl greenHouseId={data.greenHouseId}/>
+                            <ManualWaterControl greenHouseId={data.greenHouseId}/>
+                            <WaterHistory greenHouseId={data.greenHouseId}/>
                         </div>
                     </FuseAnimate>
                 }
@@ -43,4 +56,10 @@ function WaterControl(props){
     
 }
 
-export default withStyles(styles, { withTheme: true })(WaterControl)
+function mapStateToProps({application}) {
+    return {
+        greenHouse: application.greenHouseReducers.greenHouse,
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(WaterControl))

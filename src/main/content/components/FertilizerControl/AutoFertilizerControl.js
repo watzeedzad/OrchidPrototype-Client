@@ -14,18 +14,16 @@ class AutoFertilizerControl extends Component{
 
     componentDidMount(){
         this.props.dispatch(setNavigation(projectNavigation))
-        if(!this.props.project.isLoading){
-            this.props.dispatch(getFertilizerTime({ projectId: this.props.project.data.projectId }))
-        }
+        this.props.dispatch(getFertilizerTime({ projectId: this.props.projectId }))
     }
 
     render(){
-        const {fertilizerTimeList, project} = this.props;
+        const {fertilizerTimeList} = this.props;
 
         if (fertilizerTimeList.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+fertilizerTimeList.data}/>
         }
-        if (fertilizerTimeList.isLoading || project.isLoading) {
+        if (fertilizerTimeList.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (fertilizerTimeList.data.errorMessage){
@@ -39,7 +37,7 @@ class AutoFertilizerControl extends Component{
                         <Typography variant="headline">สั่งให้ปุ๋ยตามเวลา</Typography>
                     </div>
                     <FertilizerTimeList fertilizerTimeList={fertilizerTimeList}
-                        projectId={project.data.projectId} 
+                        projectId={this.props.projectId} 
                         onToggle={this.toggle}
                         onDelete={this.delete}  
                         mss={this.state.mss}/>
@@ -52,14 +50,14 @@ class AutoFertilizerControl extends Component{
         this.setState({
             mss: <SnackbarContent className="bg-green-light" message="บันทึกการตั้งค่าเวลาการให้ปุ๋ยสำเร็จ"/>
         });
-        this.props.dispatch(getFertilizerTime({ projectId: this.props.project.data.projectId}))
+        this.props.dispatch(getFertilizerTime({ projectId: this.props.projectId}))
     }
 
     delete = ()=>{
         this.setState({
             mss: <SnackbarContent className="bg-green-light" message="ทำการลบเวลาการให้ปุ๋ยสำเร็จ"/>
         });
-        this.props.dispatch(getFertilizerTime({ projectId: this.props.project.data.projectId}))
+        this.props.dispatch(getFertilizerTime({ projectId: this.props.projectId}))
     }
     
 }
@@ -67,7 +65,6 @@ class AutoFertilizerControl extends Component{
 function mapStateToProps({application}) {
     return {
         fertilizerTimeList: application.fertilizerReducers.fertilizerTimeList,
-        project: application.projectReducers.project,
     }
 }
 

@@ -65,19 +65,17 @@ class ManualFertilizerControl extends Component {
     }
     
     fetchData = (count) => {
-        if(!this.props.project.isLoading){
-            this.props.dispatch(getFertility({ projectId: this.props.project.data.projectId , count:count}))
-        }
+        this.props.dispatch(getFertility({ projectId: this.props.projectId , count:count}))
     }
 
     render() {
-        const { classes,fertility,project } = this.props
+        const { classes,fertility } = this.props
         const { data } = fertility
 
         if (fertility.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+fertility.data}/>
         }
-        if (fertility.isLoading || project.isLoading) {
+        if (fertility.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -101,7 +99,7 @@ class ManualFertilizerControl extends Component {
                         </Grid> 
                         <Grid item xs={12} sm={12} md={6}>
                             <ManualFertilizerField
-                                projectId={project.data.projectId}
+                                projectId={this.props.projectI}
                                 onSubmit={this.onSubmit}
                             />
                         </Grid>
@@ -123,7 +121,6 @@ class ManualFertilizerControl extends Component {
 function mapStateToProps({application}) {
     return {
         fertility: application.planterReducers.fertility,
-        project: application.projectReducers.project,
     }
 }
 

@@ -1,9 +1,10 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import AutoFertilizerControl from '../components/FertilizerControl/AutoFertilizerControl';
 import ManualFertilizerControl from '../components/FertilizerControl/ManualFertilizerControl'
+import FertilizerHistory from '../components/FertilizerControl/FertilizerHistory'
 import {FuseAnimate,FusePageCarded} from '@fuse';
-import {Icon, Typography} from '@material-ui/core';
+import {Typography, SnackbarContent, withStyles, Icon} from '@material-ui/core';
+import { connect } from 'react-redux'
 
 const styles = theme => ({
     root: {
@@ -13,7 +14,18 @@ const styles = theme => ({
 });
 
 function FertilizerControl(props){
-    const {classes} = props;
+    const {classes,project} = props;
+    const {data} = project
+
+    if (project.isRejected) {
+        return <SnackbarContent className="bg-red-light" message={"Error: "+project.data}/>
+    }
+    if (project.isLoading) {
+        return <Typography variant="body1">Loading...</Typography>
+    }
+    if (data.errorMessage){
+        return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
+    }
 
     return(
         <FusePageCarded
@@ -33,8 +45,9 @@ function FertilizerControl(props){
             content={
                 <FuseAnimate animation="transition.slideUpIn" delay={200}>
                     <div>
-                        <AutoFertilizerControl/>
-                        <ManualFertilizerControl/>
+                        <AutoFertilizerControl projectId={data.projectId}/>
+                        <ManualFertilizerControl projectId={data.projectId}/>
+                        <FertilizerHistory projectId={data.projectId}/>
                     </div>
                 </FuseAnimate>
             }
@@ -42,5 +55,11 @@ function FertilizerControl(props){
     )
 }
 
-export default withStyles(styles,{withTheme:true})(FertilizerControl);
+function mapStateToProps({application}){
+    return {
+        project: application.projectReducers.project,
+    }
+}
+
+export default withStyles(styles,{withTheme:true})(connect(mapStateToProps)(FertilizerControl));
 

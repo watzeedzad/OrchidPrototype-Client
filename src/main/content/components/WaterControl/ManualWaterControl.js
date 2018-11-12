@@ -61,19 +61,17 @@ class ManualWaterControl extends Component {
     }
     
     fetchData = (count) => {
-        if(!this.props.greenHouse.isLoading){
-            this.props.dispatch(getMoisture({ greenHouseId: this.props.greenHouse.data.greenHouseId ,count:count}))
-        }
+        this.props.dispatch(getMoisture({ greenHouseId: this.props.greenHouseId ,count:count}))
     }
 
     render() {
-        const { classes,moisture,greenHouse } = this.props
+        const { classes,moisture } = this.props
         const { data } = moisture
 
         if (moisture.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+moisture.data}/>
         }
-        if (moisture.isLoading || greenHouse.isLoading) {
+        if (moisture.isLoading ) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -98,7 +96,7 @@ class ManualWaterControl extends Component {
                             </Grid> 
                             <Grid item xs={12} sm={12} md={6}>
                                 <ManualWaterField
-                                    greenHouseId={greenHouse.data.greenHouseId}
+                                    greenHouseId={this.props.greenHouseId}
                                     onSubmit={this.onSubmit}
                                 />
                             </Grid>
@@ -120,7 +118,6 @@ class ManualWaterControl extends Component {
 function mapStateToProps({application}) {
     return {
         moisture: application.planterReducers.moisture,
-        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 
