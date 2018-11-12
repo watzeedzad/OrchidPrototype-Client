@@ -168,7 +168,7 @@ class WateringTimeList extends Component {
         var newArray = this.state.setTimeList.slice();    
         newArray.push(val);
         newArray.sort();
-        this.onSubmit({greenHouseId:789456123,timeRanges:newArray})
+        this.onSubmit({greenHouseId:this.props.greenHouseId,timeRanges:newArray})
         }else{
             this.setState({
                 mss: <SnackbarContent className="bg-red-light" message="เวลาที่เลือกซ้ำกับที่เคยตั้งไว้"/>
@@ -206,7 +206,7 @@ class WateringTimeList extends Component {
             onConfirm: () => {
                 var newArray = this.state.setTimeList.slice()
                 newArray.splice(index,1)
-                this.props.dispatch(saveWaterConfig({greenHouseId:789456123,timeRanges:newArray})).then(() => {
+                this.props.dispatch(saveWaterConfig({greenHouseId:this.props.greenHouseId,timeRanges:newArray})).then(() => {
                     this.props.onDelete()
                 })
             }

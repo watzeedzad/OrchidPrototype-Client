@@ -38,7 +38,7 @@ const styles = theme => ({
 class SettingLightIntensity extends Component {
 
     state = {
-        greenHouseId: 789456123,
+        greenHouseId: this.props.greenHouseId,
         minLightIntensity: this.props.minConfig,
         maxLightIntensity: this.props.maxConfig,
         canSubmit: false

@@ -37,7 +37,7 @@ const styles = theme => ({
 
 class SettingMoisture extends Component {
     state = {
-        greenHouseId: 789456123,
+        greenHouseId: this.props.greenHouseId,
         minSoilMoisture: this.props.minConfig,
         maxSoilMoisture: this.props.maxConfig,
         canSubmit: false

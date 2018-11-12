@@ -38,7 +38,7 @@ const styles = theme => ({
 class ManualWaterField extends Component {
 
     state = {
-        greenHouseId: 789456123,
+        greenHouseId: this.props.greenHouseId,
         litre: 0,
         canSubmit: false
     };

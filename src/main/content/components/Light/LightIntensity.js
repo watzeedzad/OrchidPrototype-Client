@@ -101,6 +101,7 @@ class LightIntensity extends Component {
                             </Grid> 
                             <Grid item xs={12} sm={12} md={6}>
                                 <SettingLightIntensity
+                                    greenHouseId={greenHouse.data.greenHouseId}
                                     minConfig={data.minLightIntensity}
                                     maxConfig={data.maxLightIntensity}
                                     onSubmit={this.onSubmit}

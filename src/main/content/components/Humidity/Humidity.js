@@ -41,19 +41,17 @@ class Humidity extends Component {
      }
     
     fetchData = (count) => {
-        if(!this.props.greenHouse.isLoading){
-            this.props.dispatch(getHumidity({ greenHouseId: this.props.greenHouse.data.greenHouseId, count:count }))
-        }
+        this.props.dispatch(getHumidity({ greenHouseId: this.props.greenHouseId, count:count }))
     }
 
     render() {
-        const { humidity,greenHouse } = this.props
+        const { humidity,greenHouseId } = this.props
         const { data } = humidity
 
         if (humidity.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+humidity.data}/>
         }
-        if (humidity.isLoading || greenHouse.isLoading) {
+        if (humidity.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -71,6 +69,7 @@ class Humidity extends Component {
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
                     <SettingHumidity
+                        greenHouseId={greenHouseId}
                         minConfig={data.minConfigHumidity}
                         maxConfig={data.maxConfigHumidity}
                         onSubmit={this.onSubmit}
@@ -91,7 +90,6 @@ class Humidity extends Component {
 function mapStateToProps({application}) {
     return {
         humidity: application.weatherReducers.humidity,
-        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

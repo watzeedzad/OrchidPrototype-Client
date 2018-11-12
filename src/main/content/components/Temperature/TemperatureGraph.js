@@ -33,7 +33,7 @@ class TemperatureGraph extends Component {
      }
     
     fetchData = () => {
-        this.props.dispatch(getTempHistory({ greenHouseId: 2 }))
+        this.props.dispatch(getTempHistory({ greenHouseId: this.props.greenHouseId }))
     }
 
     render() {
@@ -53,7 +53,7 @@ class TemperatureGraph extends Component {
         for (let index = 0; index < data.temperatureHistory.length; index++) {
             history[index] = data.temperatureHistory[index].currentTemperature;
         }
-      
+        
         return (
             <div>
                 <LineGraph history={history} name='ประวัติอุณหภูมิในวันนี้' yName='อุณหภูมิ'/>

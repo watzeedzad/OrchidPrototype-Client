@@ -38,7 +38,7 @@ const styles = theme => ({
 class SettingLightVolume extends Component {
 
     state = {
-        greenHouseId: 789456123,
+        greenHouseId: this.props.greenHouseId,
         maxLightVolume: this.props.maxLightVolume,
         canSubmit: false
     };

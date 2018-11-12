@@ -37,7 +37,7 @@ const styles = theme => ({
 
 class SettingTemperature extends Component {
     state = {
-        greenHouseId: 789456123,
+        greenHouseId: this.props.greenHouseId,
         minTemperature: this.props.minConfig,
         maxTemperature: this.props.maxConfig,
         canSubmit: false

@@ -107,6 +107,7 @@ class LightVolume extends Component {
                             </Grid> 
                             <Grid item xs={12} sm={12} md={6}>
                                 <SettingLightVolume
+                                    greenHouseId={greenHouse.data.greenHouseId}
                                     maxConfig={data.maxLightVolume}
                                     onSubmit={this.onSubmit}
                                 />

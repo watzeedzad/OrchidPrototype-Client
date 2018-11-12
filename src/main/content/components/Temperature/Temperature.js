@@ -39,19 +39,17 @@ class Temperature extends Component {
     }
     
     fetchData = (count) => {
-        if(!this.props.greenHouse.isLoading){
-            this.props.dispatch(getTemp({ greenHouseId: this.props.greenHouse.data.greenHouseId , count: count}))
-        }
+        this.props.dispatch(getTemp({ greenHouseId: this.props.greenHouseId, count: count}))
     }
 
     render() {
-        const { temp,greenHouse } = this.props
+        const { temp,greenHouseId } = this.props
         const { data } = temp
 
         if (temp.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+temp.data}/>
         }
-        if (temp.isLoading || greenHouse.isLoading) {
+        if (temp.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
         if (data.errorMessage){
@@ -69,6 +67,7 @@ class Temperature extends Component {
                 </Grid> 
                 <Grid item xs={12} sm={12} md={6}>
                     <SettingTemperature
+                        greenHouseId={greenHouseId}
                         minConfig={data.minConfigTemperature}
                         maxConfig={data.maxConfigTemperature}
                         onSubmit={this.onSubmit}
@@ -89,7 +88,6 @@ class Temperature extends Component {
 function mapStateToProps({application}) {
     return {
         temp: application.weatherReducers.temp,
-        greenHouse: application.greenHouseReducers.greenHouse,
     }
 }
 

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Temperature from './Temperature'
 import TemperatureGraph from './TemperatureGraph'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
+import {Typography, SnackbarContent, withStyles, Paper, CssBaseline} from '@material-ui/core';
+import { connect } from 'react-redux'
+
 
 const styles = theme => ({
     layout: {
@@ -33,7 +33,18 @@ const styles = theme => ({
 class TemperatureTab extends Component {
     render() {
 
-        const { classes } = this.props;
+        const { classes,greenHouse } = this.props;
+        const { data } = greenHouse
+
+        if (greenHouse.isRejected) {
+            return <SnackbarContent className="bg-red-light" message={"Error: "+greenHouse.data}/>
+        }
+        if (greenHouse.isLoading) {
+            return <Typography variant="body1">Loading...</Typography>
+        }
+        if (data.errorMessage){
+            return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
+        }
 
         return (
             <React.Fragment>
@@ -41,10 +52,10 @@ class TemperatureTab extends Component {
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
                         <div className="w-full">
-                            <Temperature />
+                            <Temperature greenHouseId={data.greenHouseId}/>
                         </div>
                         <div className="w-full">
-                            <TemperatureGraph />
+                            <TemperatureGraph greenHouseId={data.greenHouseId}/>
                         </div>
                     </Paper>
                 </main>
@@ -53,4 +64,10 @@ class TemperatureTab extends Component {
     }
 }
 
-export default  withStyles(styles, {withTheme: true})(TemperatureTab);
+function mapStateToProps({application}) {
+    return {
+        greenHouse: application.greenHouseReducers.greenHouse,
+    }
+}
+
+export default  withStyles(styles, {withTheme: true})(connect(mapStateToProps)(TemperatureTab));

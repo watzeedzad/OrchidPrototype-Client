@@ -38,7 +38,8 @@ class AutoFertilizerControl extends Component{
                     <div className="pl-60 pt-40">
                         <Typography variant="headline">สั่งให้ปุ๋ยตามเวลา</Typography>
                     </div>
-                    <FertilizerTimeList fertilizerTimeList={fertilizerTimeList} 
+                    <FertilizerTimeList fertilizerTimeList={fertilizerTimeList}
+                        projectId={project.data.projectId} 
                         onToggle={this.toggle}
                         onDelete={this.delete}  
                         mss={this.state.mss}/>

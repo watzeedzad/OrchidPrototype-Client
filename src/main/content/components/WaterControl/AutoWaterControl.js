@@ -39,7 +39,8 @@ class AutoWaterControl extends Component {
                     <div className="pl-60 pt-40">
                         <Typography variant="headline">สั่งให้น้ำตามเวลา</Typography>
                     </div>
-                    <WateringTimeList wateringTimeList={wateringTimeList} 
+                    <WateringTimeList wateringTimeList={wateringTimeList}
+                        greenHouseId={greenHouse.data.greenHouseId} 
                         onToggle={this.toggle} 
                         onDelete={this.delete} 
                         mss={this.state.mss}/>

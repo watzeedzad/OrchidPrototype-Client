@@ -33,7 +33,7 @@ class HumidityGraph extends Component {
     }
     
     fetchData = () => {
-        this.props.dispatch(getHumidityHistory({ greenHouseId: 2 }))
+        this.props.dispatch(getHumidityHistory({ greenHouseId: this.props.greenHouseId }))
     }
 
     render() {

@@ -38,7 +38,7 @@ const styles = theme => ({
 class SettingHumidity extends Component {
 
     state = {
-        greenHouseId: 789456123,
+        greenHouseId: this.props.greenHouseId,
         minHumidity: this.props.minConfig,
         maxHumidity: this.props.maxConfig,
         canSubmit: false
