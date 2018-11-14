@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadGrowthRate, addGrowthRate, resetStatus } from 'store/actions/application/monitoringActions'
-import {Button,SnackbarContent,Typography} from '@material-ui/core';
+import { loadGrowthRate, addGrowthRate, resetStatus, loadCompareGrowthRate } from 'store/actions/application/monitoringActions'
+import {Button,SnackbarContent,Typography,MenuItem,Select} from '@material-ui/core';
 import {withRouter} from 'react-router-dom';
 import GrowthRateForm from './GrowthRateForm'
 import CSVModal from './CSVModal'
@@ -9,6 +9,8 @@ import GrowthRateGraphTab from './GrowthRateGraphTab';
 import { setNavigation } from 'store/actions/fuse/navigation.actions'
 import { projectNavigation } from 'fuse-configs/fuseNavigationConfig';
 import { selectProject } from 'store/actions/application/projectActions'
+import {SelectFormsy} from '@fuse';
+import _ from '@lodash';
 
 class GrowthRateTab extends Component {
     //มีการใช้ Modal ของ reactstrap ซึ่งจะต้องเก็บ State การแสดง modal ไว้
@@ -17,7 +19,8 @@ class GrowthRateTab extends Component {
         csvDialog: false,
         dialogTitle: '',
         data: [],
-        mss: ''
+        mss: '',
+        selectProject: null
     }
 
     //สั่ง dispach ฟังก์ชัน loadUsers
@@ -31,9 +34,14 @@ class GrowthRateTab extends Component {
         }
     }
 
+    handleChange = (event) => {
+        this.props.dispatch(loadCompareGrowthRate({ projectId: event.target.value }));
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+    };
+
     render() {
-        const { growthRate,growthRateSave,project,greenHouse } = this.props
-        console.log(this.props)
+        const { growthRate,growthRateSave,project,greenHouse,compareGrowthRate } = this.props
+        
         if (project.isLoading || greenHouse.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
@@ -47,8 +55,25 @@ class GrowthRateTab extends Component {
                     <Button variant="contained" color="primary" onClick={this.csvToggle}>export ข้อมูล</Button>{' '}
                     <Button variant="contained" color="primary" onClick={this.handleNew}>เพิ่มข้อมูล</Button>
                 </div>
+                <div className="flex flex-col pl-80 pb-48">
+                    เปรียบเทียบโปรเจ็ค
+                    <Select
+                        className="pb-24 w-96"
+                        name="selectProject"
+                        value={this.state.selectProject}
+                        onChange={this.handleChange}
+                    >
+                        <MenuItem value="2">
+                            <em>โปรเจ็คที่2</em>
+                        </MenuItem>
+                        <MenuItem value="3">
+                            <em>โปรเจ็คที่3</em>
+                        </MenuItem>
+                        
+                    </Select>
+                </div>
 
-                <GrowthRateGraphTab growthRate={growthRate}/>
+                <GrowthRateGraphTab growthRate={growthRate} compareGrowthRate={compareGrowthRate}/>
 
                 <GrowthRateForm
                     isOpen={this.state.dialog} 
@@ -106,6 +131,7 @@ class GrowthRateTab extends Component {
 function mapStateToProps({application}) {
     return {
         growthRate: application.monitoringReducers.growthRate,
+        compareGrowthRate: application.monitoringReducers.compareGrowthRate,
         growthRateSave: application.monitoringReducers.growthRateSave,
         greenHouse: application.greenHouseReducers.greenHouse,
         project: application.projectReducers.project,

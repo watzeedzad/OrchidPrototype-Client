@@ -2,6 +2,7 @@
 //ซึ่งถ้าเราไม่กำหนด state  เริ่มต้นก็จะไม่มี object ชื่อ isRejected ให้เรียกใช้งาน
 const initialState = {
     growthRate: { data: null, isLoading: true, isRejected: false },
+    compareGrowthRate: { data: null, isLoading: true, isRejected: false },
     farmCSV: { data: null, isLoading: true, isRejected: false },
     greenHouseCSV: { data: null, isLoading: true, isRejected: false },
     projectCSV: { data: null, isLoading: true, isRejected: false },
@@ -39,6 +40,13 @@ export default (state = initialState, action) => {
             return { ...state, growthRate: { data: action.payload, isLoading: false, isRejected: false } }
         case 'LOAD_GROWTHRATE_REJECTED':
             return { ...state, growthRate: { data: action.payload, isLoading: false, isRejected: true } }
+
+        case 'LOAD_COMPAREGROWTHRATE_PENDING':
+            return { ...state, compareGrowthRate: { data: null, isLoading: true, isRejected: false } }
+        case 'LOAD_COMPAREGROWTHRATE_SUCCESS':
+            return { ...state, compareGrowthRate: { data: action.payload, isLoading: false, isRejected: false } }
+        case 'LOAD_COMPAREGROWTHRATE_REJECTED':
+            return { ...state, compareGrowthRate: { data: action.payload, isLoading: false, isRejected: true } }
 
         //เก็บ state สถานะการบันทึกข้อมูลผู้ใช้
         case 'SAVE_GROWTHRATE_SUCCESS':

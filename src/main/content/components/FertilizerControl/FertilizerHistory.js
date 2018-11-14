@@ -78,6 +78,11 @@ class FertilizerHistory extends Component {
                                         filterable: true,
                                     },
                                     {
+                                        Header    : "สูตรปุ๋ย",
+                                        accessor  : "ratio",
+                                        filterable: true,
+                                    },
+                                    {
                                         Header    : "ปริมาณ(ลิตร)",
                                         accessor  : "volume",
                                         filterable: true,

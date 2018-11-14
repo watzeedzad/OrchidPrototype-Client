@@ -112,9 +112,8 @@ export const loadProjectCSV = ({greenHouseId,projectId}) => {
     }
 }
 
-export const loadGrowthRate = ({greenHouseId,projectId}) => {
+export const loadGrowthRate = ({projectId}) => {
     let values = {
-        greenHouseId:greenHouseId,
         projectId:projectId
     }
     
@@ -136,6 +135,33 @@ export const loadGrowthRate = ({greenHouseId,projectId}) => {
         }).catch(err => {
             //กรณี error
             dispatch({ type: 'LOAD_GROWTHRATE_REJECTED', payload: err.message })
+        })
+    }
+}
+
+export const loadCompareGrowthRate = ({projectId}) => {
+    let values = {
+        projectId:projectId
+    }
+    
+    return (dispatch) => {
+        //ก่อนดึงข้อมูลสั่ง dispatch ให้ reducer รู้ว่าก่อนเพื่อจะแสดง loading
+        dispatch({ type: 'LOAD_COMPAREGROWTHRATE_PENDING' })
+        return axios({
+            method: 'post',
+            url: `${BASE_URL}/monitoringAndAnalyze/loadGrowthRateCSV`,
+            data: values,
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+            //headers: { authorization: localStorage.getItem('token') }
+        }).then(results => {
+            //เมื่อข้อมูลส่งกลับมาก็สั่ง dispatch ให้ reducer รู้พร้อมส่ง payload
+            //เนื่องจากเราใช้ axios แทน fetch ดังนั้นข้อมูลที่ส่งมาจะอยู่ใน object ชื่อ data
+            //ที่มี Array อยู่ข้างใน ดังนั้นนำไป data.map ได้เลยครับ
+            dispatch({ type: 'LOAD_COMPAREGROWTHRATE_SUCCESS', payload: results.data })
+        }).catch(err => {
+            //กรณี error
+            dispatch({ type: 'LOAD_COMPAREGROWTHRATE_REJECTED', payload: err.message })
         })
     }
 }

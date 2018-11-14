@@ -14,11 +14,12 @@ require("highcharts/modules/exporting")(Highcharts);
 
 
 const plotOptions = {
-  line: {
-    dataLabels: {
-      enabled: true
+  spline: {
+    marker: {
+      radius: 4,
+      lineColor: '#666666',
+      lineWidth: 1
     },
-    enableMouseTracking: false
   }
 };
 
@@ -28,7 +29,7 @@ class GrowthRateGraph extends Component {
     return (
       <div className="gauge-empty">
         <div className="text-center">{this.props.name}</div>
-        <HighchartsChart chart={{ type: "line" }} plotOptions={plotOptions}>
+        <HighchartsChart chart={{ type: "spline" }} plotOptions={plotOptions}>
           <Tooltip padding={1} hideDelay={250} shape="square" />
 
           <XAxis
@@ -39,7 +40,14 @@ class GrowthRateGraph extends Component {
           <YAxis title={{ text: this.props.yName }} id="myAxis">
             <Series
               id="series"
+              name={"โปรเจ็ค "+this.props.projectId}
               data={this.props.data}
+              type="line"
+            />
+            <Series
+              id="series"
+              name="โปรเจ็ค 2"
+              data={this.props.data2}
               type="line"
             />
           </YAxis>
