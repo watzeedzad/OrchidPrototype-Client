@@ -8,7 +8,6 @@ export const saveWaterConfig = (values) => {
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
         //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
-        console.log(values)
         return axios({
             method: 'post',
             url: `${BASE_URL}/waterControl/wateringConfig`,
@@ -103,6 +102,35 @@ export const showWateringHistory = ({greenHouseId}) => {
         }).catch(err => {
             //กรณี error         
             dispatch({ type: 'LOAD_WATERHISTORY_REJECTED', payload: err.message })
+        })
+    }
+}
+
+export const isAutoWatering = ({greenHouseId}) => {
+
+    let values = {
+        greenHouseId: greenHouseId
+    }
+    
+    return (dispatch) => {
+        //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
+        //ต้องส่ง heder ชื่อ authorization โดยส่ง token เขาไปด้วยครับ
+        dispatch({ type: 'LOAD_ISAUTOWATERING_PENDING' })
+        return axios({
+            method: 'post',
+            url: `${BASE_URL}/utils/isAutoWatering`,
+            data: values,
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+            //headers: { authorization: localStorage.getItem('token') }
+        }).then(result => {
+            //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า code ซ�้ำหรือไม่
+            //โดยserver จะส่ง object ที่ชื่อว่า status และ message กลับมา
+            //browserHistory.push('/waterControl')
+            dispatch({ type: 'LOAD_ISAUTOWATERING_SUCCESS', payload: result.data })           
+        }).catch(err => {
+            //กรณี error         
+            dispatch({ type: 'LOAD_ISAUTOWATERING_REJECTED', payload: err.message })
         })
     }
 }

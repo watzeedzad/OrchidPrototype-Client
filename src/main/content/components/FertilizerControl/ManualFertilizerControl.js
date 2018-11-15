@@ -99,7 +99,7 @@ class ManualFertilizerControl extends Component {
                         </Grid> 
                         <Grid item xs={12} sm={12} md={6}>
                             <ManualFertilizerField
-                                projectId={this.props.projectI}
+                                projectId={this.props.projectId}
                                 onSubmit={this.onSubmit}
                             />
                         </Grid>

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {Button, Typography, CssBaseline, Icon} from '@material-ui/core';
+import { isAutoWatering } from 'store/actions/application/waterActions'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
     layout: {
@@ -45,6 +47,21 @@ class ManualWaterField extends Component {
 
     form = React.createRef();
 
+    componentDidMount() {
+        this.fetchData(0)
+        var intervalId = setInterval( this.fetchData, 30000);
+        this.setState({intervalId: intervalId});
+    }
+
+    componentWillUnmount() {
+        // use intervalId from the state to clear the interval
+        clearInterval(this.state.intervalId);
+    }
+    
+    fetchData = (count) => {
+        this.props.dispatch(isAutoWatering({greenHouseId: this.props.greenHouseId}))
+    }
+
     disableButton = () => {
         this.setState({canSubmit: false});
     };
@@ -54,13 +71,25 @@ class ManualWaterField extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,isAutoWatering } = this.props
         const {canSubmit} = this.state;
+
+        let pumpStatus = null
+        if(!isAutoWatering.isLoading){
+            if(isAutoWatering.data.isAutoWatering){
+                pumpStatus = <div className="flex"><Typography className="pb-16" variant="title"> เปิด... </Typography><Icon>invert_colors</Icon></div>
+            }else{
+                pumpStatus = <div className="flex"><Typography className="pb-16" variant="title"> ปิด... </Typography><Icon>invert_colors_off</Icon></div>
+            }
+        }else{
+            pumpStatus =<div className="flex"><Typography className="pb-16" variant="title"> รอสักครู่... </Typography><Icon>hourglass_empty</Icon></div>
+        }
 
         return (
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
+            <div div className="flex"><Typography className="pb-16" variant="title">สถานะปั๊มน้ำ :</Typography>{' '}{pumpStatus}</div>
                 <Typography variant="headline">กรอกปริมาณน้ำที่ต้องการให้</Typography>
 
                 <Formsy
@@ -112,8 +141,6 @@ class ManualWaterField extends Component {
           </React.Fragment>
         )
     }
-
-
     
 }
 
@@ -132,4 +159,10 @@ function validate(values) {
     return errors;
 }
 
-export default withStyles(styles, {withTheme: true})(ManualWaterField);
+function mapStateToProps({application}) {
+    return {
+        isAutoWatering: application.waterReducers.isAutoWatering,
+    }
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(ManualWaterField));

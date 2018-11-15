@@ -5,6 +5,7 @@ const initialState = {
     wateringTimeList: { data: null, isLoading: true, isRejected: false },
     manualWatering: { data: null, isLoading: true, isRejected: false },
     wateringHistory:  { data: null, isLoading: true, isRejected: false },
+    isAutoWatering: { data: null, isLoading: true, isRejected: false },
 
 }
 export default (state = initialState, action) => {
@@ -33,6 +34,13 @@ export default (state = initialState, action) => {
             return { ...state, wateringHistory: { data: action.payload, isLoading: false, isRejected: false } }
         case 'LOAD_WATERHISTORY_REJECTED':
             return { ...state, wateringHistory: { data: action.payload, isLoading: false, isRejected: true } }
+
+        case 'LOAD_ISAUTOWATERING_PENDING':
+            return { ...state, isAutoWatering: { data: null, isLoading: true, isRejected: false } }
+        case 'LOAD_ISAUTOWATERING_SUCCESS':
+            return { ...state, isAutoWatering: { data: action.payload, isLoading: false, isRejected: false } }
+        case 'LOAD_ISAUTOWATERING_REJECTED':
+            return { ...state, isAutoWatering: { data: action.payload, isLoading: false, isRejected: true } }
 
         default:
             return state

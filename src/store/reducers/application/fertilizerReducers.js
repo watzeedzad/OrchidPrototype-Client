@@ -2,7 +2,8 @@ const initialState = {
     fertilizerConfig: {data: null,isLoading: true,isRejected: false},
     fertilizerTimeList: {data: null,isLoading: true,isRejected: false},
     manualFertilizer: { data: null, isLoading: true, isRejected: false },
-    fertilizerHistory: { data: null, isLoading: true, isRejected: false }
+    fertilizerHistory: { data: null, isLoading: true, isRejected: false },
+    isAutoFertilizing: { data: null, isLoading: true, isRejected: false },
 }
 
 export default (state = initialState,action)=>{
@@ -31,6 +32,13 @@ export default (state = initialState,action)=>{
             return {...state, fertilizerHistory:{data: action.payload ,isLoading:false,isRejected:false}}
         case 'LOAD_FERTILIZERHISTORY_REJECTED':
             return {...state, fertilizerHistory:{data: action.payload ,isLoading:true,isRejected:true}}
+
+        case 'LOAD_ISAUTOFERTILIZING_PENDING':
+            return { ...state, isAutoFertilizing: { data: null, isLoading: true, isRejected: false } }
+        case 'LOAD_ISAUTOFERTILIZING_SUCCESS':
+            return { ...state, isAutoFertilizing: { data: action.payload, isLoading: false, isRejected: false } }
+        case 'LOAD_ISAUTOFERTILIZING_REJECTED':
+            return { ...state, isAutoFertilizing: { data: action.payload, isLoading: false, isRejected: true } }
 
         default:
             return state

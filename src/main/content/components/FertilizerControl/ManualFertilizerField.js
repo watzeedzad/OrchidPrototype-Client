@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {Button, Typography, CssBaseline, Icon} from '@material-ui/core';
+import { isAutoFertilizing } from 'store/actions/application/fertilizerActions'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
     layout: {
@@ -45,6 +47,21 @@ class ManualFertilizerField extends Component {
 
     form = React.createRef();
 
+    componentDidMount() {
+        this.fetchData(0)
+        var intervalId = setInterval( this.fetchData, 30000);
+        this.setState({intervalId: intervalId});
+    }
+
+    componentWillUnmount() {
+        // use intervalId from the state to clear the interval
+        clearInterval(this.state.intervalId);
+    }
+    
+    fetchData = (count) => {
+        this.props.dispatch(isAutoFertilizing({projectId: this.props.projectId}))
+    }
+
     disableButton = () => {
         this.setState({canSubmit: false});
     };
@@ -54,13 +71,25 @@ class ManualFertilizerField extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,isAutoFertilizing } = this.props
         const {canSubmit} = this.state;
 
+        let pumpStatus = null
+        if(!isAutoFertilizing.isLoading){
+            if(isAutoFertilizing.data.isAutoFertilizering){
+                pumpStatus = <div className="flex"><Typography className="pb-16" variant="title"> เปิด... </Typography><Icon>invert_colors</Icon></div>
+            }else{
+                pumpStatus = <div className="flex"><Typography className="pb-16" variant="title"> ปิด... </Typography><Icon>invert_colors_off</Icon></div>
+            }
+        }else{
+            pumpStatus =<div className="flex"><Typography className="pb-16" variant="title"> รอสักครู่... </Typography><Icon>hourglass_empty</Icon></div>
+        }
+        
         return (
             <React.Fragment>
             <CssBaseline />
             <main className={classes.layout}>
+                <div div className="flex"><Typography className="pb-16" variant="title">สถานะปั๊มปุ๋ย :</Typography>{' '}{pumpStatus}</div>
                 <Typography variant="headline">กรอกปริมาณปุ๋ยที่ต้องการให้</Typography>
                 <Formsy
                     onValidSubmit={onSubmit}
@@ -129,5 +158,10 @@ function validate(values) {
     return errors;
 }
 
+function mapStateToProps({application}) {
+    return {
+        isAutoFertilizing: application.fertilizerReducers.isAutoFertilizing,
+    }
+}
 
-export default withStyles(styles, {withTheme: true})(ManualFertilizerField);
+export default connect(mapStateToProps)(withStyles(styles)(ManualFertilizerField));
