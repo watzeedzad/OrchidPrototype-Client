@@ -34,6 +34,10 @@ export const addProject = (values,picture) => {
 
     const formData = new FormData();
     formData.append('picture', picture);
+    formData.append('greenHouseId', values.greenHouseId);
+    formData.append('name', values.name);
+    formData.append('tribeName', values.tribeName);
+    formData.append('currentRatio', values.currentRatio);
 
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
@@ -42,11 +46,7 @@ export const addProject = (values,picture) => {
             method:'post',
             url:`${BASE_URL}/project/addProject`,
             data: formData,
-            headers:{'Content-type': 'application/json',
-                    'greenHouseId' : values.greenHouseId,
-                    'name' : values.name,
-                    'tribeName' : values.tribeName,
-                    'currentRatio' : values.currentRatio,},
+            headers:{'Content-type': 'multipart/form-data'},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
@@ -86,6 +86,10 @@ export const editProject = (values,picture) => {
 
     const formData = new FormData();
     formData.append('picture', picture);
+    formData.append('id', values.id);
+    formData.append('name', values.name);
+    formData.append('tribeName', values.tribeName);
+    formData.append('currentRatio', values.currentRatio);
 
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ

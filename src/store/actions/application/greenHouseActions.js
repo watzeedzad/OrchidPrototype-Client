@@ -33,6 +33,8 @@ export const addGreenHouse = (values,picture) => {
 
     const formData = new FormData();
     formData.append('picture', picture);
+    formData.append('greenHouseDesc', values.desc);
+    formData.append('greenHouseName', values.name);
 
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
@@ -41,9 +43,7 @@ export const addGreenHouse = (values,picture) => {
             method:'post',
             url:`${BASE_URL}/greenHouse/addGreenHouse`,
             data: formData,
-            headers:{'Content-type': 'application/json',
-                    'greenHouseDesc': values.desc,
-                    'greenHouseName': values.name},
+            headers:{'Content-type': 'multipart/form-data'},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
@@ -83,6 +83,9 @@ export const editGreenHouse = (values,picture) => {
 
     const formData = new FormData();
     formData.append('picture', picture);
+    formData.append('greenHouseDocId', values.id);
+    formData.append('greenHouseName', values.name);
+    formData.append('greenHouseDesc', values.desc);
 
     return (dispatch) => {
         //รูปแบบการใช้ axios อีกรูปแบบในการจะบุ method ที่ต้องการ
@@ -91,10 +94,7 @@ export const editGreenHouse = (values,picture) => {
             method:'post',
             url:`${BASE_URL}/greenHouse/editGreenHouse`,
             data: formData,
-            headers:{'Content-type': 'application/json',
-                    'id' : values.id,
-                    'name' : values.name,
-                    'desc' : values.desc},
+            headers:{'Content-type': 'multipart/form-data'},
             withCredentials: true
         }).then(results => {
             //เมื่อข้อมูลส่งกลับมาต้องเช็คสถานะก่อนว่า username ซ้ำหรือไม่
