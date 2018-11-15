@@ -64,6 +64,7 @@ class UserTab extends Component {
                     content={
                         <UserTable
                             data={users.data}
+                            buttonCreate={this.handleNew}
                             buttonEdit={this.handleEdit}
                             buttonDelete={this.handleDelete}        
                         />
@@ -74,17 +75,6 @@ class UserTab extends Component {
                     }}
                     innerScroll
                 />
-                <FuseAnimate animation="transition.expandIn" delay={300}>
-                    <Button
-                        variant="fab"
-                        color="primary"
-                        aria-label="add"
-                        className={classes.addButton}
-                        onClick={this.handleNew}
-                    >
-                        <Icon>person_add</Icon>
-                    </Button>
-                </FuseAnimate>
                 <UserDialog
                     isOpen={this.state.dialog} 
                     dialogTitle={this.state.dialogTitle}
@@ -99,7 +89,7 @@ class UserTab extends Component {
 
     toggle = () => {
         this.setState({
-            dialog: !this.state.dialog
+            dialog: !this.state.dialog,
         })
     }
 
@@ -112,7 +102,7 @@ class UserTab extends Component {
     handleNew = () => {
         this.props.dispatch(resetStatus())
 
-        this.setState({ dialogTitle: 'เพิ่ม' })
+        this.setState({ dialogTitle: 'เพิ่ม' ,data: []})
         this.toggle();
     }
 

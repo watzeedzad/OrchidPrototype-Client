@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import {FuseUtils, FuseAnimate} from '@fuse';
-import {Avatar, Checkbox, Icon, IconButton,Typography} from '@material-ui/core';
+import {Avatar, Checkbox, Icon, IconButton,Typography,Button} from '@material-ui/core';
 import ReactTable from "react-table";
 import classNames from 'classnames';
 
@@ -43,7 +43,7 @@ class UserTable extends Component {
 
     render()
     {
-        const {classes, data, buttonEdit, buttonDelete} = this.props;
+        const {classes, data,buttonCreate,buttonEdit, buttonDelete} = this.props;
 
         if ( !data || data.length === 0 )
         {
@@ -95,7 +95,18 @@ class UserTable extends Component {
                             filterable: true
                         },
                         {
-                            Header: "",
+                            Header: <Button
+                                        variant="fab"
+                                        color="primary"
+                                        aria-label="add"
+                                        className={classes.addButton}
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            buttonCreate();
+                                        }}
+                                    >
+                                        <Icon>person_add</Icon>
+                                    </Button>,
                             width : 128,
                             Cell  : row => (
                                 <div className="flex items-center">

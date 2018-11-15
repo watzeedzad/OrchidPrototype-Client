@@ -174,19 +174,18 @@ class UserDialog extends Component {
                                 className="my-24"
                                 name="role"
                                 label="ประเภทผู้ใช้"
+                                value={this.state.role}
                                 required
                             >
                                 <FormControlLabel 
                                     value="เจ้าของฟาร์ม" 
                                     control={<Radio color="primary"/>} 
                                     label="เจ้าของฟาร์ม"
-                                    checked={this.state.role === 'เจ้าของฟาร์ม'}
                                     onChange={this.handleRadioChange}/>
                                 <FormControlLabel 
                                     value="พนักงาน" 
                                     control={<Radio color="primary"/>} 
                                     label="พนักงาน"
-                                    checked={this.state.role === 'พนักงาน'}
                                     onChange={this.handleRadioChange}/>                                                
                             </RadioGroupFormsy>
                         </div>

@@ -224,19 +224,18 @@ class ControllerForm extends Component {
                                 className="my-24"
                                 name="isHaveRelay"
                                 label="ประเภทคอนโทรลเลอร์"
+                                value={this.state.isHaveRelay}
                                 required
                             >
                                 <FormControlLabel 
-                                    value="0" 
+                                    value={true}
                                     control={<Radio color="primary"/>} 
                                     label="มีรีเลย์"
-                                    checked={this.state.isHaveRelay}
                                     onChange={this.handleRadioChange}/>
                                 <FormControlLabel 
-                                    value="1"
+                                    value={false}
                                     control={<Radio color="primary"/>} 
                                     label="ไม่มีรีเลย์"
-                                    checked={!this.state.isHaveRelay}
                                     onChange={this.handleRadioChange}/>                                                
                             </RadioGroupFormsy>
                         </div>
