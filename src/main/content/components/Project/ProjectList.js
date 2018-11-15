@@ -113,7 +113,7 @@ class ProjectList extends Component {
                                     <Avatar
                                         className={classNames(classes.avatar, "avatar")}
                                         alt="user photo"
-                                        src={"assets/images/farm/123456789.jpg"}
+                                        src={!e.picturePath?"assets/images/farm/defaultIMG.jpg":"assets/images/project/"+e.picturePath+".jpg"}
                                     />
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.projectId}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">ชื่อ : {e.name}</Typography>

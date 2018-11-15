@@ -111,7 +111,7 @@ class GreenHouseList extends Component {
                                     <Avatar
                                         className={classNames(classes.avatar, "avatar")}
                                         alt="user photo"
-                                        src={"assets/images/farm/123456789.jpg"}
+                                        src={!e.picturePath?"assets/images/farm/defaultIMG.jpg":"assets/images/greenHouse/"+e.picturePath+".jpg"}
                                     />
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.greenHouseId}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">ชื่อ : {e.name}</Typography>
@@ -191,17 +191,13 @@ class GreenHouseList extends Component {
     handleSubmit = (values) => {
         if(this.state.dialogTitle === 'เพิ่ม'){
             this.props.dispatch(addGreenHouse(values,this.state.picture)).then(() => {
-                if (!this.props.greenHouseSave.isRejected) {
-                    this.toggle()
-                    this.props.dispatch(showGreenHouse());
-                }
+                this.toggle()
+                this.props.dispatch(showGreenHouse());
             })
         }else if(this.state.dialogTitle === 'แก้ไข'){
             this.props.dispatch(editGreenHouse(values,this.state.picture)).then(() => {
-                if (!this.props.greenHouseSave.isRejected) {
-                    this.toggle()
-                    this.props.dispatch(showGreenHouse());
-                }
+                this.toggle()
+                this.props.dispatch(showGreenHouse());                
             })
         }
     }

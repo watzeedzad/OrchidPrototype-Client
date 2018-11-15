@@ -7,6 +7,7 @@ const initialState = {
     greenHouseCSV: { data: null, isLoading: true, isRejected: false },
     projectCSV: { data: null, isLoading: true, isRejected: false },
     growthRateSave: { data: null, isLoading: true, isRejected: false },
+    compareProject: { data: null, isLoading: true, isRejected: false },
 }
 
 export default (state = initialState, action) => {
@@ -47,6 +48,13 @@ export default (state = initialState, action) => {
             return { ...state, compareGrowthRate: { data: action.payload, isLoading: false, isRejected: false } }
         case 'LOAD_COMPAREGROWTHRATE_REJECTED':
             return { ...state, compareGrowthRate: { data: action.payload, isLoading: false, isRejected: true } }
+
+        case 'LOAD_COMPAREPROJECT_PENDING':
+            return { ...state, compareProject: { data: null, isLoading: true, isRejected: false } }
+        case 'LOAD_COMPAREPROJECT_SUCCESS':
+            return { ...state, compareProject: { data: action.payload, isLoading: false, isRejected: false } }
+        case 'LOAD_COMPAREPROJECT_REJECTED':
+            return { ...state, compareProject: { data: action.payload, isLoading: false, isRejected: true } }
 
         //เก็บ state สถานะการบันทึกข้อมูลผู้ใช้
         case 'SAVE_GROWTHRATE_SUCCESS':

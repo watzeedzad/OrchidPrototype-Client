@@ -45,8 +45,8 @@ class GrowthRateGraph extends Component {
               type="line"
             />
             <Series
-              id="series"
-              name="โปรเจ็ค 2"
+              id="series2"
+              name={"โปรเจ็ค "+this.props.projectId2}
               data={this.props.data2}
               type="line"
             />

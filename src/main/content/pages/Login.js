@@ -80,8 +80,7 @@ class Login extends Component {
 
                             <CardContent className="flex flex-col items-center justify-center p-32">
 
-                                <img className="w-128 m-32" src="assets/images/logos/fuse.svg" alt="logo"/>
-                                <Typography variant="h4" className="mt-16 mb-32">Smart Orchid farm</Typography>
+                                <img className="w-272 m-32" src="assets/images/logos/smart-farm.png" alt="logo"/>
                                 <Formsy
                                     onValidSubmit={this.onSubmit}
                                     onValid={this.enableButton}

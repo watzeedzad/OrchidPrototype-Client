@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadGrowthRate, addGrowthRate, resetStatus, loadCompareGrowthRate } from 'store/actions/application/monitoringActions'
-import {Button,SnackbarContent,Typography,MenuItem,Select} from '@material-ui/core';
+import { loadGrowthRate, addGrowthRate, resetStatus, loadCompareGrowthRate, getCompareProject } from 'store/actions/application/monitoringActions'
+import {Button,SnackbarContent,Typography,MenuItem,Select,InputLabel} from '@material-ui/core';
 import {withRouter} from 'react-router-dom';
 import GrowthRateForm from './GrowthRateForm'
 import CSVModal from './CSVModal'
@@ -9,7 +9,6 @@ import GrowthRateGraphTab from './GrowthRateGraphTab';
 import { setNavigation } from 'store/actions/fuse/navigation.actions'
 import { projectNavigation } from 'fuse-configs/fuseNavigationConfig';
 import { selectProject } from 'store/actions/application/projectActions'
-import {SelectFormsy} from '@fuse';
 import _ from '@lodash';
 
 class GrowthRateTab extends Component {
@@ -20,7 +19,7 @@ class GrowthRateTab extends Component {
         dialogTitle: '',
         data: [],
         mss: '',
-        selectProject: null
+        selectProject: 0
     }
 
     //สั่ง dispach ฟังก์ชัน loadUsers
@@ -29,8 +28,10 @@ class GrowthRateTab extends Component {
         if(this.props.location.state){
             this.props.dispatch(selectProject(this.props.location.state.project))
             this.props.dispatch(loadGrowthRate({ projectId: this.props.location.state.project.projectId }));
+            this.props.dispatch(getCompareProject({projectId: this.props.location.state.project.projectId, greenHouseId:this.props.greenHouse.data.greenHouseId}))
         }else if(!this.props.greenHouse.isLoading){
             this.props.dispatch(loadGrowthRate({projectId: this.props.project.data.projectId}));
+            this.props.dispatch(getCompareProject({projectId: this.props.project.data.projectId, greenHouseId:this.props.greenHouse.data.greenHouseId}))
         }
     }
 
@@ -40,12 +41,12 @@ class GrowthRateTab extends Component {
     };
 
     render() {
-        const { growthRate,growthRateSave,project,greenHouse,compareGrowthRate } = this.props
+        const { growthRate,growthRateSave,project,greenHouse,compareGrowthRate,compareProject } = this.props
         
-        if (project.isLoading || greenHouse.isLoading) {
+        if (project.isLoading || greenHouse.isLoading || compareProject.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
-
+        
         return (
             <div>
                 <div className="p-24 pl-80">
@@ -56,20 +57,21 @@ class GrowthRateTab extends Component {
                     <Button variant="contained" color="primary" onClick={this.handleNew}>เพิ่มข้อมูล</Button>
                 </div>
                 <div className="flex flex-col pl-80 pb-48">
-                    เปรียบเทียบโปรเจ็ค
+                    <InputLabel htmlFor="age-simple">เปรียบเทียบโปรเจ็ค</InputLabel>
                     <Select
-                        className="pb-24 w-96"
+                        className="w-216"
                         name="selectProject"
                         value={this.state.selectProject}
                         onChange={this.handleChange}
-                    >
-                        <MenuItem value="2">
-                            <em>โปรเจ็คที่2</em>
+                    >   <MenuItem value="0">
+                            <em>กรุณาเลือกโปรเจ็ค</em>
                         </MenuItem>
-                        <MenuItem value="3">
-                            <em>โปรเจ็คที่3</em>
-                        </MenuItem>
-                        
+                    
+                        {!compareProject.data.errorMessage && compareProject.data != null && compareProject.data.map(e => (
+                            <MenuItem value={e.projectId}>
+                                <em>โปรเจ็คที่ {e.projectId}</em>
+                            </MenuItem>
+                        ))}
                     </Select>
                 </div>
 
@@ -131,6 +133,7 @@ class GrowthRateTab extends Component {
 function mapStateToProps({application}) {
     return {
         growthRate: application.monitoringReducers.growthRate,
+        compareProject: application.monitoringReducers.compareProject,
         compareGrowthRate: application.monitoringReducers.compareGrowthRate,
         growthRateSave: application.monitoringReducers.growthRateSave,
         greenHouse: application.greenHouseReducers.greenHouse,
