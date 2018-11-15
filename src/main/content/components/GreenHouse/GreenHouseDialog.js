@@ -64,11 +64,33 @@ class GreenHouseDialog extends Component {
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
-
+    
     render()
     {
         const {classes, dialogTitle, fileChangedHandler} = this.props;
-
+        
+        let picture = null;
+        if(this.props.selectedFile === null){
+            if(typeof this.state.picturePath === 'undefined'){
+                picture =   <Avatar
+                                className={classNames(classes.avatar, "avatar")}
+                                alt="greenhouse photo"
+                                src={"assets/images/farm/defaultIMG.jpg"}
+                            />
+            }else{
+                picture =   <Avatar
+                                className={classNames(classes.avatar, "avatar")}
+                                alt="greenhouse photo"
+                                src={"assets/images/greenHouse/"+this.state.picturePath}
+                            />
+            }
+        }else {
+            picture =   <Avatar
+                            className={classNames(classes.avatar, "avatar")}
+                            alt="greenhouse photo"
+                            src={this.props.selectedFile}
+                        />
+        }
         return (
             <Dialog
                 classes={{
@@ -106,18 +128,7 @@ class GreenHouseDialog extends Component {
                             <div className="flex flex-col">
                                 <input type="file" onChange={fileChangedHandler} />
                                 <div className="justify-center pt-16">
-                                    {this.props.selectedFile === null ?
-                                        <Avatar
-                                            className={classNames(classes.avatar, "avatar")}
-                                            alt="greenhouse photo"
-                                            src={"assets/images/farm/defaultIMG.jpg"}
-                                        />
-                                    :   <Avatar
-                                            className={classNames(classes.avatar, "avatar")}
-                                            alt="greenhouse photo"
-                                            src={this.props.selectedFile}
-                                        />
-                                    }
+                                    {picture}
                                 </div>
                             </div>
                         </div>

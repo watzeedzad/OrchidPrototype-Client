@@ -76,6 +76,29 @@ class ProjectDialog extends Component {
     {
         const {classes, dialogTitle, fileChangedHandler} = this.props;
 
+        let picture = null;
+        if(this.props.selectedFile === null){
+            if(typeof this.state.picturePath === 'undefined'){
+                picture =   <Avatar
+                                className={classNames(classes.avatar, "avatar")}
+                                alt="project photo"
+                                src={"assets/images/farm/defaultIMG.jpg"}
+                            />
+            }else{
+                picture =   <Avatar
+                                className={classNames(classes.avatar, "avatar")}
+                                alt="project photo"
+                                src={"assets/images/project/"+this.state.picturePath}
+                            />
+            }
+        }else {
+            picture =   <Avatar
+                            className={classNames(classes.avatar, "avatar")}
+                            alt="project photo"
+                            src={this.props.selectedFile}
+                        />
+        }
+
         return (
             <Dialog
                 classes={{
@@ -113,18 +136,7 @@ class ProjectDialog extends Component {
                             <div className="flex flex-col">
                                 <input type="file" onChange={fileChangedHandler} />
                                 <div className="justify-center pt-16">
-                                    {this.props.selectedFile === null ?
-                                        <Avatar
-                                            className={classNames(classes.avatar, "avatar")}
-                                            alt="project photo"
-                                            src={"assets/images/farm/defaultIMG.jpg"}
-                                        />
-                                    :   <Avatar
-                                            className={classNames(classes.avatar, "avatar")}
-                                            alt="project photo"
-                                            src={this.props.selectedFile}
-                                        />
-                                    }
+                                    {picture}
                                 </div>
                             </div>
                         </div>

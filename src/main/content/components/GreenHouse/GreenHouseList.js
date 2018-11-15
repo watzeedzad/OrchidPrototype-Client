@@ -110,8 +110,8 @@ class GreenHouseList extends Component {
                                 >
                                     <Avatar
                                         className={classNames(classes.avatar, "avatar")}
-                                        alt="user photo"
-                                        src={!e.picturePath?"assets/images/farm/defaultIMG.jpg":"assets/images/greenHouse/"+e.picturePath+".jpg"}
+                                        alt="greenhouse photo"
+                                        src={!e.picturePath?"assets/images/farm/defaultIMG.jpg":"assets/images/greenHouse/"+e.picturePath}
                                     />
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">รหัส : {e.greenHouseId}</Typography>
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">ชื่อ : {e.name}</Typography>
@@ -167,7 +167,8 @@ class GreenHouseList extends Component {
 
     toggle = () => {
         this.setState({
-            dialog: !this.state.dialog
+            dialog: !this.state.dialog,
+            selectedFile: null
         })
     }
 
