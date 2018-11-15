@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
 import classNames from 'classnames';
-import {Icon, IconButton, Typography} from '@material-ui/core';
+import {Avatar, Button, Icon, IconButton, ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
 import {connect} from 'react-redux';
 import * as quickPanelActions from 'main/quickPanel/store/actions';
-import {bindActionCreators} from 'redux';
+import {FuseShortcuts, FuseAnimate} from '@fuse';
+import {Link} from 'react-router-dom';
 
 const styles = theme => ({
     root     : {
@@ -21,35 +22,91 @@ const styles = theme => ({
 
 class MainToolbar extends Component {
 
+    state = {
+        userMenu: null
+    };
+
+    userMenuClick = event => {
+        this.setState({userMenu: event.currentTarget});
+    };
+
+    userMenuClose = () => {
+        this.setState({userMenu: null});
+    };
+
     render()
     {
-        const {classes, toggleQuickPanel} = this.props;
+        const {classes, auth, logout, openChatPanel} = this.props;
+        const {data} = auth;
+        const {userMenu} = this.state;
 
         return (
             <div className={classNames(classes.root, "flex flex-row")}>
 
                 <div className="flex flex-1 px-24">
-                    <Typography>Toolbar</Typography>
                 </div>
 
                 <div className="flex">
 
+                    <FuseAnimate delay={300}>
+                        <Button className="h-64" onClick={this.userMenuClick}>
+                            <Avatar 
+                                className=""
+                                alt="user photo"
+                                src={"assets/images/avatars/profile.jpg"} />
+
+                            <div className="hidden md:flex flex-col ml-12 items-start">
+                                <Typography component="span" className="normal-case font-600 flex">
+                                    {data.user.firstname+" "+data.user.lastname}
+                                </Typography>
+                                <Typography className="text-11 capitalize" color="textSecondary">
+                                    {data.user.role}
+                                </Typography>
+                            </div>
+
+                            <Icon className="text-16 ml-12 hidden sm:flex" variant="action">keyboard_arrow_down</Icon>
+                        </Button>
+                    </FuseAnimate>
+
+                    <Popover
+                        open={Boolean(userMenu)}
+                        anchorEl={userMenu}
+                        onClose={this.userMenuClose}
+                        anchorOrigin={{
+                            vertical  : 'bottom',
+                            horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                            vertical  : 'top',
+                            horizontal: 'center'
+                        }}
+                        classes={{
+                            paper: "py-8"
+                        }}
+                    >
+                        <React.Fragment>
+                            <MenuItem component={Link} to="/logout">
+                                <ListItemIcon>
+                                    <Icon>lock</Icon>
+                                </ListItemIcon>
+                                <ListItemText className="pl-0" primary="Logout"/>
+                            </MenuItem>
+                        </React.Fragment>
+                    </Popover>
+
                     <div className={classes.seperator}/>
 
-                    {/* <IconButton className="w-64 h-64" onClick={() => toggleQuickPanel(true)}>
-                        <Icon>format_list_bulleted</Icon>
-                    </IconButton> */}
                 </div>
             </div>
         );
     }
 }
 
-function mapDispatchToProps(dispatch)
+function mapStateToProps({fuse, auth, application})
 {
-    return bindActionCreators({
-        toggleQuickPanel: quickPanelActions.toggleQuickPanel
-    }, dispatch);
+    return {
+        auth       : application.loginReducers.auth
+    }
 }
 
-export default withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(MainToolbar));
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(MainToolbar));

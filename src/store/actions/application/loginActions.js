@@ -23,7 +23,7 @@ export const login = (values) => {
         }).then(result => {
             //สั่ง redirect ไปหน้าแรก (/)
             history.push('/greenHouse')
-            dispatch({ type: 'LOGIN_SUCCESS' })
+            dispatch({ type: 'LOGIN_SUCCESS' , payload: result.data})
         }).catch(err => {
             //กรณี error         
             dispatch({ type: 'LOGIN_REJECTED', payload: err.message })

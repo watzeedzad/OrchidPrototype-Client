@@ -34,7 +34,7 @@ const styles = theme => ({
 });
 
 
-function MainNavbar({classes, navigation, layoutStyle, user})
+function MainNavbar({classes, navigation, layoutStyle, user, auth})
 {
     function UserHeader()
     {
@@ -43,13 +43,12 @@ function MainNavbar({classes, navigation, layoutStyle, user})
                 position="static"
                 color="primary"
                 elevation={0}
-                className="user relative flex flex-col items-center justify-center pt-24 pb-96 mb-96 z-0"
+                className="user relative flex flex-col items-center justify-center pt-48 pb-96 mb-96 z-0"
             >
-                <Typography className="username text-16 whitespace-no-wrap" color="inherit">Witchapon Farm</Typography>
-                <Typography className="email text-13 mt-8 opacity-50 whitespace-no-wrap" color="inherit">สถานที่ . . .</Typography>
+                <Typography className="username text-16 whitespace-no-wrap" color="inherit">{auth.data.farm.farmName}</Typography>
                 <Avatar
                     className={classNames(classes.avatar, "avatar")}
-                    alt="user photo"
+                    alt="farm photo"
                     src={"assets/images/farm/123456789.jpg"}
                 />
             </AppBar>
@@ -82,12 +81,13 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({}, dispatch);
 }
 
-function mapStateToProps({fuse, auth})
+function mapStateToProps({fuse, auth, application})
 {
     return {
         navigation : fuse.navigation,
         layoutStyle: fuse.settings.current.layout.style,
-        user       : auth.user
+        user       : auth.user,
+        auth       : application.loginReducers.auth
     }
 }
 

@@ -1,18 +1,14 @@
 const initialState = {
-    success: false,
-    error  : {
-        username: null,
-        password: null
-    }
+    auth: { data: null, isLoading: true, isRejected: false },
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
 
         case 'LOGIN_SUCCESS':
-            return { ...state, success: true }
+            return { ...state, auth: { data: action.payload, isLoading: false, isRejected: false } }
         case 'LOGIN_REJECTED':
-            return { ...state, success:false, error: action.payload }
+            return { ...state, auth: { data: null, isLoading: false, isRejected: true } }
         default:
             return state
     }
