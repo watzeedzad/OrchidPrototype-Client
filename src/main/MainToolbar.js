@@ -3,9 +3,9 @@ import {withStyles} from '@material-ui/core/styles/index';
 import classNames from 'classnames';
 import {Avatar, Button, Icon, IconButton, ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
 import {connect} from 'react-redux';
-import * as quickPanelActions from 'main/quickPanel/store/actions';
-import {FuseShortcuts, FuseAnimate} from '@fuse';
+import {FuseAnimate} from '@fuse';
 import {Link} from 'react-router-dom';
+import {logout} from 'store/actions/application/logoutActions'
 
 const styles = theme => ({
     root     : {
@@ -89,7 +89,7 @@ class MainToolbar extends Component {
                         }}
                     >
                         <React.Fragment>
-                            <MenuItem component={Link} to="/logout">
+                            <MenuItem component={Button} onClick={this.logout}>
                                 <ListItemIcon>
                                     <Icon>lock</Icon>
                                 </ListItemIcon>
@@ -103,6 +103,10 @@ class MainToolbar extends Component {
                 </div>
             </div>
         );
+    }
+
+    logout = () => {
+        this.props.dispatch(logout())
     }
 }
 
