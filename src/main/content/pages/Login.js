@@ -92,12 +92,12 @@ class Login extends Component {
                                         className="mb-16"
                                         type="text"
                                         name="username"
-                                        label="Username"
+                                        label="ไอดี"
                                         validations={{
                                             minLength: 4
                                         }}
                                         validationErrors={{
-                                            minLength: 'Min character length is 4'
+                                            minLength: 'ไอดีต้องมีความยาวขั้นต่ำ 4 ตัวอักษร'
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">email</Icon></InputAdornment>
@@ -110,12 +110,12 @@ class Login extends Component {
                                         className="mb-16"
                                         type="password"
                                         name="password"
-                                        label="Password"
+                                        label="รหัสผ่าน"
                                         validations={{
                                             minLength: 4
                                         }}
                                         validationErrors={{
-                                            minLength: 'Min character length is 4'
+                                            minLength: 'รหัสผ่านต้องมีความยาวขั้นต่ำ 4 ตัวอักษร'
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">vpn_key</Icon></InputAdornment>
@@ -148,7 +148,6 @@ class Login extends Component {
 
     onSubmit = (values) => {
         //เมื่อบันทึกข้อมูลเสร็จสังให้ไปยัง route /
-        console.log(values)
         this.props.dispatch(login(values))
     }
 }

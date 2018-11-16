@@ -66,14 +66,16 @@ class WaterHistory extends Component {
                                         filterable: true,
                                         className : "font-bold"
                                     },
-                                    {
+                                    {   
+                                        id        : 'startTime',
                                         Header    : "วันที่",
-                                        accessor  : "startTime",
+                                        accessor  : d => d.startTime.slice(0,19).replace('T',' '),
                                         filterable: true,
                                     },
                                     {
+                                        id        : 'volume',
                                         Header    : "ปริมาณ(ลิตร)",
-                                        accessor  : "volume",
+                                        accessor  : d => d.volume/1000,
                                         filterable: true,
                                     },
                                 ]}

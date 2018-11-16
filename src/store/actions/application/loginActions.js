@@ -26,7 +26,6 @@ export const login = (values) => {
             dispatch({ type: 'LOGIN_SUCCESS' , payload: result.data})
         }).catch(err => {
             //กรณี error     
-            console.log(err)    
             dispatch({ type: 'LOGIN_REJECTED', payload: err.message })
         })
     }

@@ -73,8 +73,9 @@ class FertilizerHistory extends Component {
                                         className : "font-bold"
                                     },
                                     {
+                                        id        : 'startTime',
                                         Header    : "วันที่",
-                                        accessor  : "startTime",
+                                        accessor  : d => d.startTime.slice(0,19).replace('T',' '),
                                         filterable: true,
                                     },
                                     {
@@ -82,9 +83,10 @@ class FertilizerHistory extends Component {
                                         accessor  : "ratio",
                                         filterable: true,
                                     },
-                                    {
+                                    {   
+                                        id        : 'volume',
                                         Header    : "ปริมาณ(ลิตร)",
-                                        accessor  : "volume",
+                                        accessor  : d => d.volume/1000,
                                         filterable: true,
                                     },
                                 ]}

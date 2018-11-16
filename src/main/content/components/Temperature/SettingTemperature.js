@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {Button, Typography, CssBaseline, Icon, InputAdornment} from '@material-ui/core';
 
 const styles = theme => ({
     layout: {
@@ -34,6 +34,14 @@ const styles = theme => ({
     }
   
 });
+
+// Formsy.addValidationRule('temperatureSetting', (values, value) => {
+//     value = parseFloat(value)
+//     if(value < 0 || value > 60 ){
+//         return false;
+//     }
+//     return true;
+// });
 
 class SettingTemperature extends Component {
     state = {
@@ -75,12 +83,8 @@ class SettingTemperature extends Component {
                         name="minTemperature"
                         label="อุณหภูมิต่ำสุด"
                         value={this.state.minTemperature}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
+                        // validations="temperatureSetting"
+                        // validationError="อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC"
                         // InputProps={{
                         //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
                         // }}
@@ -131,28 +135,5 @@ class SettingTemperature extends Component {
         )
     }
 }
-
-
-function validate(values) {
-    const errors = {};
-    let min = parseFloat(values.minTemperature)
-    let max = parseFloat(values.maxTemperature)
-
-    if (values.minTemperature === "") {
-        errors.minTemperature = 'ต้องกรอกอุณหภูมิต่ำสุด';
-    }else if(min < 0 || min > 60 ){
-        errors.minTemperature = 'อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC ';
-    }
-    if (values.maxTemperature === "") {
-        errors.maxTemperature = 'ต้องกรอกอุณหภูมิสูงสุด';
-    }else if(max < 0 || max > 60 ){
-        errors.maxTemperature = 'อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC ';
-    }
-    if(min > max ){
-        errors.minTemperature = 'อุณหภูมิต่ำสุดต้องน้อยกว่าสูงสุด';
-    }
-    return errors;
-}
-
 
 export default  withStyles(styles, {withTheme: true})(SettingTemperature);

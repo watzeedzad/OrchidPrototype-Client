@@ -61,34 +61,38 @@ class GreenHouseControllerList extends Component {
                         accessor  : "mac_address",
                         filterable: true
                     },
-                    {
+                    {   
+                        id        : 'water',
                         Header    : "ปั๊มน้ำ",
-                        Cell  : row => (<div>
-                            {data[0].relayType.water? <Icon>check</Icon>:<Icon>close</Icon>}
+                        accessor  : d => (<div>
+                            {d.relayType.water? <Icon>check</Icon>:<Icon>close</Icon>}
                             </div>
                         ),
                         filterable: false
                     },
-                    {
+                    {   
+                        id        : 'fertilizer',
                         Header    : "ปั๊มปุ๋ย",
-                        Cell  : row => (<div>
-                            {data[0].relayType.fertilizer? <Icon>check</Icon>:<Icon>close</Icon>}
+                        accessor  : d => (<div>
+                            {d.relayType.fertilizer? <Icon>check</Icon>:<Icon>close</Icon>}
                             </div>
                         ),
                         filterable: false
                     },
-                    {
+                    {   
+                        id        : 'moisture',
                         Header    : "ปั๊มความชื้น",
-                        Cell  : row => (<div>
-                            {data[0].relayType.moisture? <Icon>check</Icon>:<Icon>close</Icon>}
+                        accessor  : d => (<div>
+                            {d.relayType.moisture? <Icon>check</Icon>:<Icon>close</Icon>}
                             </div>
                         ),
                         filterable: false
                     },
-                    {
+                    {   
+                        id        : 'light',
                         Header    : "หลอดไฟ",
-                        Cell  : row => (<div>
-                            {data[0].relayType.light? <Icon>check</Icon>:<Icon>close</Icon>}
+                        accessor  : d => (<div>
+                            {d.relayType.light? <Icon>check</Icon>:<Icon>close</Icon>}
                             </div>
                         ),
                         filterable: false
