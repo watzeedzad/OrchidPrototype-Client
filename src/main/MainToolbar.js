@@ -22,8 +22,11 @@ const styles = theme => ({
 
 class MainToolbar extends Component {
 
+    
+
     state = {
-        userMenu: null
+        userMenu: null,
+        refresh:false
     };
 
     userMenuClick = event => {
@@ -36,7 +39,7 @@ class MainToolbar extends Component {
 
     render()
     {
-        const {classes, auth, logout, openChatPanel} = this.props;
+        const {classes, auth, logout} = this.props;
         const {data} = auth;
         const {userMenu} = this.state;
 
@@ -48,7 +51,7 @@ class MainToolbar extends Component {
 
                 <div className="flex">
 
-                    <FuseAnimate delay={300}>
+                    {!auth.isLoading && data !== null?<FuseAnimate delay={300}>
                         <Button className="h-64" onClick={this.userMenuClick}>
                             <Avatar 
                                 className=""
@@ -65,9 +68,10 @@ class MainToolbar extends Component {
                             </div>
 
                             <Icon className="text-16 ml-12 hidden sm:flex" variant="action">keyboard_arrow_down</Icon>
-                        </Button>
+                        </Button>                                               
                     </FuseAnimate>
-
+                    : <Typography component="span" className="normal-case font-600 flex">Loading...</Typography>}
+                    
                     <Popover
                         open={Boolean(userMenu)}
                         anchorEl={userMenu}
@@ -102,7 +106,7 @@ class MainToolbar extends Component {
     }
 }
 
-function mapStateToProps({fuse, auth, application})
+function mapStateToProps({application})
 {
     return {
         auth       : application.loginReducers.auth

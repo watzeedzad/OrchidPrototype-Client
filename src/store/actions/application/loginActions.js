@@ -25,7 +25,8 @@ export const login = (values) => {
             history.push('/greenHouse')
             dispatch({ type: 'LOGIN_SUCCESS' , payload: result.data})
         }).catch(err => {
-            //กรณี error         
+            //กรณี error     
+            console.log(err)    
             dispatch({ type: 'LOGIN_REJECTED', payload: err.message })
         })
     }

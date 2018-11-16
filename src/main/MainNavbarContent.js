@@ -34,7 +34,7 @@ const styles = theme => ({
 });
 
 
-function MainNavbar({classes, navigation, layoutStyle, user, auth})
+function MainNavbar({classes, navigation, layoutStyle, auth})
 {
     function UserHeader()
     {
@@ -45,12 +45,16 @@ function MainNavbar({classes, navigation, layoutStyle, user, auth})
                 elevation={0}
                 className="user relative flex flex-col items-center justify-center pt-48 pb-96 mb-96 z-0"
             >
-                <Typography className="username text-16 whitespace-no-wrap" color="inherit">{auth.data.farm.farmName}</Typography>
-                <Avatar
-                    className={classNames(classes.avatar, "avatar")}
-                    alt="farm photo"
-                    src={"assets/images/farm/123456789.jpg"}
-                />
+                {!auth.isLoading && auth.data != null ?
+                <div>
+                    <Typography className="username text-16 whitespace-no-wrap" color="inherit">{auth.data.farm.farmName}</Typography>
+                    <Avatar
+                        className={classNames(classes.avatar, "avatar")}
+                        alt="farm photo"
+                        src={"assets/images/farm/123456789.jpg"}
+                    />
+                </div>
+                :<Typography className="username text-16 whitespace-no-wrap" color="inherit">Loading...</Typography>}
             </AppBar>
         );
     }
