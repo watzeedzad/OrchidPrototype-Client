@@ -23,6 +23,8 @@ import configureStore from 'configureStore';
 import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
 import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist';
+
 
 const { persistor, store } = configureStore()
 
@@ -33,6 +35,7 @@ const jss = create({
 
 jss.options.insertionPoint = document.getElementById('jss-insertion-point');
 const generateClassName = createGenerateClassName();
+
 
 ReactDOM.render(
     <JssProvider jss={jss} generateClassName={generateClassName}>
@@ -76,3 +79,5 @@ ReactDOM.render(
     , document.getElementById('root'));
 
 registerServiceWorker();
+
+persistStore(store).purge();

@@ -14,7 +14,7 @@ const styles = theme => ({
 });
 
 
-class FarmDialog extend Component{
+class FarmDialog extends Component{
     consturctor(){
         super();
         this.state={
@@ -26,7 +26,7 @@ class FarmDialog extend Component{
             piMacAddress : '',
             canSubmit : false
         }
-        this.handleChange = this.handleC   hange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     form = React.createRef();
@@ -39,7 +39,7 @@ class FarmDialog extend Component{
                 ownerName : data.ownerName,
                 ownerSurname : data.ownerSurname,
                 ownerTel : data.ownerTel,
-                configFilePath: data.configFilePath
+                configFilePath: data.configFilePath,
                 piMacAddress : data.piMacAddress
             })
         }else{
@@ -48,7 +48,7 @@ class FarmDialog extend Component{
                 ownwerName : '',
                 ownerSurname : '',
                 ownerTel : '',
-                configFilePath : ''
+                configFilePath : '',
                 piMacAddress : ''
             });
         }
