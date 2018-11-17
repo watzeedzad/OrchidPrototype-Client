@@ -3,6 +3,7 @@ import Formsy,{addValidationRule} from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Card, CardContent, Typography, Icon, InputAdornment,CssBaseline} from '@material-ui/core';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layout: {
@@ -63,7 +64,7 @@ class SettingHumidity extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,auth } = this.props
         const {canSubmit} = this.state;
 
         return (
@@ -87,6 +88,7 @@ class SettingHumidity extends Component {
                         validations="humiditySetting"
                         validationError="ความชื้นต้องอยู่ระหว่าง 0 - 100"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
 
@@ -98,6 +100,7 @@ class SettingHumidity extends Component {
                         value={this.state.maxHumidity}
                         validations="humiditySetting"
                         validationError="ความชื้นต้องอยู่ระหว่าง 0 - 100"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         variant="outlined"
                         required
                     />
@@ -127,4 +130,11 @@ class SettingHumidity extends Component {
     }
 }
 
-export default  withStyles(styles, {withTheme: true})(SettingHumidity);
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
+    }
+}
+
+export default  withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SettingHumidity));

@@ -3,6 +3,7 @@ import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layout: {
@@ -62,7 +63,7 @@ class SettingFertility extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,auth } = this.props
         const {canSubmit} = this.state;
 
         return (
@@ -86,6 +87,7 @@ class SettingFertility extends Component {
                         validations="fertilitySetting"
                         validationError="ปริมาณแร่ธาตุอยู่ระหว่าง 0 - 100"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
 
@@ -98,6 +100,7 @@ class SettingFertility extends Component {
                         validations="fertilitySetting"
                         validationError="ปริมาณแร่ธาตุอยู่ระหว่าง 0 - 100"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
                     
@@ -126,26 +129,12 @@ class SettingFertility extends Component {
     }
 }
 
-
-function validate(values) {
-    const errors = {};
-    let min = parseFloat(values.minFertility)
-    let max = parseFloat(values.maxFertility)
-
-    if (values.minFertility === "") {
-        errors.minFertility = 'ต้องกรอกปริมาณแร่ธาตุต่ำสุด';
-    }else if(min < 0 || min > 100 ){
-        errors.minFertility = 'ปริมาณแร่ธาตุต้องอยู่ระหว่าง 0 - 100 ';
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
     }
-    if (values.maxFertility === "") {
-        errors.maxFertility = 'ต้องกรอกปริมาณแร่ธาตุสูงสุด';
-    }else if(max < 0 || max > 100 ){
-        errors.maxFertility = 'ปริมาณแร่ธาตุต้องอยู่ระหว่าง 0 - 100 ';
-    }
-    if(min > max ){
-        errors.minFertility = 'ปริมาณแร่ธาตุต่ำสุดต้องน้อยกว่าสูงสุด';
-    }
-    return errors;
 }
 
-export default withStyles(styles, {withTheme: true})(SettingFertility);
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SettingFertility));

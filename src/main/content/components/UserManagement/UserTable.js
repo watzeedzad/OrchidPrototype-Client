@@ -5,6 +5,7 @@ import {FuseUtils, FuseAnimate} from '@fuse';
 import {Avatar, Checkbox, Icon, IconButton,Typography,Button} from '@material-ui/core';
 import ReactTable from "react-table";
 import classNames from 'classnames';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     mailList: {
@@ -43,7 +44,7 @@ class UserTable extends Component {
 
     render()
     {
-        const {classes, data,buttonCreate,buttonEdit, buttonDelete} = this.props;
+        const {classes, data,buttonCreate,buttonEdit, buttonDelete,auth} = this.props;
 
         if ( !data || data.length === 0 )
         {
@@ -56,23 +57,7 @@ class UserTable extends Component {
             );
         }
 
-        return (
-            <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                <ReactTable
-                    className={classNames(classes.root, "-striped -highlight border-0")}
-                    getTrProps={(state, rowInfo, column) => {
-                        return {
-                            className: "cursor-pointer",
-                            onClick  : (e, handleOriginal) => {
-                                if ( rowInfo )
-                                {
-                                    buttonEdit(rowInfo.original);
-                                }
-                            }
-                        }
-                    }}
-                    data={data}
-                    columns={[
+        const columns = [
                         {
                             Header    : "ประเภทผู้ใช้",
                             accessor  : "role",
@@ -93,7 +78,10 @@ class UserTable extends Component {
                             Header    : "ไอดีผู้ใช้",
                             accessor  : "username",
                             filterable: true
-                        },
+                        }
+                    ]
+        if(auth.data.user.role === 'เจ้าของฟาร์ม'){
+            columns.push(
                         {
                             Header: <Button
                                         variant="fab"
@@ -128,8 +116,25 @@ class UserTable extends Component {
                                     </IconButton>
                                 </div>
                             )
+                        })
+        }
+        return (
+            <FuseAnimate animation="transition.slideUpIn" delay={300}>
+                <ReactTable
+                    className={classNames(classes.root, "-striped -highlight border-0")}
+                    getTrProps={(state, rowInfo, column) => {
+                        return {
+                            className: "cursor-pointer",
+                            onClick  : (e, handleOriginal) => {
+                                if ( rowInfo )
+                                {
+                                    buttonEdit(rowInfo.original);
+                                }
+                            }
                         }
-                    ]}
+                    }}
+                    data={data}
+                    columns={columns}
                     defaultPageSize={10}
                     noDataText="ไม่มีรายชื่อผู้ใช้งาน"
                 />
@@ -138,4 +143,12 @@ class UserTable extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(UserTable));
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
+    }
+}
+
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(withRouter(UserTable)));

@@ -3,6 +3,7 @@ import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline, Icon, InputAdornment} from '@material-ui/core';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layout: {
@@ -62,7 +63,7 @@ class SettingTemperature extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,auth } = this.props
         const {canSubmit} = this.state;
 
         return (
@@ -86,6 +87,7 @@ class SettingTemperature extends Component {
                         validations="temperatureSetting"
                         validationError="อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
 
@@ -98,6 +100,7 @@ class SettingTemperature extends Component {
                         validations="temperatureSetting"
                         validationError="อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
                     
@@ -126,4 +129,12 @@ class SettingTemperature extends Component {
     }
 }
 
-export default  withStyles(styles, {withTheme: true})(SettingTemperature);
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
+    }
+}
+
+
+export default  withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SettingTemperature));

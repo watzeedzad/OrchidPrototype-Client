@@ -30,13 +30,109 @@ class GreenHouseControllerList extends Component {
     }
    
     render() {
-        const { classes,gController,buttonDelete,buttonEdit,buttonCreate } = this.props;
+        const { classes,gController,buttonDelete,buttonEdit,buttonCreate,auth } = this.props;
 
         if (gController.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+gController.data}/>
         }
         if (gController.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
+        }
+
+        const columns = [
+                    {
+                        Header    : "ชื่อ",
+                        accessor  : "name",
+                        filterable: true,
+                        className : "font-bold"
+                    },
+                    {
+                        Header    : "รหัสโรงเรือน",
+                        accessor  : "greenHouseId",
+                        filterable: true,
+                    },
+                    {
+                        Header    : "IP",
+                        accessor  : "ip",
+                        filterable: true,
+                    },
+                    {
+                        Header    : "รหัสเครื่อง",
+                        accessor  : "mac_address",
+                        filterable: true
+                    },
+                    {   
+                        id        : 'water',
+                        Header    : "ปั๊มน้ำ",
+                        accessor  : d => (<div>
+                            {d.relayType.water? <Icon>check</Icon>:<Icon>close</Icon>}
+                            </div>
+                        ),
+                        filterable: false
+                    },
+                    {   
+                        id        : 'fertilizer',
+                        Header    : "ปั๊มปุ๋ย",
+                        accessor  : d => (<div>
+                            {d.relayType.fertilizer? <Icon>check</Icon>:<Icon>close</Icon>}
+                            </div>
+                        ),
+                        filterable: false
+                    },
+                    {   
+                        id        : 'moisture',
+                        Header    : "ปั๊มความชื้น",
+                        accessor  : d => (<div>
+                            {d.relayType.moisture? <Icon>check</Icon>:<Icon>close</Icon>}
+                            </div>
+                        ),
+                        filterable: false
+                    },
+                    {   
+                        id        : 'light',
+                        Header    : "หลอดไฟ",
+                        accessor  : d => (<div>
+                            {d.relayType.light? <Icon>check</Icon>:<Icon>close</Icon>}
+                            </div>
+                        ),
+                        filterable: false
+                    }
+                ]
+        if(auth.data.user.role === 'เจ้าของฟาร์ม'){
+            columns.push(
+                {
+                    Header:                                     
+                    <IconButton
+                        onClick={(ev) => {
+                            ev.stopPropagation();
+                            buttonCreate(this.props.greenHouseId,null);
+                        }}
+                    >
+                        <Icon>add_box</Icon>
+                    </IconButton>,
+                    width : 128,
+                    Cell  : row => (
+                        <div className="flex items-center">
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    buttonEdit(row.original);
+                                }}
+                            >
+                                <Icon>edit</Icon>
+                            </IconButton>
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    buttonDelete(row.original._id);
+                                }}
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </div>
+                    )
+                }
+            )
         }
         return (
                 <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -54,97 +150,7 @@ class GreenHouseControllerList extends Component {
                         }
                     }}
                     data={gController.data}
-                    columns={[
-                        {
-                            Header    : "ชื่อ",
-                            accessor  : "name",
-                            filterable: true,
-                            className : "font-bold"
-                        },
-                        {
-                            Header    : "รหัสโรงเรือน",
-                            accessor  : "greenHouseId",
-                            filterable: true,
-                        },
-                        {
-                            Header    : "IP",
-                            accessor  : "ip",
-                            filterable: true,
-                        },
-                        {
-                            Header    : "รหัสเครื่อง",
-                            accessor  : "mac_address",
-                            filterable: true
-                        },
-                        {   
-                            id        : 'water',
-                            Header    : "ปั๊มน้ำ",
-                            accessor  : d => (<div>
-                                {d.relayType.water? <Icon>check</Icon>:<Icon>close</Icon>}
-                                </div>
-                            ),
-                            filterable: false
-                        },
-                        {   
-                            id        : 'fertilizer',
-                            Header    : "ปั๊มปุ๋ย",
-                            accessor  : d => (<div>
-                                {d.relayType.fertilizer? <Icon>check</Icon>:<Icon>close</Icon>}
-                                </div>
-                            ),
-                            filterable: false
-                        },
-                        {   
-                            id        : 'moisture',
-                            Header    : "ปั๊มความชื้น",
-                            accessor  : d => (<div>
-                                {d.relayType.moisture? <Icon>check</Icon>:<Icon>close</Icon>}
-                                </div>
-                            ),
-                            filterable: false
-                        },
-                        {   
-                            id        : 'light',
-                            Header    : "หลอดไฟ",
-                            accessor  : d => (<div>
-                                {d.relayType.light? <Icon>check</Icon>:<Icon>close</Icon>}
-                                </div>
-                            ),
-                            filterable: false
-                        },
-                        {
-                            Header:                                     
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    buttonCreate(this.props.greenHouseId,null);
-                                }}
-                            >
-                                <Icon>add_box</Icon>
-                            </IconButton>,
-                            width : 128,
-                            Cell  : row => (
-                                <div className="flex items-center">
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            buttonEdit(row.original);
-                                        }}
-                                    >
-                                        <Icon>edit</Icon>
-                                    </IconButton>
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            buttonDelete(row.original._id);
-                                        }}
-                                    >
-                                        <Icon>delete</Icon>
-                                    </IconButton>
-                                </div>
-                            )
-                        }
-                    ]}
+                    columns={columns}
                     defaultPageSize={5}
                     noDataText="ไม่มีคอนโทรลเลอร์ในโรงเรือนนี้"
                 />
@@ -158,6 +164,7 @@ class GreenHouseControllerList extends Component {
 function mapStateToProps({application}) {
     return {
         gController: application.controllerReducers.gController,
+        auth       : application.loginReducers.auth
     }
 }
 

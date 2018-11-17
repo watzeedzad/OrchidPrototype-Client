@@ -3,6 +3,7 @@ import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layout: {
@@ -62,7 +63,7 @@ class SettingMoisture extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,auth } = this.props
         const {canSubmit} = this.state;
 
         return (
@@ -86,6 +87,7 @@ class SettingMoisture extends Component {
                         validations="moistureSetting"
                         validationError="ความชื้นอยู่ระหว่าง 0 - 100"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
 
@@ -98,6 +100,7 @@ class SettingMoisture extends Component {
                         validations="moistureSetting"
                         validationError="ความชื้นอยู่ระหว่าง 0 - 100"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
                     
@@ -124,7 +127,13 @@ class SettingMoisture extends Component {
             </React.Fragment>
         )
     }
-
 }
 
-export default withStyles(styles, {withTheme: true})(SettingMoisture);
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
+    }
+}
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SettingMoisture));

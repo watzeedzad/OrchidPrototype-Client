@@ -74,7 +74,7 @@ class GreenHouseList extends Component {
 
     render()
     {
-        const {classes, greenHouses, greenHouseSave} = this.props;
+        const {classes, greenHouses, greenHouseSave, auth} = this.props;
 
         if (greenHouses.isRejected) {
             return <SnackbarContent className="bg-red-light" message={"Error: "+greenHouses.data}/>
@@ -118,37 +118,39 @@ class GreenHouseList extends Component {
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">คำอธิบาย : {e.desc?e.desc:' - '}</Typography>
                                     
                                 </Link>
-
-                                <div className={classNames(classes.boardFooter, "flex justify-end")}>
-                                        <IconButton
-                                            onClick={(ev) => {
-                                                ev.stopPropagation();
-                                                this.handleEdit(e)
-                                            }}
-                                        >
-                                            <Icon>edit</Icon>
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={(ev) => {
-                                                ev.stopPropagation();
-                                                this.handleDelete(e._id)
-                                            }}
-                                        >
-                                            <Icon>delete</Icon>
-                                        </IconButton>
-                                </div>
-
+                                {auth.data.user.role === 'เจ้าของฟาร์ม' &&
+                                    <div className={classNames(classes.boardFooter, "flex justify-end")}>
+                                            <IconButton
+                                                onClick={(ev) => {
+                                                    ev.stopPropagation();
+                                                    this.handleEdit(e)
+                                                }}
+                                            >
+                                                <Icon>edit</Icon>
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={(ev) => {
+                                                    ev.stopPropagation();
+                                                    this.handleDelete(e._id)
+                                                }}
+                                            >
+                                                <Icon>delete</Icon>
+                                            </IconButton>
+                                    </div>
+                                }
                             </div>
                         ))}
-                        <div className="w-xs p-16 pb-64">
-                            <div
-                                className={classNames(classes.board, classes.newBoard, "flex flex-col items-center justify-center w-full h-full rounded py-24")}
-                                onClick={() => this.handleNew()}
-                            >
-                                <Icon className="text-56">add_circle</Icon>
-                                <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">เพิ่มโรงเรือนใหม่</Typography>
+                        {auth.data.user.role === 'เจ้าของฟาร์ม' &&
+                            <div className="w-xs p-16 pb-64">
+                                <div
+                                    className={classNames(classes.board, classes.newBoard, "flex flex-col items-center justify-center w-full h-full rounded py-24")}
+                                    onClick={() => this.handleNew()}
+                                >
+                                    <Icon className="text-56">add_circle</Icon>
+                                    <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">เพิ่มโรงเรือนใหม่</Typography>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </FuseAnimateGroup>
 
                 </div>
@@ -226,7 +228,8 @@ function mapStateToProps({application})
 {
     return {
         greenHouses: application.greenHouseReducers.greenHouses,
-        greenHouseSave: application.greenHouseReducers.greenHouseSave
+        greenHouseSave: application.greenHouseReducers.greenHouseSave,
+        auth: application.loginReducers.auth
     }
 }
 

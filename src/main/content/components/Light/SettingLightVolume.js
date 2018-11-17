@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layout: {
@@ -35,6 +36,14 @@ const styles = theme => ({
   
 });
 
+addValidationRule('lightVolumeSetting', (values, value) => {
+    value = parseFloat(value)
+    if(value < 0 || value > 24 ){
+        return false;
+    }
+    return true;
+});
+
 class SettingLightVolume extends Component {
 
     state = {
@@ -54,7 +63,7 @@ class SettingLightVolume extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,auth } = this.props
         const {canSubmit} = this.state;
 
         return (
@@ -76,16 +85,10 @@ class SettingLightVolume extends Component {
                             name="maxLightVolume"
                             label="ปริมาณแสงที่ต้องการต่อวัน(ชม.)"
                             value={this.state.maxLightVolume}
-                            // validations={{
-                            //     minLength: 1                          
-                            // }}
-                            // validationErrors={{
-                            //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                            // }}
-                            // InputProps={{
-                            //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
-                            // }}
+                            validations="lightVolumeSetting"
+                            validationError="ปริมาณแสงต้องอยู่ระหว่าง 0 - 24 ชม."
                             variant="outlined"
+                            disabled = {auth.data.user.role==='พนักงาน'?true:false}
                             required
                         />
                         
@@ -114,18 +117,12 @@ class SettingLightVolume extends Component {
     }
 }
 
-function validate(values) {
-    const errors = {};
-    let min = parseFloat(values.minLightVolume)
-    let max = parseFloat(values.maxLightVolume)
-
-    if (values.minLightVolume === "") {
-        errors.maxLightVolume = 'ต้องกรอกปริมาณแสงที่ต้องการ';
-    }else if(min < 0 || min > 60 ){
-        errors.maxLightVolume = 'ปริมาณแสงที่ต้องการต้องอยู่ในช่วง 0-24 ชม.';
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
     }
-    return errors;
 }
 
 
-export default withStyles(styles, {withTheme: true})(SettingLightVolume);
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SettingLightVolume));

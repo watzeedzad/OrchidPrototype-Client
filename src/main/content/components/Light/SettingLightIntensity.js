@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline} from '@material-ui/core';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layout: {
@@ -35,6 +36,15 @@ const styles = theme => ({
   
 });
 
+addValidationRule('lightIntensitySetting', (values, value) => {
+    value = parseFloat(value)
+    if(value < 0 || value > 20000 ){
+        return false;
+    }
+    return true;
+});
+
+
 class SettingLightIntensity extends Component {
 
     state = {
@@ -55,7 +65,7 @@ class SettingLightIntensity extends Component {
     };
 
     render() {
-        const { classes,onSubmit } = this.props
+        const { classes,onSubmit,auth } = this.props
         const {canSubmit} = this.state;
 
         return (
@@ -76,16 +86,10 @@ class SettingLightIntensity extends Component {
                         name="minLightIntensity"
                         label="ความเข้มแสงต่ำสุด"
                         value={this.state.minLightIntensity}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
-                        // }}
+                        validations="lightIntensitySetting"
+                        validationError="ความเข้มแสงต้องอยู่ระหว่าง 0 - 20,000"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
 
@@ -95,16 +99,10 @@ class SettingLightIntensity extends Component {
                         name="maxLightIntensity"
                         label="ความเข้มแสงสูงสุด"
                         value={this.state.maxLightIntensity}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
-                        // }}
+                        validations="lightIntensitySetting"
+                        validationError="ความเข้มแสงต้องอยู่ระหว่าง 0 - 20,000"
                         variant="outlined"
+                        disabled = {auth.data.user.role==='พนักงาน'?true:false}
                         required
                     />
                     
@@ -134,26 +132,11 @@ class SettingLightIntensity extends Component {
 
 }
 
-
-function validate(values) {
-    const errors = {};
-    let min = parseFloat(values.minLightIntensity)
-    let max = parseFloat(values.maxLightIntensity)
-
-    if (values.minLightIntensity === "") {
-        errors.minLightIntensity = 'ต้องกรอกความเข้มแสงต่ำสุด';
-    }else if(min < 0 || min > 60 ){
-        errors.minLightIntensity = 'ความเข้มแสงต้องอยู่ระหว่าง 0 - 100 ';
+function mapStateToProps({application})
+{
+    return {
+        auth       : application.loginReducers.auth
     }
-    if (values.maxLightIntensity === "") {
-        errors.maxLightIntensity = 'ต้องกรอกความเข้มแสงสูงสุด';
-    }else if(max < 0 || max > 60 ){
-        errors.maxLightIntensity = 'ความเข้มแสงต้องอยู่ระหว่าง 0 - 100 ';
-    }
-    if(min > max ){
-        errors.minLightIntensity = 'ความเข้มแสงต่ำสุดต้องน้อยกว่าสูงสุด';
-    }
-    return errors;
 }
 
-export default withStyles(styles, {withTheme: true})(SettingLightIntensity);
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SettingLightIntensity));
