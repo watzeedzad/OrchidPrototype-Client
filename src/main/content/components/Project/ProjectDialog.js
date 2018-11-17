@@ -28,7 +28,7 @@ class ProjectDialog extends Component {
             name : '',
             tribeName : '',
             currentRatio : '',
-            picturePath : '',
+            picturePath : null,
             canSubmit: false,
             greenHouseId: ''
         }
@@ -54,7 +54,7 @@ class ProjectDialog extends Component {
                 name : '',
                 tribeName : '',
                 currentRatio : '',
-                picturePath : '',
+                picturePath : null,
                 greenHouseId: this.props.greenHouseId
             })
         }
@@ -78,7 +78,7 @@ class ProjectDialog extends Component {
 
         let picture = null;
         if(this.props.selectedFile === null){
-            if(typeof this.state.picturePath === 'undefined'){
+            if(this.state.picturePath === null){
                 picture =   <Avatar
                                 className={classNames(classes.avatar, "avatar")}
                                 alt="project photo"

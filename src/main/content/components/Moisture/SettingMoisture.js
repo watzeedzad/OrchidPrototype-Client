@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline} from '@material-ui/core';
@@ -33,6 +33,14 @@ const styles = theme => ({
       margin: theme.spacing.unit,
     }
   
+});
+
+addValidationRule('moistureSetting', (values, value) => {
+    value = parseFloat(value)
+    if(value < 0 || value > 100 ){
+        return false;
+    }
+    return true;
 });
 
 class SettingMoisture extends Component {
@@ -75,15 +83,8 @@ class SettingMoisture extends Component {
                         name="minSoilMoisture"
                         label="ความชื้นต่ำสุด"
                         value={this.state.minSoilMoisture}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
-                        // }}
+                        validations="moistureSetting"
+                        validationError="ความชื้นอยู่ระหว่าง 0 - 100"
                         variant="outlined"
                         required
                     />
@@ -94,15 +95,8 @@ class SettingMoisture extends Component {
                         name="maxSoilMoisture"
                         label="ความชื้นสูงสุด"
                         value={this.state.maxSoilMoisture}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
-                        // }}
+                        validations="moistureSetting"
+                        validationError="ความชื้นอยู่ระหว่าง 0 - 100"
                         variant="outlined"
                         required
                     />
@@ -132,28 +126,5 @@ class SettingMoisture extends Component {
     }
 
 }
-
-
-function validate(values) {
-    const errors = {};
-    let min = parseFloat(values.minSoilMoisture)
-    let max = parseFloat(values.maxSoilMoisture)
-
-    if (values.minSoilMoisture === "") {
-        errors.minSoilMoisture = 'ต้องกรอกความชื้นต่ำสุด';
-    }else if(min < 0 || min > 100 ){
-        errors.minSoilMoisture = 'ความชื้นต้องอยู่ระหว่าง 0 - 100 ';
-    }
-    if (values.maxSoilMoisture === "") {
-        errors.maxSoilMoisture = 'ต้องกรอกความชื้นสูงสุด';
-    }else if(max < 0 || max > 100 ){
-        errors.maxSoilMoisture = 'ความชื้นต้องอยู่ระหว่าง 0 - 100 ';
-    }
-    if(min > max ){
-        errors.minSoilMoisture = 'ความชื้นต่ำสุดต้องน้อยกว่าสูงสุด';
-    }
-    return errors;
-}
-
 
 export default withStyles(styles, {withTheme: true})(SettingMoisture);

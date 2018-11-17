@@ -27,7 +27,7 @@ class GreenHouseDialog extends Component {
             id : '',
             name : '',
             desc : '',
-            picturePath : '',
+            picturePath : null,
             canSubmit: false,
         }
         this.handleChange = this.handleChange.bind(this);
@@ -48,7 +48,7 @@ class GreenHouseDialog extends Component {
             this.setState({ 
                 name : '',
                 desc : '',
-                picturePath : '',
+                picturePath : null,
             })
         }
     }
@@ -71,7 +71,7 @@ class GreenHouseDialog extends Component {
         
         let picture = null;
         if(this.props.selectedFile === null){
-            if(typeof this.state.picturePath === 'undefined'){
+            if(this.state.picturePath === null){
                 picture =   <Avatar
                                 className={classNames(classes.avatar, "avatar")}
                                 alt="greenhouse photo"

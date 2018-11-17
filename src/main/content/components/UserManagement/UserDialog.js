@@ -3,7 +3,7 @@ import {
     FormControlLabel, Radio, Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar
 } from '@material-ui/core';
 import {TextFieldFormsy, RadioGroupFormsy} from '@fuse';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule } from 'formsy-react';
 import {withStyles} from '@material-ui/core/styles/index';
 import _ from '@lodash';
 
@@ -12,6 +12,10 @@ const styles = theme => ({
     formControl: {
         marginBottom: 24
     }
+});
+
+addValidationRule('repasswordCheck', (values, value, otherField) => {
+    return value === values[otherField];
 });
 
 class UserDialog extends Component {
@@ -161,6 +165,12 @@ class UserDialog extends Component {
                                 name="username"
                                 value={this.state.username}
                                 onChange={this.handleChange}
+                                validations={{
+                                    minLength: 4                          
+                                }}
+                                validationErrors={{
+                                    minLength: 'ต้องมีความยาวมากกว่า 4 ตัวอักษร'
+                                }}
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -205,6 +215,12 @@ class UserDialog extends Component {
                                     value={this.state.password}
                                     onChange={this.handleChange}
                                     variant="outlined"
+                                    validations={{
+                                        minLength: 4                          
+                                    }}
+                                    validationErrors={{
+                                        minLength: 'ต้องมีความยาวมากกว่า 4 ตัวอักษร'
+                                    }}
                                     fullWidth
                                     required
                                 />
@@ -221,7 +237,8 @@ class UserDialog extends Component {
                                     value={this.state.repassword}
                                     onChange={this.handleChange}
                                     variant="outlined"
-                                    fullWidth
+                                    validations="repasswordCheck:password"
+                                    validationError="ยืนยันรหัสผ่านไม่ตรงกับรหัสผ่านที่กรอกมา"
                                     required
                                 />
                             </div>

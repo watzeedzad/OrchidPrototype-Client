@@ -166,10 +166,11 @@ class ControllerForm extends Component {
                             </div>
                             {!this.props.data._id  
                             ?   <SelectFormsy
-                                    className={classes.formControl}
+                                    className="w-216 mb-24"
                                     name="mac_address"
                                     label="กรุณาเลือกคอนโทรลเลอร์"
                                     value="none"
+                                    required
                                 >
                                     {dropdownController.data == null || dropdownController.data.errorMessage ?
                                         <MenuItem value="none">

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline, Icon, InputAdornment} from '@material-ui/core';
@@ -35,13 +35,13 @@ const styles = theme => ({
   
 });
 
-// Formsy.addValidationRule('temperatureSetting', (values, value) => {
-//     value = parseFloat(value)
-//     if(value < 0 || value > 60 ){
-//         return false;
-//     }
-//     return true;
-// });
+addValidationRule('temperatureSetting', (values, value) => {
+    value = parseFloat(value)
+    if(value < 0 || value > 60 ){
+        return false;
+    }
+    return true;
+});
 
 class SettingTemperature extends Component {
     state = {
@@ -83,11 +83,8 @@ class SettingTemperature extends Component {
                         name="minTemperature"
                         label="อุณหภูมิต่ำสุด"
                         value={this.state.minTemperature}
-                        // validations="temperatureSetting"
-                        // validationError="อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC"
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
-                        // }}
+                        validations="temperatureSetting"
+                        validationError="อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC"
                         variant="outlined"
                         required
                     />
@@ -98,15 +95,8 @@ class SettingTemperature extends Component {
                         name="maxTemperature"
                         label="อุณหภูมิสูงสุด"
                         value={this.state.maxTemperature}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
-                        // }}
+                        validations="temperatureSetting"
+                        validationError="อุณหภูมิต้องอยู่ระหว่าง 0 - 60ํ  ํC"
                         variant="outlined"
                         required
                     />

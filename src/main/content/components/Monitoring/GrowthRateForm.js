@@ -3,7 +3,7 @@ import {
     Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar, SnackbarContent
 } from '@material-ui/core';
 import {TextFieldFormsy} from '@fuse';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule }from 'formsy-react';
 import {withStyles} from '@material-ui/core/styles/index';
 import _ from '@lodash';
 
@@ -12,6 +12,14 @@ const styles = theme => ({
     formControl: {
         marginBottom: 24
     }
+});
+
+addValidationRule('monitoringSetting', (values, value) => {
+    value = parseFloat(value)
+    if(value < 0){
+        return false;
+    }
+    return true;
 });
 
 class GrowthRateForm extends Component {
@@ -112,6 +120,8 @@ class GrowthRateForm extends Component {
                             name="trunkDiameter"
                             value={this.state.trunkDiameter}
                             onChange={this.handleChange}
+                            validations="monitoringSetting"
+                            validationError="ต้องมีค่ามากกว่า 0"
                             variant="outlined"
                             required
                             fullWidth
@@ -130,6 +140,8 @@ class GrowthRateForm extends Component {
                             name="leafWidth"
                             value={this.state.leafWidth}
                             onChange={this.handleChange}
+                            validations="monitoringSetting"
+                            validationError="ต้องมีค่ามากกว่า 0"
                             variant="outlined"
                             required
                             fullWidth
@@ -148,6 +160,8 @@ class GrowthRateForm extends Component {
                             name="totalLeaf"
                             value={this.state.totalLeaf}
                             onChange={this.handleChange}
+                            validations="monitoringSetting"
+                            validationError="ต้องมีค่ามากกว่า 0"
                             variant="outlined"
                             required
                             fullWidth
@@ -166,6 +180,8 @@ class GrowthRateForm extends Component {
                             name="height"
                             value={this.state.height}
                             onChange={this.handleChange}
+                            validations="monitoringSetting"
+                            validationError="ต้องมีค่ามากกว่า 0"
                             variant="outlined"
                             required
                             fullWidth

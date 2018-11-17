@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule }from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Typography, CssBaseline} from '@material-ui/core';
@@ -33,6 +33,14 @@ const styles = theme => ({
       margin: theme.spacing.unit,
     }
   
+});
+
+addValidationRule('fertilitySetting', (values, value) => {
+    value = parseFloat(value)
+    if(value < 0 || value > 100 ){
+        return false;
+    }
+    return true;
 });
 
 class SettingFertility extends Component {
@@ -75,15 +83,8 @@ class SettingFertility extends Component {
                         name="minFertility"
                         label="ปริมาณแร่ธาตุต่ำสุด"
                         value={this.state.minFertility}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">maximize</Icon></InputAdornment>
-                        // }}
+                        validations="fertilitySetting"
+                        validationError="ปริมาณแร่ธาตุอยู่ระหว่าง 0 - 100"
                         variant="outlined"
                         required
                     />
@@ -94,15 +95,8 @@ class SettingFertility extends Component {
                         name="maxFertility"
                         label="ปริมาณแร่ธาตุสูงสุด"
                         value={this.state.maxFertility}
-                        // validations={{
-                        //     minLength: 1                          
-                        // }}
-                        // validationErrors={{
-                        //     minLength: 'กรุณากรอกอุณหภูมิสูงสุด'
-                        // }}
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end"><Icon className="text-20" color="action">minimize</Icon></InputAdornment>
-                        // }}
+                        validations="fertilitySetting"
+                        validationError="ปริมาณแร่ธาตุอยู่ระหว่าง 0 - 100"
                         variant="outlined"
                         required
                     />
