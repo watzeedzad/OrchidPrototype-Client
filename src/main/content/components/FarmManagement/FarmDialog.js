@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {FormControlLabel, Dialog , Button ,Typography ,AppBar} from '@material-ui/core';
-import {TextFiledFormy} from '@fuse';
-import Formsy from 'formsy-react';
+import {
+    FormControlLabel, Radio, Button, Dialog, DialogActions, DialogContent, Icon, Typography, Toolbar, AppBar
+} from '@material-ui/core';
+import {TextFieldFormsy, RadioGroupFormsy} from '@fuse';
+import Formsy, { addValidationRule } from 'formsy-react';
 import {withStyles} from '@material-ui/core/styles/index';
 import _ from '@lodash';
 
@@ -15,11 +17,11 @@ const styles = theme => ({
 
 
 class FarmDialog extends Component{
-    consturctor(){
+    constructor(){
         super();
         this.state={
             farmName : '',
-            owenerName : '',
+            ownerName : '',
             ownerSurname : '',
             ownerTel : '',
             configFilePath : '',
@@ -31,7 +33,7 @@ class FarmDialog extends Component{
 
     form = React.createRef();
 
-    componentWillReciveProps(nextProps){
+    componentWillReceiveProps(nextProps){
         const {data} = nextProps
         if(data._id){
             this.setState({
@@ -45,7 +47,7 @@ class FarmDialog extends Component{
         }else{
             this.setState({
                 farmName : '',
-                ownwerName : '',
+                ownerName : '',
                 ownerSurname : '',
                 ownerTel : '',
                 configFilePath : '',
@@ -69,7 +71,7 @@ class FarmDialog extends Component{
     render(){
 
         const {classes, dialogTitle ,fileChangedHandler} = this.props;
-
+        console.log(this.props.data)
         return(
             <Dialog
                 classes={{
@@ -102,7 +104,7 @@ class FarmDialog extends Component{
                         <div className="flex">
                             <div className="min-w-48 pt-20">
                             </div>
-                            <TextFieldFormy
+                            <TextFieldFormsy
                                 className={classes.formControl}
                                 label="ชื่อฟาร์ม"
                                 autoFocud
@@ -124,9 +126,9 @@ class FarmDialog extends Component{
                                 className={classes.formControl}
                                 label="ชื่อเจ้าของฟาร์ม"
                                 type="text"
-                                id="ownwerName"
-                                name="ownwerName"
-                                value={this.state.ownwerName}
+                                id="ownerName"
+                                name="ownerName"
+                                value={this.state.ownerName}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -157,7 +159,7 @@ class FarmDialog extends Component{
                             <TextFieldFormsy
                                 className={classes.formControl}
                                 label="เบอร์โทร์ศัพท์"
-                                type="number"
+                                type="text"
                                 id="ownerTel"
                                 name="ownerTel"
                                 value={this.state.ownerTel}
@@ -166,18 +168,6 @@ class FarmDialog extends Component{
                                 fullWidth
                             />      
                         </div>
-
-                        <div className="flex pb-24">
-                            <div className="min-w-36 pt-20">
-                            </div>
-                            <div className="flex flex-col">
-                                <input type="file" onChange={fileChangedHandler} />
-                                <div className="justify-center pt-16">
-                                    {picture}
-                                </div>
-                            </div>
-                        </div>
-
 
                         <div className="flex">
                                 <div className="min-w-48 pt-20">
@@ -225,7 +215,7 @@ class FarmDialog extends Component{
         this.props.onToggle()
     }
 
-    onSubmit = (value) => {
+    onSubmit = (values) => {
         this.props.onSubmit(values);
     }
 }

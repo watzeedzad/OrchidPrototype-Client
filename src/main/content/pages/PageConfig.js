@@ -22,6 +22,27 @@ export const PageConfig = {
             }
         }   
     },
+    adminSettings: {
+        layout: {
+            config: {
+                navbar        : {
+                    display: false
+                },
+                toolbar       : {
+                    display: true
+                },
+                footer        : {
+                    display: false
+                },
+                leftSidePanel : {
+                    display: false
+                },
+                rightSidePanel: {
+                    display: false
+                }
+            }
+        }   
+    },
     routes  : [
         {
             path     : '/weatherControl',
@@ -100,9 +121,9 @@ export const PageConfig = {
             
         },
         {
-            path     : '/error-404',
+            path     : '/farm',
             component: FuseLoadable({
-                loader: () => import('./Error404Page')
+                loader: () => import('./Farm')
             })
             
         }

@@ -22,7 +22,11 @@ export const login = (values) => {
             //headers: { authorization: localStorage.getItem('token') }
         }).then(result => {
             //สั่ง redirect ไปหน้าแรก (/)
-            history.push('/greenHouse')
+            if(result.data.user.role === 'ผู้ดูแลระบบ'){
+                history.push('/farm')
+            }else{
+                history.push('/greenHouse')
+            }
             dispatch({ type: 'LOGIN_SUCCESS' , payload: result.data})
         }).catch(err => {
             //กรณี error     

@@ -118,7 +118,7 @@ class GreenHouseList extends Component {
                                     <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">คำอธิบาย : {e.desc?e.desc:' - '}</Typography>
                                     
                                 </Link>
-                                {auth.data.user.role === 'เจ้าของฟาร์ม' &&
+                                {auth.data !== null && auth.data.user.role === 'เจ้าของฟาร์ม' &&
                                     <div className={classNames(classes.boardFooter, "flex justify-end")}>
                                             <IconButton
                                                 onClick={(ev) => {
@@ -140,7 +140,7 @@ class GreenHouseList extends Component {
                                 }
                             </div>
                         ))}
-                        {auth.data.user.role === 'เจ้าของฟาร์ม' &&
+                        {auth.data !== null && auth.data.user.role === 'เจ้าของฟาร์ม' &&
                             <div className="w-xs p-16 pb-64">
                                 <div
                                     className={classNames(classes.board, classes.newBoard, "flex flex-col items-center justify-center w-full h-full rounded py-24")}

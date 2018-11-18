@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import {FuseUtils, FuseAnimate} from '@fuse';
 import {Avatar, Checkbox, Icon, IconButton,Typography,Button} from '@material-ui/core';
 import ReactTable from "react-table";
 import classNames from 'classnames';
-
 
 const styles = theme => ({
     mailList:{
@@ -26,22 +25,21 @@ class FarmTable extends Component {
         selectedContactsMenu: null
     }
 
-    getFilteredArray = (entites, searchText) => {
-
-        const arr = Object.keys(entites).map((id) => entites[id]);
-        if( searchText.length === 0){
-            return arr
+    getFilteredArray = (entities, searchText) => {
+        const arr = Object.keys(entities).map((id) => entities[id]);
+        if ( searchText.length === 0 )
+        {
+            return arr;
         }
-
         return FuseUtils.filterArrayByString(arr, searchText);
     };
 
     openSelectedContactMenu = (event) => {
-        this.state({selectedContactsMenu: event.currentTarget});
+        this.setState({selectedContactsMenu: event.currentTarget});
     };
 
-    closeSelectedContactMenu = () =>{
-        this.state({selectedContactsMenu: null});
+    closeSelectedContactsMenu = () => {
+        this.setState({selectedContactsMenu: null});
     };
 
     render(){
@@ -59,44 +57,44 @@ class FarmTable extends Component {
 
         return (
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                <ReactTable 
+                <ReactTable
                     className={classNames(classes.root, "-striped -highlight border-0")}
-                    getTrProps={(state, rowInfo, column)=>{
+                    getTrProps={(state, rowInfo, column) => {
                         return {
                             className: "cursor-pointer",
-                            onClick : (e,handleOriginal) =>{
-                                if(rowInfo){
+                            onClick  : (e, handleOriginal) => {
+                                if ( rowInfo )
+                                {
                                     buttonEdit(rowInfo.original);
                                 }
                             }
                         }
                     }}
-
-                    data ={data}
+                    data={data}
                     columns={[
                         {
                             Header : "ชื่อฟาร์ม",
-                            accessor : "farmname",
+                            accessor : "farmName",
                             filterable : true
                         },
                         {
                             Header : "ชื่อเจ้าของฟาร์ม",
-                            accessor : "ownername",
+                            accessor : "ownerName",
                             filterable : true
                         },
                         {
                             Header : "นามสกุลเจ้าของฟาร์ม",
-                            accessor : "ownersurname",
+                            accessor : "ownerSurname",
                             filterable : true
                         },
                         {
                             Header : "เบอร์โทร",
-                            accessor : "ownertel",
+                            accessor : "ownerTel",
                             filterable : true
                         },
                         {
                             Header : "Pi MacAddress",
-                            accessor : "pimacaddress",
+                            accessor : "piMacAddress",
                             filterable : true
                         },
                         {
@@ -110,7 +108,7 @@ class FarmTable extends Component {
                                             buttonCreate();
                                         }}
                                     >
-                                        <Icon>person_add</Icon>
+                                        <Icon>add_box</Icon>
                                     </Button>,
                             width : 128,
                             Cell : row =>(
