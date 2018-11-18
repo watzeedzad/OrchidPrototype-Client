@@ -43,7 +43,7 @@ class FarmTable extends Component {
     };
 
     render(){
-        const {classes, data ,buttonCreate ,buttonEdit} = this.props;
+        const {classes, data ,buttonCreate ,buttonEdit, buttonUserCreate} = this.props;
 
         if(!data || data.length === 0){
             return(
@@ -72,6 +72,11 @@ class FarmTable extends Component {
                     }}
                     data={data}
                     columns={[
+                        {
+                            Header : "รหัสฟาร์ม",
+                            accessor : "farmId",
+                            filterable : true
+                        },
                         {
                             Header : "ชื่อฟาร์ม",
                             accessor : "farmName",
@@ -126,6 +131,18 @@ class FarmTable extends Component {
                                     >
                                         <Icon>edit</Icon>
                                     </IconButton>
+                                    <Button
+                                        variant="fab"
+                                        color="primary"
+                                        aria-label="add"
+                                        className={classes.addButton}
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            buttonUserCreate(row.original.farmId);
+                                        }}
+                                    >
+                                        <Icon>person_add</Icon>
+                                    </Button>
                                 </div>
                             )
                         }

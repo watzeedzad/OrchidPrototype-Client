@@ -39,24 +39,26 @@ class UserDialog extends Component {
 
     componentWillReceiveProps(nextProps){
         const {data} = nextProps
-        if (data._id) {
-            this.setState({ 
-                role : data.role,
-                firstname : data.firstname,
-                lastname : data.lastname,
-                username : data.username,
-                password : data.password,
-                repassword : data.password
-            })
-        }else {
-            this.setState({ 
-                role : 'เจ้าของฟาร์ม',
-                firstname : '',
-                lastname : '',
-                username : '',
-                password : '',
-                repassword : ''
-            })
+        if(data){
+            if (data._id) {
+                this.setState({ 
+                    role : data.role,
+                    firstname : data.firstname,
+                    lastname : data.lastname,
+                    username : data.username,
+                    password : data.password,
+                    repassword : data.password
+                })
+            }else {
+                this.setState({ 
+                    role : 'เจ้าของฟาร์ม',
+                    firstname : '',
+                    lastname : '',
+                    username : '',
+                    password : '',
+                    repassword : ''
+                })
+            }
         }
     }
 
@@ -199,7 +201,7 @@ class UserDialog extends Component {
                                     onChange={this.handleRadioChange}/>                                                
                             </RadioGroupFormsy>
                         </div>
-                        {this.props.data._id  ?
+                        {this.props.data &&this.props.data._id  ?
                         null 
                         : <div>
                             <div className="flex">
@@ -244,16 +246,26 @@ class UserDialog extends Component {
                             </div>
                         </div>
                         }
-
+                        {this.props.data && this.props.data._id &&
                         <TextFieldFormsy
-                                className={classes.formControl}
-                                autoFocus
-                                type="hidden"
-                                id="_id"
-                                name="_id"
-                                value={this.props.data._id}
-                                onChange={this.handleChange}
-                            />
+                            className={classes.formControl}
+                            autoFocus
+                            type="hidden"
+                            id="_id"
+                            name="_id"
+                            value={this.props.data._id}
+                            onChange={this.handleChange}
+                        />}
+                        
+                        <TextFieldFormsy
+                            className={classes.formControl}
+                            autoFocus
+                            type="hidden"
+                            id="farmId"
+                            name="farmId"
+                            value={this.props.farmId}
+                            onChange={this.handleChange}
+                        />
                     </DialogContent>
 
                     <DialogActions className="justify-between pl-16">

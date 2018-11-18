@@ -55,7 +55,7 @@ class HumidityGraph extends Component {
         }
         
         const timeStamp = []
-        for (let index = 0; index < data.temperatureHistory.length; index++) {
+        for (let index = 0; index < data.humidityHistory.length; index++) {
             timeStamp[index] = data.humidityHistory[index].timeStamp.slice(11,13)+".00";
         }
 

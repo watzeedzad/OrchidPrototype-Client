@@ -15,6 +15,10 @@ const styles = theme => ({
     }
 });
 
+addValidationRule('isPiMacAddress', (values, value) => {
+    return /^(([0-9A-Za-z]{2}))-([0-9A-Za-z]{2})-([0-9A-Za-z]{2})-([0-9A-Za-z]{2})-([0-9A-Za-z]{2})-([0-9A-Za-z]{2})$/.test(value);
+});
+
 
 class FarmDialog extends Component{
     constructor(){
@@ -105,8 +109,6 @@ class FarmDialog extends Component{
                 >
                     <DialogContent classes={{root: "p-24"}}>
                         <div className="flex">
-                            <div className="min-w-48 pt-20">
-                            </div>
                             <TextFieldFormsy
                                 className={classes.formControl}
                                 label="ชื่อฟาร์ม"
@@ -123,8 +125,6 @@ class FarmDialog extends Component{
 
 
                         <div className="flex">
-                            <div className="min-w-48 pt-20">
-                            </div>
                             <TextFieldFormsy
                                 className={classes.formControl}
                                 label="ชื่อเจ้าของฟาร์ม"
@@ -140,8 +140,6 @@ class FarmDialog extends Component{
 
                         
                         <div className="flex">
-                            <div className="min-w-48 pt-20">
-                            </div>
                             <TextFieldFormsy
                                 className={classes.formControl}
                                 label="นามสกุลเจ้าของฟาร์ม"
@@ -157,8 +155,6 @@ class FarmDialog extends Component{
 
 
                         <div className="flex">
-                            <div className="min-w-48 pt-20">
-                            </div>
                             <TextFieldFormsy
                                 className={classes.formControl}
                                 label="เบอร์โทร์ศัพท์"
@@ -173,8 +169,6 @@ class FarmDialog extends Component{
                         </div>
 
                         <div className="flex">
-                            <div className="min-w-48 pt-20">
-                            </div>
                             <TextFieldFormsy
                                 className={classes.formControl}
                                 label="ที่อยู่"
@@ -189,15 +183,15 @@ class FarmDialog extends Component{
                         </div>
 
                         <div className="flex">
-                                <div className="min-w-48 pt-20">
-                                </div>
                                 <TextFieldFormsy
                                     className={classes.formControl}
-                                    label="Pi-MacAddress"
+                                    label="Pi-MacAddress (xx-xx-xx-xx-xx-xx)"
                                     type="text"
                                     id="piMacAddress"
                                     name="piMacAddress"
                                     value={this.state.piMacAddress}
+                                    validations="isPiMacAddress"
+                                    validationError="ต้องอยู่ในรูปแบบ xx-xx-xx-xx-xx-xx"
                                     variant="outlined"
                                     required
                                     fullWidth

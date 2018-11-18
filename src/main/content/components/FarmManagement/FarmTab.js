@@ -7,12 +7,12 @@ import FarmTable from 'main/content/components/FarmManagement/FarmTable';
 import _ from '@lodash';
 import {Button, Icon, Typography, SnackbarContent} from '@material-ui/core';
 import FarmDialog from 'main/content/components/FarmManagement/FarmDialog';
-import {
-    loadFarms, addFarm, editFarm, resetStatus
-} from 'store/actions/application/farmActions';
+import {loadFarms, addFarm, editFarm, resetStatus} from 'store/actions/application/farmActions';
 import { confirmModalDialog } from 'main/Utils/reactConfirmModalDialog'
 import { setSettings } from 'store/actions/fuse/settings.actions'
 import {PageConfig} from '../../pages/PageConfig'
+import UserDialog from '../UserManagement/UserDialog'
+import {addUser} from 'store/actions/application/userActions';
 
 const styles = theme => ({
     addButton: {
@@ -27,8 +27,11 @@ class FarmTab extends Component {
 
     state = {
         dialog: false,
+        dialog2: false,
         dialogTitle: '',
         data: [],
+        userData: [],
+        farmId: ''
     }
 
     componentDidMount()
@@ -67,6 +70,7 @@ class FarmTab extends Component {
                         <FarmTable
                             data={farms.data}
                             buttonCreate={this.handleNew}
+                            buttonUserCreate={this.handleUserNew}
                             buttonEdit={this.handleEdit}
                         />
                     }
@@ -83,7 +87,12 @@ class FarmTab extends Component {
                     farmSave={farmSave}
                     onSubmit={this.handleSubmit}
                     onToggle={this.toggle}/>
-
+                <UserDialog
+                    isOpen={this.state.dialog2} 
+                    dialogTitle="เพิ่ม"
+                    farmId={this.state.farmId}
+                    onSubmit={this.handleUserSubmit}
+                    onToggle={this.toggle2}/>
             </React.Fragment>
         )
     };
@@ -91,6 +100,28 @@ class FarmTab extends Component {
     toggle = () => {
         this.setState({
             dialog: !this.state.dialog,
+        })
+    }
+
+    toggle2 = () => {
+        this.setState({
+            dialog2: !this.state.dialog2,
+        })
+    }
+
+    handleUserNew = (farmId) => {
+        this.props.dispatch(resetStatus())
+
+        this.setState({farmId: farmId})
+        this.toggle2();
+    }
+
+    handleUserSubmit = (values) => {
+        this.props.dispatch(addUser(values)).then(() => {
+            if (!this.props.userSave.isRejected) {
+                this.toggle2();
+                this.props.dispatch(loadFarms())
+            }
         })
     }
 
@@ -135,8 +166,8 @@ function mapStateToProps({application})
 {
     return {
         farms: application.farmReducers.farms,
-        farmSave: application.farmReducers.farmSave
-
+        farmSave: application.farmReducers.farmSave,
+        userSave: application.userReducers.userSave
     }
 }
 

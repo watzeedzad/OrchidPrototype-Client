@@ -45,7 +45,7 @@ function MainNavbar({classes, navigation, layoutStyle, auth})
                 elevation={0}
                 className="user relative flex flex-col items-center justify-center pt-48 pb-96 mb-96 z-0"
             >
-                {!auth.isLoading && auth.data != null ?
+                {!auth.isLoading && auth.data != null && auth.data.farm?
                 <div>
                     <Typography className="username text-16 whitespace-no-wrap" color="inherit">{auth.data.farm.farmName}</Typography>
                     <Avatar
