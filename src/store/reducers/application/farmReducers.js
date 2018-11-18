@@ -21,7 +21,7 @@ export default (state = initialState ,action) => {
         case 'SAVE_FARM_REJECTED':
             return {...state, farmSave: { data: action.payload, isLoading: false, isRejected: true}}
         case 'SAVE_FARM_SUCCESS':
-            return  {...state, farmSave: {data: null, isLoading: false, isRejected: true}}
+            return  {...state, farmSave: {data: null, isLoading: false, isRejected: false}}
 
         default:
             return state

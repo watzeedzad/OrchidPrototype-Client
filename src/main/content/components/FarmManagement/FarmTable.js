@@ -93,6 +93,11 @@ class FarmTable extends Component {
                             filterable : true
                         },
                         {
+                            Header : "ที่อยู่",
+                            accessor : "ownerAddress",
+                            filterable : true
+                        },
+                        {
                             Header : "Pi MacAddress",
                             accessor : "piMacAddress",
                             filterable : true

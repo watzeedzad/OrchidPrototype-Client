@@ -24,6 +24,7 @@ class FarmDialog extends Component{
             ownerName : '',
             ownerSurname : '',
             ownerTel : '',
+            ownerAddress  : '',
             configFilePath : '',
             piMacAddress : '',
             canSubmit : false
@@ -41,6 +42,7 @@ class FarmDialog extends Component{
                 ownerName : data.ownerName,
                 ownerSurname : data.ownerSurname,
                 ownerTel : data.ownerTel,
+                ownerAddress : data.ownerAddress,
                 configFilePath: data.configFilePath,
                 piMacAddress : data.piMacAddress
             })
@@ -50,6 +52,7 @@ class FarmDialog extends Component{
                 ownerName : '',
                 ownerSurname : '',
                 ownerTel : '',
+                ownerAddress : '',
                 configFilePath : '',
                 piMacAddress : ''
             });
@@ -163,6 +166,22 @@ class FarmDialog extends Component{
                                 id="ownerTel"
                                 name="ownerTel"
                                 value={this.state.ownerTel}
+                                variant="outlined"
+                                required
+                                fullWidth
+                            />      
+                        </div>
+
+                        <div className="flex">
+                            <div className="min-w-48 pt-20">
+                            </div>
+                            <TextFieldFormsy
+                                className={classes.formControl}
+                                label="ที่อยู่"
+                                type="text"
+                                id="ownerAddress"
+                                name="ownerAddress"
+                                value={this.state.ownerAddress}
                                 variant="outlined"
                                 required
                                 fullWidth
