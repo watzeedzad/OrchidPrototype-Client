@@ -82,7 +82,7 @@ class GreenHouseList extends Component {
         if (greenHouses.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
-
+        console.log(greenHouses)
         return (
             <div className={classNames(classes.root, "flex flex-grow flex-no-shrink flex-col items-center")}>
 
@@ -98,7 +98,7 @@ class GreenHouseList extends Component {
                             duration : 300
                         }}
                     >
-                        {greenHouses.data && greenHouses.data.map(e => (
+                        {greenHouses.data && !greenHouses.data.errorMessage && greenHouses.data.map(e => (
                             <div className="w-xs p-16 pb-64" key={e._id}>
                                 <Link 
                                     to={{

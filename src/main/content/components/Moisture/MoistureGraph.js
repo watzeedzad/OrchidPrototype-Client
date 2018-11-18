@@ -53,10 +53,15 @@ class MoistureGraph extends Component {
         for (let index = 0; index < data.soilMoistureHistory.length; index++) {
             history[index] = data.soilMoistureHistory[index].currentSoilMoisture;
         }
-      
+        
+        const timeStamp = []
+        for (let index = 0; index < data.soilMoistureHistory.length; index++) {
+            timeStamp[index] = data.soilMoistureHistory[index].timeStamp.slice(11,13)+".00";
+        }
+
         return (
             <div>
-                <LineGraph history={history} name='ประวัติความชื้นในเครื่องปลูกของวันนี้' yName='ความชื้นในเครื่องปลูก'/>
+                <LineGraph history={history} timeStamp={timeStamp} name='ประวัติความชื้นในเครื่องปลูกของวันนี้' yName='ความชื้นในเครื่องปลูก'/>
             </div>
         )
     }

@@ -53,10 +53,15 @@ class FertilityGraph extends Component {
         for (let index = 0; index < data.fertilityHistory.length; index++) {
             history[index] = data.fertilityHistory[index].currentFertility;
         }
+
+        const timeStamp = []
+        for (let index = 0; index < data.fertilityHistory.length; index++) {
+            timeStamp[index] = data.fertilityHistory[index].timeStamp.slice(11,13)+".00";
+        }
       
         return (
             <div>
-                <LineGraph history={history} name='ประวัติความอุดมสมบูรณ์ในเครื่องปลูกของวันนี้' yName='ปริมาณแร่ธาตุ'/>
+                <LineGraph history={history} timeStamp={timeStamp} name='ประวัติความอุดมสมบูรณ์ในเครื่องปลูกของวันนี้' yName='ปริมาณแร่ธาตุ'/>
             </div>
         )
     }

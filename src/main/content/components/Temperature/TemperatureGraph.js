@@ -54,9 +54,15 @@ class TemperatureGraph extends Component {
             history[index] = data.temperatureHistory[index].currentTemperature;
         }
         
+        const timeStamp = []
+        for (let index = 0; index < data.temperatureHistory.length; index++) {
+            timeStamp[index] = data.temperatureHistory[index].timeStamp.slice(11,13)+".00";
+        }
+        
+
         return (
             <div>
-                <LineGraph history={history} name='ประวัติอุณหภูมิในวันนี้' yName='อุณหภูมิ'/>
+                <LineGraph history={history} timeStamp={timeStamp} name='ประวัติอุณหภูมิในวันนี้' yName='อุณหภูมิ'/>
             </div>
         )
     }

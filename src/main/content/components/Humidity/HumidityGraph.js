@@ -53,10 +53,15 @@ class HumidityGraph extends Component {
         for (let index = 0; index < data.humidityHistory.length; index++) {
             history[index] = data.humidityHistory[index].currentHumidity;
         }
-      
+        
+        const timeStamp = []
+        for (let index = 0; index < data.temperatureHistory.length; index++) {
+            timeStamp[index] = data.humidityHistory[index].timeStamp.slice(11,13)+".00";
+        }
+
         return (
             <div>
-                <LineGraph history={history} name='ประวัติความชื้นในอากาศของวันนี้' yName='ความชื้นในอากาศ'/>
+                <LineGraph history={history} timeStamp={timeStamp} name='ประวัติความชื้นในอากาศของวันนี้' yName='ความชื้นในอากาศ'/>
             </div>
         )
     }
