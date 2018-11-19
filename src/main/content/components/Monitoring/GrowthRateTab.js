@@ -46,7 +46,10 @@ class GrowthRateTab extends Component {
         if (project.isLoading || greenHouse.isLoading || compareProject.isLoading) {
             return <Typography variant="body1">Loading...</Typography>
         }
-        
+        if(compareProject.isRejected) {
+            return <SnackbarContent className="bg-red-light" message={compareProject.data}/>
+        }
+        console.log(compareProject)
         return (
             <div>
                 <div className="p-24 pl-80">
@@ -67,7 +70,7 @@ class GrowthRateTab extends Component {
                             <em>กรุณาเลือกโปรเจ็ค</em>
                         </MenuItem>
                     
-                        {!compareProject.data.errorMessage && compareProject.data != null&& compareProject.length > 0 && compareProject.data.map(e => (
+                        {compareProject.data && !compareProject.data.errorMessage && compareProject.data != null&& compareProject.data.length > 0 && compareProject.data.map(e => (
                             <MenuItem value={e.projectId}>
                                 <em>โปรเจ็คที่ {e.projectId}</em>
                             </MenuItem>
