@@ -67,7 +67,7 @@ class GrowthRateTab extends Component {
                             <em>กรุณาเลือกโปรเจ็ค</em>
                         </MenuItem>
                     
-                        {!compareProject.data.errorMessage && compareProject.data != null && compareProject.data.map(e => (
+                        {!compareProject.data.errorMessage && compareProject.data != null&& compareProject.length > 0 && compareProject.data.map(e => (
                             <MenuItem value={e.projectId}>
                                 <em>โปรเจ็คที่ {e.projectId}</em>
                             </MenuItem>

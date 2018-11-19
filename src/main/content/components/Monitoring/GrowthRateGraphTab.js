@@ -21,6 +21,9 @@ class GrowthRateGraphTab extends Component {
         if (data.errorMessage){
             return <SnackbarContent className="bg-red-light" message={data.errorMessage}/>
         }
+        if(data.length <=0){
+            return <SnackbarContent className="bg-red-light" message="ไม่มีข้อมูลการเจริญเติบโต"/>
+        }
         let timeStamp = []
         if(compareGrowthRate.data!==null && compareGrowthRate.data.length>0){
             for (let index = 0; index < data.length; index++) {
@@ -82,6 +85,7 @@ class GrowthRateGraphTab extends Component {
                 <GrowthRateGraph projectId={data[0].projectId} projectId2={projectId2} timeStamp={timeStamp} data={totalLeaf} data2={totalLeaf2} name='อัตราการเจริญเติบโตทางจำนวนของใบ' yName='จำนวนใบ'/>
                 <GrowthRateGraph projectId={data[0].projectId} projectId2={projectId2} timeStamp={timeStamp} data={height} data2={height2} name='อัตราการเจริญเติบโตทางความสูงของลำต้น' yName='ความสูงลำต้น'/>
             </div>
+            
         )
     }
 }
