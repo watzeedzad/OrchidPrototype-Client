@@ -17,7 +17,7 @@
  npm install
  ```
 ## วิธีการรัน
- - ไปที่ root (Folder OrchidPrototype และ OrchidPrototype-Client ต้องอยู่ใน Directory เดียวกัน) และใช้คำสี่ง
+ - ไปที่ root folder ซึ่ง folder OrchidPrototype และ OrchidPrototype-Client ต้องอยู่ใน Directory เดียวกัน และใช้คำสี่ง
  ```
  npm start
  ```
